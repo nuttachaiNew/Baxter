@@ -2,11 +2,9 @@ package com.demo.spring.SpringBootOAuth2.domain;
 
 import com.demo.spring.SpringBootOAuth2.domain.general.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
-import java.util.HashSet;
-import lombok.*;
 @Entity
 @Data
 @Table(name = "app_user")
@@ -39,19 +37,26 @@ public class User extends BaseModel {
    
     @OneToOne(fetch = FetchType.LAZY)
     private Branch branch;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Role role;
+
     /**
      * Roles are being eagerly loaded here because
      * they are a fairly small collection of items for this example.
      */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "userRole", joinColumns = {
-            @JoinColumn(name = "user_id", nullable = false, updatable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false, updatable = false)})
-    private Set<Role> roles = new HashSet<Role>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "userRole", joinColumns = {
+//            @JoinColumn(name = "user_id", nullable = false, updatable = false)},
+//            inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false, updatable = false)})
+//    private Set<Role> roles = new HashSet<Role>();
+//
+//    public Set<Role> getAuthorities() {
+//        return this.roles;
+//    }
 
-    public Set<Role> getAuthorities() {
-        return this.roles;
-    }
+
+
 
     // public Long getId() {
     //     return id;
