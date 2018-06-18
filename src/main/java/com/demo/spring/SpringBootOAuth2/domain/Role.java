@@ -1,9 +1,9 @@
 package com.demo.spring.SpringBootOAuth2.domain;
 
-import javax.persistence.*;
-import lombok.*;
-import java.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -22,7 +22,4 @@ public class Role {
 
     @Column(name="description")
     private String detail;
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
-    private Set<User> users = new HashSet<User>();
 }
