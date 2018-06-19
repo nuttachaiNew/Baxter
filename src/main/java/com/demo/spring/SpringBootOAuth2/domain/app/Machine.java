@@ -1,15 +1,15 @@
 package com.demo.spring.SpringBootOAuth2.domain.app;
 
-import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.demo.spring.SpringBootOAuth2.domain.general.BaseMasterEntity;
-import java.io.Serializable;
-import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.*;
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Set;
+
 @Entity
-@Data
+//@Data
 public class Machine extends BaseMasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -27,4 +27,64 @@ public class Machine extends BaseMasterEntity {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp endUsed;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public String getMachineType() {
+        return machineType;
+    }
+
+    public void setMachineType(String machineType) {
+        this.machineType = machineType;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Timestamp getStartUsed() {
+        return startUsed;
+    }
+
+    public void setStartUsed(Timestamp startUsed) {
+        this.startUsed = startUsed;
+    }
+
+    public Timestamp getEndUsed() {
+        return endUsed;
+    }
+
+    public void setEndUsed(Timestamp endUsed) {
+        this.endUsed = endUsed;
+    }
+
+    public Set<MachineHistory> getMachineHistory() {
+        return machineHistory;
+    }
+
+    public void setMachineHistory(Set<MachineHistory> machineHistory) {
+        this.machineHistory = machineHistory;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machine")
+    private Set<MachineHistory> machineHistory;
+
 }

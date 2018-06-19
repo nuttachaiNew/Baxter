@@ -1,7 +1,7 @@
 package com.demo.spring.SpringBootOAuth2.service.impl;
 
-import com.demo.spring.SpringBootOAuth2.domain.RandomCity;
-import com.demo.spring.SpringBootOAuth2.domain.User;
+import com.demo.spring.SpringBootOAuth2.domain.app.RandomCity;
+import com.demo.spring.SpringBootOAuth2.domain.app.User;
 import com.demo.spring.SpringBootOAuth2.repository.RandomCityRepository;
 import com.demo.spring.SpringBootOAuth2.repository.UserRepository;
 import com.demo.spring.SpringBootOAuth2.service.GenericService;
