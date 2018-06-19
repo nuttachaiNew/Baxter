@@ -1,7 +1,7 @@
 package com.demo.spring.SpringBootOAuth2.controller;
 
-import com.demo.spring.SpringBootOAuth2.domain.RandomCity;
-import com.demo.spring.SpringBootOAuth2.domain.User;
+import com.demo.spring.SpringBootOAuth2.domain.app.RandomCity;
+import com.demo.spring.SpringBootOAuth2.domain.app.User;
 import com.demo.spring.SpringBootOAuth2.service.GenericService;
 import flexjson.JSONSerializer;
 import org.slf4j.Logger;
