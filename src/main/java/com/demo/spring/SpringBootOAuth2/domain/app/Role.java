@@ -1,12 +1,13 @@
 package com.demo.spring.SpringBootOAuth2.domain.app;
 
+import com.demo.spring.SpringBootOAuth2.domain.general.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="app_role")
-public class Role {
+public class Role extends BaseModel {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -20,6 +21,9 @@ public class Role {
 
     @Column(name="description")
     private String detail;
+
+    @Column
+    private String code;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -57,4 +61,11 @@ public class Role {
         this.detail = detail;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 }
