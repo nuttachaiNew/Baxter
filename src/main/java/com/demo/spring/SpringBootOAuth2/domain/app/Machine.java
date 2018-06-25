@@ -28,6 +28,9 @@ public class Machine extends BaseMasterEntity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp endUsed;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machine")
+    private Set<MachineHistory> machineHistory;
+
     public Long getId() {
         return id;
     }
@@ -83,8 +86,5 @@ public class Machine extends BaseMasterEntity {
     public void setMachineHistory(Set<MachineHistory> machineHistory) {
         this.machineHistory = machineHistory;
     }
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machine")
-    private Set<MachineHistory> machineHistory;
 
 }

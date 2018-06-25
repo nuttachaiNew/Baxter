@@ -2,15 +2,23 @@ package com.demo.spring.SpringBootOAuth2.service.impl;
 
 import com.demo.spring.SpringBootOAuth2.domain.app.Machine;
 import com.demo.spring.SpringBootOAuth2.repository.MachineRepository;
+import com.demo.spring.SpringBootOAuth2.repository.MachineRepositoryCustom;
 import com.demo.spring.SpringBootOAuth2.service.MachineService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MachineServiceImpl implements MachineService {
@@ -20,11 +28,74 @@ public class MachineServiceImpl implements MachineService {
     @Autowired
     private MachineRepository machineRepository;
 
+    @Autowired
+    private MachineRepositoryCustom machineRepositoryCustom;
+
+    JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
+        public Date deserialize(JsonElement json, Type typeOfT,
+                                JsonDeserializationContext context) throws JsonParseException {
+            return json == null ? null : new Date(json.getAsLong());
+        }
+    };
+
+    protected Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").registerTypeAdapter(Date.class, deser).create();
+
+    @Override
+    @Transactional
+    public Map<String,String> saveMachine(String json) {
+        Map<String,String> result = new HashMap<>();
+        try{
+            LOGGER.info("===============Save Machine===============");
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            Machine machine = mapper.readValue(jsonObject.toString(),Machine.class);
+            machineRepository.saveAndFlush(machine);
+            result.put("code",machine.getCode());
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("Exception : {}",e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public Map<String, String> updateMachine(String json) {
+        Map<String,String> result = new HashMap<>();
+        try{
+            LOGGER.info("===============Update Machine===============");
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            Machine machineNew = mapper.readValue(jsonObject.toString(),Machine.class);
+            Machine machineOld = machineRepository.findOne(machineNew.getId());
+            machineNew = mapper.readerForUpdating(machineOld).readValue(gson.toJson(machineNew));
+
+            if(machineOld != null && machineNew != null){
+                if( (machineNew.getVersion() != null && machineOld.getVersion() != null ) &&
+                        ( machineNew.getVersion().equals(machineOld.getVersion()) )
+                        ){
+                    machineRepository.saveAndFlush(machineNew);
+                }else{
+                    throw new RuntimeException("Version machine is not match");
+                }
+            }else{
+                throw new RuntimeException("Machine is null");
+            }
+            result.put("code",machineNew.getCode());
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("Exception : {}",e);
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public Machine findById(Long id) {
 
         try{
-            LOGGER.info("Machine findById");
+            LOGGER.info("===============Machine findById===============");
             LOGGER.info("id : {}",id);
             return machineRepository.findOne(id);
         }catch (Exception e){
@@ -39,7 +110,7 @@ public class MachineServiceImpl implements MachineService {
     public List<Machine> findAllMachines() {
 
         try{
-            LOGGER.info("Machine findAllMachines");
+            LOGGER.info("===============Machine findAllMachines===============");
             return machineRepository.findAll();
         }catch (Exception e){
             e.printStackTrace();
@@ -48,16 +119,17 @@ public class MachineServiceImpl implements MachineService {
         }
     }
 
-//    @Override
-//    public List<Machine> findUserByCriteria(JSONObject jsonObject) {
-//        machineRepository.();
-//    }
+    @Override
+    public List<Map<String,Object>> findMachineByCriteria(JSONObject jsonObject) {
+        return machineRepositoryCustom.findMachineByCriteria(jsonObject);
+    }
 
     @Override
+    @Transactional
     public void deleteMachine(JSONObject jsonObject) {
 
         try{
-            LOGGER.info("Machine deleteMachine");
+            LOGGER.info("===============Machine deleteMachine===============");
 
             JSONArray jsonArray = jsonObject.getJSONArray("delete");
             if (jsonArray != null && jsonArray.length() > 0) {
