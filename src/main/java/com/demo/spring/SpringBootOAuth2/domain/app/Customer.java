@@ -7,7 +7,7 @@ import lombok.Data;
 import javax.persistence.*;
 @Entity
 @Data
-public class MachineHistory extends BaseMasterEntity {
+public class Customer extends BaseMasterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id")
@@ -15,10 +15,9 @@ public class MachineHistory extends BaseMasterEntity {
 
     @JsonIgnore
     private Long version;
-
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
-    @JoinColumn(name = "machine")
-    Machine machine;
+    private String address;
+    private String telephoneNumber;
+    private String email;
 
     public Long getId() {
         return id;
@@ -36,12 +35,29 @@ public class MachineHistory extends BaseMasterEntity {
         this.version = version;
     }
 
-    public Machine getMachine(){
-        return machine;
+    public String getAddress(String address){
+        return address;
     }
 
-    public void setMachine(Machine machine){
-        this.machine = machine;
+    public void setAddress(String address){
+        this.address = address;
     }
+
+    public String getTelephoneNumber(String telephoneNumber){
+        return telephoneNumber;
+    }
+
+    public void setTelephoneNumber(String telephoneNumber){
+        this.telephoneNumber = telephoneNumber;
+    }
+
+    public String getEmail(String email){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
 
 }
