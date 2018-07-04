@@ -1,5 +1,6 @@
 package com.demo.spring.SpringBootOAuth2.domain.app;
 
+import com.demo.spring.SpringBootOAuth2.domain.app.Parameter;
 import com.demo.spring.SpringBootOAuth2.domain.general.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -7,7 +8,7 @@ import java.util.Set;
 import java.util.HashSet;
 import javax.persistence.*;
 @Entity
-@Table(name = "app_parameter")
+@Table(name = "parameter_detail")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ParameterDetail extends BaseModel {
     @Id
@@ -28,8 +29,8 @@ public class ParameterDetail extends BaseModel {
     private String attribute3;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "appParameter")
-    private AppParameter appParameter;
+    @JoinColumn(name = "parameter")
+    private Parameter parameter;
     
 
     public Long getId() {
@@ -110,5 +111,10 @@ public class ParameterDetail extends BaseModel {
         this.attribute3 = attribute3;
     }
     
-    
+    public Parameter getParameter(){
+        return parameter;
+    }
+    public void setParameter(Parameter parameter){
+        this.parameter = parameter;
+    }
 }

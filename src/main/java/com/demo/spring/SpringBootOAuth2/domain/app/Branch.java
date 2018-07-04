@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 @Entity
+@Table(name = "area")
 @Data
 public class Branch extends BaseMasterEntity {
     @Id
