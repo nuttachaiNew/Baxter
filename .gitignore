@@ -35,7 +35,8 @@
 ehthumbs.db
 Thumbs.db
 *.iml
-
+.project
+bin/
 target/*
 ./target
 .idea/*
