@@ -18,6 +18,8 @@ public class Customer extends BaseMasterEntity {
     private String address;
     private String telephoneNumber;
     private String email;
+    private String idCard;
+
 
     public Long getId() {
         return id;
@@ -57,6 +59,14 @@ public class Customer extends BaseMasterEntity {
 
     public void setEmail(String email){
         this.email = email;
+    }
+
+    public String getIdCard(String idCard){
+        return idCard;
+    }
+
+    public void setIdCard(String idCard){
+        this.idCard = idCard;
     }
 
 

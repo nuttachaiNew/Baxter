@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Configuration
 public class AdditionalWebConfig {
@@ -18,8 +19,13 @@ public class AdditionalWebConfig {
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
-        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
-        bean.setOrder(0);
-        return bean;
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(new CorsFilter(source));
+        registrationBean.setOrder(0);
+    	CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+    	characterEncodingFilter.setForceEncoding(true);
+    	characterEncodingFilter.setEncoding("UTF-8");
+    	registrationBean.setFilter(characterEncodingFilter);
+		return registrationBean;
+
     }
 }

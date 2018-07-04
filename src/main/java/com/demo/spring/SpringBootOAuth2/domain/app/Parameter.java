@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.HashSet;
 import javax.persistence.*;
 @Entity
-@Table(name = "app_parameter")
+@Table(name = "parameter")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class AppParameter extends BaseModel {
+public class Parameter extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id")
@@ -25,7 +25,7 @@ public class AppParameter extends BaseModel {
 
      /**
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appParameter")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parameter")
     private Set<ParameterDetail> parameterDetails = new HashSet<ParameterDetail>();
 
 
