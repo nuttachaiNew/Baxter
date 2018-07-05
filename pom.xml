@@ -196,24 +196,24 @@
                                                        replace="#spring.datasource.jndi-name="/>
                                         <echo>Replace File MMCEngineApplication.java for run stand alone </echo>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@SpringBootApplication"
                                                        replace="@SpringBootApplication"/>
 
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@Bean"
                                                        replace="//@Bean"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@EnableAutoConfiguration"
                                                        replace="//@EnableAutoConfiguration"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@ComponentScan"
                                                        replace="//@ComponentScan"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@Configuration"
                                                        replace="//@Configuration"/>
                                     </tasks>
@@ -289,24 +289,24 @@
                                                        replace="spring.datasource.jndi-name="/>
                                         <echo>Replace File Jwt2Application.java for run stand alone </echo>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/Jwt2Application.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@SpringBootApplication"
                                                        replace="@SpringBootApplication"/>
 
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/Jwt2Application.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@Bean"
                                                        replace="@Bean"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/Jwt2Application.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@EnableAutoConfiguration"
                                                        replace="//@EnableAutoConfiguration"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/Jwt2Application.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@ComponentScan"
                                                        replace="//@ComponentScan"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/Jwt2Application.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@Configuration"
                                                        replace="//@Configuration"/>
                                     </tasks>
@@ -379,26 +379,26 @@
                                                        file="src/main/resources/application.properties"
                                                        match="[#]*spring.datasource.jndi-name="
                                                        replace="spring.datasource.jndi-name="/>
-                                        <echo>Replace File MMCEngineApplication.java for deploy jboss </echo>
+                                        <echo>Replace File .java for deploy jboss </echo>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@SpringBootApplication"
                                                        replace="//@SpringBootApplication"/>
 
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@Bean"
                                                        replace="//@Bean"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@EnableAutoConfiguration"
                                                        replace="@EnableAutoConfiguration"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@ComponentScan"
                                                        replace="@ComponentScan"/>
                                         <replaceregexp byline="true"
-                                                       file="src/main/java/com/spt/engine/MMCEngineApplication.java"
+                                                       file="src/main/java/com/demo/spring/SpringBootOAuth2/Jwt2Application.java"
                                                        match="[/]*@Configuration"
                                                        replace="@Configuration"/>
 
