@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -137,5 +138,10 @@ public class UserServiceImpl implements UserService{
             LOGGER.error("Exception : {}",e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public User findUserByUsername(String userName) {
+        return userRepository.findByUsername(userName);
     }
 }
