@@ -2,6 +2,7 @@ package com.demo.spring.SpringBootOAuth2.controller;
 
 import com.demo.spring.SpringBootOAuth2.domain.app.Role;
 import com.demo.spring.SpringBootOAuth2.service.RoleService;
+import com.demo.spring.SpringBootOAuth2.service.RoleMenuService;
 import flexjson.JSONSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +16,17 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/api/roles")
+// @RequestMapping("/roles")
 public class RoleController {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    RoleMenuService roleMenuService;
 
     @RequestMapping(value ="/save", method = RequestMethod.POST)
     public ResponseEntity<String> saveRole(@RequestBody String json){
@@ -153,5 +158,45 @@ public class RoleController {
         }
 
     }
+
+
+    @RequestMapping(value ="/findMenuByRoleId", method = RequestMethod.GET)
+    @ResponseBody
+    ResponseEntity<String> findMenuByRoleId(@RequestParam(value = "id", required = true) Long id){
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>>results = roleMenuService.findByRoleId(id);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").deepSerialize(results), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+   @RequestMapping(value ="/getAllRoleMenu", method = RequestMethod.GET)
+    @ResponseBody
+    ResponseEntity<String> getAllRoleMenu(){
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>>results = roleMenuService.findAll();
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").deepSerialize(results), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
 
 }

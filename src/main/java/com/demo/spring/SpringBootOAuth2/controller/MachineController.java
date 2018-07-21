@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/machines")
+@RequestMapping("/api/machines")
+// @RequestMapping("/machines")
 public class MachineController {
 
     @Autowired
