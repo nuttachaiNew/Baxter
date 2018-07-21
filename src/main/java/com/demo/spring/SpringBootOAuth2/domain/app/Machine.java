@@ -22,11 +22,11 @@ public class Machine extends BaseMasterEntity {
     private String machineType;
     private Integer status;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp startUsed;
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    // private Timestamp startUsed;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp endUsed;
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    // private Timestamp endUsed;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "machine")
     private Set<MachineHistory> machineHistory;
@@ -63,21 +63,21 @@ public class Machine extends BaseMasterEntity {
         this.status = status;
     }
 
-    public Timestamp getStartUsed() {
-        return startUsed;
-    }
+    // public Timestamp getStartUsed() {
+    //     return startUsed;
+    // }
 
-    public void setStartUsed(Timestamp startUsed) {
-        this.startUsed = startUsed;
-    }
+    // public void setStartUsed(Timestamp startUsed) {
+    //     this.startUsed = startUsed;
+    // }
 
-    public Timestamp getEndUsed() {
-        return endUsed;
-    }
+    // public Timestamp getEndUsed() {
+    //     return endUsed;
+    // }
 
-    public void setEndUsed(Timestamp endUsed) {
-        this.endUsed = endUsed;
-    }
+    // public void setEndUsed(Timestamp endUsed) {
+    //     this.endUsed = endUsed;
+    // }
 
     public Set<MachineHistory> getMachineHistory() {
         return machineHistory;

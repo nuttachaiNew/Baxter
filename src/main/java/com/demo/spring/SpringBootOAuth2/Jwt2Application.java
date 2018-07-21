@@ -51,7 +51,7 @@ public class Jwt2Application extends SpringBootServletInitializer {
 		SpringApplication.run(Jwt2Application.class, args);
 	}
 
-	//@Bean
+	@Bean
 	public TomcatEmbeddedServletContainerFactory tomcatFactory() {
 		return new TomcatEmbeddedServletContainerFactory() {
 
@@ -77,7 +77,7 @@ public class Jwt2Application extends SpringBootServletInitializer {
 		};
 	}
 
-	//@Bean(destroyMethod = "")
+	@Bean(destroyMethod = "")
 	public DataSource jndiDataSource() throws IllegalArgumentException, NamingException {
 		JndiObjectFactoryBean bean = new JndiObjectFactoryBean();
 		bean.setJndiName("java:comp/env/jdbc/CRSDS");
@@ -87,7 +87,7 @@ public class Jwt2Application extends SpringBootServletInitializer {
 		return (DataSource) bean.getObject();
 	}
 
-	//@Bean
+	@Bean
 	public JdbcTemplate jdbcTemplate(DataSource dsItems) {
 		try {
 			return new JdbcTemplate(this.jndiDataSource());
