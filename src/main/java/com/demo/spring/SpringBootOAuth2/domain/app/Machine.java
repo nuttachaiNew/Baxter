@@ -20,8 +20,12 @@ public class Machine extends BaseMasterEntity {
     private Long version;
 
     private String machineType;
+    
     private Integer status;
-
+    
+    private String modelRef; 
+    
+    private String serialNumber;
     // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     // private Timestamp startUsed;
 
@@ -62,6 +66,23 @@ public class Machine extends BaseMasterEntity {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    public String getModelRef() {
+        return modelRef;
+    }
+
+    public void setModelRef(String modelRef) {
+        this.modelRef = modelRef;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
 
     // public Timestamp getStartUsed() {
     //     return startUsed;
