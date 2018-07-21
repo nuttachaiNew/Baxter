@@ -149,4 +149,25 @@ public class MachineController {
         }
     }
 
+
+    @RequestMapping(value ="/findMachineByMachineType", method = RequestMethod.GET)
+    ResponseEntity<String> findMachineByMachineType(@RequestParam(value = "machineType",required = false)String machineType){
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> result = machineService.findMachineByMachineType(machineType,null);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
 }

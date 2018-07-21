@@ -16,7 +16,6 @@ public class MachineRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
     public List<Map<String,Object>> findMachineByCriteria(JSONObject jsonObject){
 
         try{
@@ -107,4 +106,48 @@ public class MachineRepositoryCustom {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+
+        public List<Map<String,Object>> findMachineByMachineType(String type,String ref){
+            try{
+                List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+                List<Object[]> listfromQuery = new ArrayList<Object[]>();
+                StringBuilder criteriaSqlData = new StringBuilder();
+                criteriaSqlData.append(" SELECT ID , CODE , NAME , MACHINE_TYPE ");
+                criteriaSqlData.append(" , STATUS , MODEL_REF , SERIAL_NUMBER ");
+                criteriaSqlData.append(" FROM MACHINE ");
+                criteriaSqlData.append(" WHERE MACHINE_TYPE = :type AND STATUS = 1 ");
+                if(ref != null){
+                    criteriaSqlData.append(" AND MODEL_REF = :ref ");
+                }
+                criteriaSqlData.append(" ORDER BY SERIAL_NUMBER , CODE , NAME ");
+                Query query = em.createNativeQuery(criteriaSqlData.toString());
+                query.setParameter("type",type);
+                if(ref != null ) query.setParameter("ref",ref);
+                 listfromQuery = query.getResultList();
+
+                if(listfromQuery != null){
+                for(Object [] o :listfromQuery ){
+                    Map<String,Object> mapResult = new HashMap();
+                    mapResult.put("id",o[0]);
+                    mapResult.put("code",o[1]);
+                    mapResult.put("name",o[2]);
+                    mapResult.put("machineType",o[3]);
+                    mapResult.put("status",o[4]);
+                    mapResult.put("modelRef",o[5]);
+                    mapResult.put("serialNumber",o[6]);
+                    result.add(mapResult);
+                }
+            }
+
+                return result;
+            }catch(Exception e){
+                  e.printStackTrace();
+                 throw new RuntimeException(e.getMessage());
+            }
+        }
+
+
+
+
 }

@@ -13,5 +13,9 @@ public interface MachineService {
     void deleteMachine(JSONObject jsonObject,String user);
     Map<String,String> saveMachine(String json,String user);
     Map<String,String> updateMachine(String json,String user);
+    // void deleteMachine(JSONObject jsonObject);
+    // Map<String,String> saveMachine(String json);
+    // Map<String,String> updateMachine(String json);
+    List<Map<String,Object>> findMachineByMachineType(String type,String ref);
 }
 

@@ -161,4 +161,10 @@ public class MachineServiceImpl implements MachineService {
 
     }
 
+    @Override
+    public List<Map<String,Object>> findMachineByMachineType(String type,String ref) {
+        return machineRepositoryCustom.findMachineByMachineType(type,ref);
+    }
+
+
 }
