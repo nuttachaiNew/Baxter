@@ -4,6 +4,7 @@ import com.demo.spring.SpringBootOAuth2.domain.app.Machine;
 import com.demo.spring.SpringBootOAuth2.repository.MachineRepository;
 import com.demo.spring.SpringBootOAuth2.repository.MachineRepositoryCustom;
 import com.demo.spring.SpringBootOAuth2.service.MachineService;
+import com.demo.spring.SpringBootOAuth2.util.StandardUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
 import org.json.JSONArray;
@@ -42,13 +43,17 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     @Transactional
-    public Map<String,String> saveMachine(String json) {
+    public Map<String,String> saveMachine(String json,String user) {
         Map<String,String> result = new HashMap<>();
         try{
             LOGGER.info("===============Save Machine===============");
             ObjectMapper mapper = new ObjectMapper();
             JSONObject jsonObject = new JSONObject(json);
             Machine machine = mapper.readValue(jsonObject.toString(),Machine.class);
+            machine.setCreatedDate(StandardUtil.getCurrentDate());
+            machine.setCreatedBy(user);
+            machine.setUpdatedDate(StandardUtil.getCurrentDate());
+            machine.setUpdatedBy(user);
             machineRepository.saveAndFlush(machine);
             result.put("code",machine.getCode());
             return result;
@@ -61,7 +66,7 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     @Transactional
-    public Map<String, String> updateMachine(String json) {
+    public Map<String, String> updateMachine(String json,String user) {
         Map<String,String> result = new HashMap<>();
         try{
             LOGGER.info("===============Update Machine===============");
@@ -75,6 +80,8 @@ public class MachineServiceImpl implements MachineService {
                 if( (machineNew.getVersion() != null && machineOld.getVersion() != null ) &&
                         ( machineNew.getVersion().equals(machineOld.getVersion()) )
                         ){
+                    machineNew.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineNew.setUpdatedBy(user);
                     machineRepository.saveAndFlush(machineNew);
                 }else{
                     throw new RuntimeException("Version machine is not match");
@@ -126,7 +133,7 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     @Transactional
-    public void deleteMachine(JSONObject jsonObject) {
+    public void deleteMachine(JSONObject jsonObject,String user) {
 
         try{
             LOGGER.info("===============Machine deleteMachine===============");
@@ -138,6 +145,8 @@ public class MachineServiceImpl implements MachineService {
                     Machine machine = machineRepository.findOne(id);
                     if(machine != null){
                         machine.setStatus(0);
+                        machine.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machine.setUpdatedBy(user);
                         machineRepository.saveAndFlush(machine);
                     }
                 }

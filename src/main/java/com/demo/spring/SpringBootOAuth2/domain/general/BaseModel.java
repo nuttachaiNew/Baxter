@@ -23,7 +23,7 @@ public class BaseModel implements Serializable {
     protected String updatedBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected Timestamp updatdDate;
+    protected Timestamp updatedDate;
 
     protected Integer displayOrder;
 
@@ -77,12 +77,12 @@ public class BaseModel implements Serializable {
         this.updatedBy = updatedBy;
     }
 
-    public Timestamp getUpdatdDate() {
-        return updatdDate;
+    public Timestamp getUpdatedDate() {
+        return updatedDate;
     }
 
-    public void setUpdatdDate(Timestamp updatdDate) {
-        this.updatdDate = updatdDate;
+    public void setUpdatedDate(Timestamp updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     public Integer getDisplayOrder() {

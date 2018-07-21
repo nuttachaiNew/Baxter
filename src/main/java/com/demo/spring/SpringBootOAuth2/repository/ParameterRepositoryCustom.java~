@@ -2,7 +2,6 @@ package com.demo.spring.SpringBootOAuth2.repository;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Repository;
-import com.demo.spring.SpringBootOAuth2.domain.app.Parameter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,10 +9,6 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 @Repository
 public class ParameterRepositoryCustom {

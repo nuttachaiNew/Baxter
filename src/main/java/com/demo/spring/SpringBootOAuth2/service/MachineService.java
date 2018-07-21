@@ -10,8 +10,8 @@ public interface MachineService {
     Machine findById(Long id);
     List<Machine> findAllMachines();
     List<Map<String,Object>> findMachineByCriteria(JSONObject jsonObject);
-    void deleteMachine(JSONObject jsonObject);
-    Map<String,String> saveMachine(String json);
-    Map<String,String> updateMachine(String json);
+    void deleteMachine(JSONObject jsonObject,String user);
+    Map<String,String> saveMachine(String json,String user);
+    Map<String,String> updateMachine(String json,String user);
 }
 

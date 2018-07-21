@@ -1,11 +1,11 @@
 package com.demo.spring.SpringBootOAuth2.domain.app;
 
-import com.demo.spring.SpringBootOAuth2.domain.general.BaseModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import java.sql.Timestamp;
+
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -21,6 +21,7 @@ public class FileUpload {
 
     private String filePath;
     private String fileType;
+    private String fileName;
 
     protected String updatedBy;
 
