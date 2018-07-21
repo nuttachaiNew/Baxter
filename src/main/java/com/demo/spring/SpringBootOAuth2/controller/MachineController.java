@@ -13,12 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/machines")
-// @RequestMapping("/machines")
+@RequestMapping("/machines")
 public class MachineController {
 
     @Autowired
@@ -30,35 +30,39 @@ public class MachineController {
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping(value ="/insert", method = RequestMethod.POST)
-    public ResponseEntity<String> saveMachine(@RequestBody String json){
+    public ResponseEntity<String> saveMachine(HttpServletRequest request , @RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
+        LOGGER.info("[saveMachine][Controller] user:{} ",request.getHeader("USER"));
         try {
-            Map<String,String> result = machineService.saveMachine(json);
+            String user = request.getHeader("USER");
+            Map<String,String> result = machineService.saveMachine(json,user);
             headers.add("errorStatus", "N");
-            headers.add("errorMsg", null);
+            headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
-            headers.add("errorMsg", ex.getMessage());
+            headers.add("errsg", ex.getMessage());
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
     }
 
     @RequestMapping(value ="/update", method = RequestMethod.POST)
-    public ResponseEntity<String> updateMachine(@RequestBody String json){
+    public ResponseEntity<String> updateMachine(HttpServletRequest request , @RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
+        LOGGER.info("[updateMachine][Controller] user:{} ",request.getHeader("USER"));
         try {
-            Map<String,String> result = machineService.updateMachine(json);
+            String user = request.getHeader("USER");
+            Map<String,String> result = machineService.updateMachine(json,user);
             headers.add("errorStatus", "N");
-            headers.add("errorMsg", null);
+            headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
-            headers.add("errorMsg", ex.getMessage());
+            headers.add("errsg", ex.getMessage());
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
     }
@@ -72,12 +76,12 @@ public class MachineController {
         try {
             List<Machine> machineList = machineService.findAllMachines();
             headers.add("errorStatus", "N");
-            headers.add("errorMsg", null);
+            headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(machineList), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
-            headers.add("errorMsg", ex.getMessage());
+            headers.add("errsg", ex.getMessage());
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
 
@@ -92,12 +96,12 @@ public class MachineController {
         try {
             Machine machine = machineService.findById(Long.valueOf(id));
             headers.add("errorStatus", "N");
-            headers.add("errorMsg", null);
+            headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(machine), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
-            headers.add("errorMsg", ex.getMessage());
+            headers.add("errsg", ex.getMessage());
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
     }
@@ -112,33 +116,35 @@ public class MachineController {
             JSONObject object = new JSONObject(json);
             List<Map<String,Object>> machineList = machineService.findMachineByCriteria(object);
             headers.add("errorStatus", "N");
-            headers.add("errorMsg", null);
+            headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(machineList), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
-            headers.add("errorMsg", ex.getMessage());
+            headers.add("errsg", ex.getMessage());
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
 
     }
 
     @RequestMapping(value ="/deleteMachine", method = RequestMethod.GET)
-    ResponseEntity<String> deleteMachine(@RequestBody String json){
+    ResponseEntity<String> deleteMachine(HttpServletRequest request , @RequestBody String json){
 
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
+        LOGGER.info("[deleteMachine][Controller] user:{} ",request.getHeader("USER"));
         try {
+            String user = request.getHeader("USER");
             JSONObject object = new JSONObject(json);
-            machineService.deleteMachine(object);
+            machineService.deleteMachine(object,user);
             headers.add("errorStatus", "N");
-            headers.add("errorMsg", null);
+            headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize("SUCCESS"), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
-            headers.add("errorMsg", ex.getMessage());
+            headers.add("errsg", ex.getMessage());
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
     }
