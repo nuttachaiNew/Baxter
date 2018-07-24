@@ -23,9 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/casemanagement")
+@RequestMapping("/api/casemanagement")
 public class CaseManagementController {
 
     @Autowired
@@ -95,6 +97,27 @@ public class CaseManagementController {
             return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
         }finally{
             IOUtils.closeQuietly(in);
+        }
+    }
+
+
+
+    @RequestMapping(value ="/saveCase", method = RequestMethod.POST)
+    public ResponseEntity<String> saveCase(@RequestBody String json){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            // LOGGER.info("JSON   :   {}",json);
+            Map<String,Object> result = caseManagementService.saveCase(json);
+            result.put("status","success");
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
     }
 

@@ -7,7 +7,7 @@ import com.demo.spring.SpringBootOAuth2.domain.app.Parameter;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
+// import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -21,7 +21,7 @@ public class ParameterRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
+    // @Transactional
     public List<Map<String,Object>> findParamaterDetailByParameterCode(String code){
 
         try{
@@ -67,7 +67,7 @@ public class ParameterRepositoryCustom {
         }
     }
 
-	@Transactional
+	// @Transactional
     public Parameter findAppParameterByAppParameterCode(String code) {
 
         Criteria criteria = ((Session) em.getDelegate()).createCriteria(Parameter.class,"Parameter");

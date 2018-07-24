@@ -18,12 +18,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.lang.reflect.Type;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+import java.lang.StringBuilder;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.*;
+import org.springframework.transaction.annotation.Transactional;
+import com.demo.spring.SpringBootOAuth2.util.*;
+
 
 @Service
 public class CaseManagementServiceImpl implements CaseManagementService {
@@ -44,6 +59,16 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     @Autowired
     private FileUploadRepository fileUploadRepository;
+
+    JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
+        public Date deserialize(JsonElement json, Type typeOfT,
+                                JsonDeserializationContext context) throws JsonParseException {
+            return json == null ? null : new Date(json.getAsLong());
+        }
+    };
+
+    protected Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").registerTypeAdapter(Date.class, deser).create();
+
 
     @Override
     public String uploadfileByCaseIdAndFileType(String name, MultipartFile multipartFile,Long caseId,String fileTpye,String user) {
@@ -120,39 +145,22 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         return inputStream;
     }
 
-//    @RequestMapping(value = "/referencedoc/{filename}", method = RequestMethod.GET)
-//    @ResponseBody
-//    public void previewReferenceDoc(@PathVariable("filename") String filename, @RequestParam(value = "extension", required = false) String extension, HttpServletRequest request, HttpServletResponse response) {
-//        try {
-//            // Get Real Path On Environment
-//            String contextPath  = request.getSession().getServletContext().getRealPath("/WEB-INF/file/" + filename);
-//            File file = new File(contextPath);
-//            logger.debug("contextPath {}" , contextPath);
-//            // Set Response
-//            if ("jpeg".equalsIgnoreCase(extension) || "png".equalsIgnoreCase(extension) || "gif".equalsIgnoreCase(extension) || "bmp".equalsIgnoreCase(extension)) {
-//                response.setContentType("image/" + extension);
-//                response.addHeader("Content-Disposition", "inline; filename=" + filename);
-//            } else if ("pdf".equalsIgnoreCase(extension)) {
-////                response.setContentType("application/" + extension);
-//                response.setContentType("application/download");
-//                response.addHeader("Content-Disposition", "inline; filename=" + filename + "." + extension);
-//            }
-//            response.setContentLength((int) file.length());
-//            // Create File Stream Object
-//            FileInputStream fileInputStream = new FileInputStream(file);
-//            OutputStream responseOutputStream = response.getOutputStream();
-//            byte[] buffer = new byte[4096];
-//            int bytesRead = -1;
-//            while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-//                //logger.debug("bytesRead {}" , bytesRead);
-//                responseOutputStream.write(buffer, 0, bytesRead);
-//            }
-//            // Close File Stream Object
-//            fileInputStream.close();
-//            responseOutputStream.close();
-//        } catch (Exception e) {
-//            logger.error("Error : {}",e.getMessage());
-//        }
-//    }
+    @Override
+    @Transactional
+    public Map<String,Object> saveCase(String json){
+        try{
+            LOGGER.debug("saveCase :{} ",json);
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            CaseManagement caseManagement = mapper.readValue(jsonObject.toString(),CaseManagement.class);
+            caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
+            caseManagementRepository.save(caseManagement);
+            return null;
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+    }
 
 }
