@@ -8,15 +8,15 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-
+// import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class FileUploadRepositoryCustom {
 
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
+    // @Transactional
     public FileUpload findFileUploadByCaseIdAndFileType(Long caseId,String fileType) {
 
         Criteria criteria = ((Session) em.getDelegate()).createCriteria(FileUpload.class,"FileUpload");
