@@ -4,6 +4,9 @@ import com.demo.spring.SpringBootOAuth2.domain.app.CaseManagement;
 import com.demo.spring.SpringBootOAuth2.domain.app.FileUpload;
 import com.demo.spring.SpringBootOAuth2.domain.app.Parameter;
 import com.demo.spring.SpringBootOAuth2.domain.app.ParameterDetail;
+import com.demo.spring.SpringBootOAuth2.domain.app.Machine;
+import com.demo.spring.SpringBootOAuth2.domain.app.MachineHistory;
+
 import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepository;
 import com.demo.spring.SpringBootOAuth2.repository.FileUploadRepository;
 import com.demo.spring.SpringBootOAuth2.service.CaseManagementService;
@@ -38,6 +41,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.*;
 import org.springframework.transaction.annotation.Transactional;
 import com.demo.spring.SpringBootOAuth2.util.*;
+import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepositoryCustom;
+
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import com.demo.spring.SpringBootOAuth2.repository.MachineRepository;
+import com.demo.spring.SpringBootOAuth2.repository.MachineHistoryRepository;
+
 
 
 @Service
@@ -47,6 +61,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     @Autowired
     private CaseManagementRepository caseManagementRepository;
+
+    @Autowired
+    private CaseManagementRepositoryCustom caseManagementRepositoryCustom;
 
     @Autowired
     private ParameterService parameterService;
@@ -59,6 +76,19 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     @Autowired
     private FileUploadRepository fileUploadRepository;
+
+    @Autowired
+    private MachineRepository machineRepository;
+
+    @Autowired
+    private MachineHistoryRepository machineHistoryRepository;
+
+
+  private static DecimalFormat FORMAT_RUNNING = new DecimalFormat("00");
+  private static DecimalFormat FORMAT_YEAR = new DecimalFormat("0000");
+  private static DecimalFormat FORMAT_MONTH = new DecimalFormat("00");
+  private static final SimpleDateFormat GEN_CASE_DATEFORMAT = new SimpleDateFormat("MM-yyyy", Locale.US);
+
 
     JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
         public Date deserialize(JsonElement json, Type typeOfT,
@@ -154,12 +184,89 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             JSONObject jsonObject = new JSONObject(json);
             CaseManagement caseManagement = mapper.readValue(jsonObject.toString(),CaseManagement.class);
             caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
+            caseManagement.setCaseType("CR");
             caseManagementRepository.save(caseManagement);
+          
+            Map<String,Object> returnResult = new HashMap<>();
+            returnResult.put("status","success");
+            returnResult.put("caseNumber",caseManagement.getCaseNumber());
+
             return null;
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public synchronized String generateCaseNumber(String caseType){
+        // cretedDate format DD-YYYY
+        try{
+            // return null;
+            Calendar today = new GregorianCalendar();
+            String createDate =  GEN_CASE_DATEFORMAT.format(today); 
+             LOGGER.info("generateCaseNumber :{} :{} ",caseType,createDate);
+
+            List<String> caseNumberMax = caseManagementRepositoryCustom.getLastedCaseNumberByCriteria(caseType,createDate);
+            String maxNumber = "";
+            String caseNumber = "";
+            if( caseNumberMax.size()>0 ){
+                maxNumber = caseNumberMax.get(0);
+            }
+            if( "CR".equalsIgnoreCase(caseType) || "AR".equalsIgnoreCase(caseType)   ){
+                 caseNumber = caseType+FORMAT_MONTH.format(today.get(Calendar.MONTH) + 1)  + FORMAT_YEAR.format(today.get(Calendar.YEAR)).substring(2) 
+                +"/01/" +FORMAT_RUNNING.format( maxNumber.equalsIgnoreCase("")? 1 : Integer.valueOf( maxNumber.substring(maxNumber.length() -2  , maxNumber.length()) ) +1 ) ;
+            }
+
+            return caseNumber;
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);   
+        }
+    }
+
+
+    @Override
+    public synchronized Long autoGenerateMachineByTypeAndStatusEqActive(String machineType){
+        LOGGER.info("autoGenerateMachineByTypeAndStatusEqActive : {} ",machineType);
+        try{
+            return caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);   
+        }
+    }
+
+
+    @Override
+    @Transactional
+    public synchronized void updateMachineStatus(Long machineId ,Integer status,String caseNumber,String actionBy){
+        try{
+            LOGGER.debug("updateMachineStatus :{} :{}",machineId,status);
+            Machine machine  = machineRepository.findOne(machineId);
+            machine.setStatus(status);
+            machine.setUpdatedBy(actionBy);
+            machine.setUpdatedDate(StandardUtil.getCurrentDate());
+            // add MachineHistory 
+            Set<MachineHistory> machineHis = machine.getMachineHistory();
+            MachineHistory history = new MachineHistory();
+            history.setActionBy(actionBy);
+            history.setActionDate(StandardUtil.getCurrentDate());
+            history.setStatus(status.toString());
+            history.setCaseNumber(caseNumber);
+            history.setMachine(machine);
+            machineHistoryRepository.save(history);
+            machineHis.add(history);
+            machine.setMachineHistory(machineHis); 
+            machineRepository.saveAndFlush(machine);
+            LOGGER.debug("machine :{} is status : {} ",machine.getCode() , machine.getStatus() );
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);   
         }
     }
 

@@ -9,5 +9,8 @@ public interface CaseManagementService {
     String uploadfileByCaseIdAndFileType(String name, MultipartFile multipartFile,Long caseId,String fileTpye,String user);
     InputStream downloadFileByCaseIdAndFileType(Long caseId,String fileTpye);
     Map<String,Object> saveCase(String json);
+    String generateCaseNumber(String caseType);
+    Long autoGenerateMachineByTypeAndStatusEqActive(String machineType);
+    void updateMachineStatus(Long machineId ,Integer status,String caseNumber,String actionBy); 
 }
 

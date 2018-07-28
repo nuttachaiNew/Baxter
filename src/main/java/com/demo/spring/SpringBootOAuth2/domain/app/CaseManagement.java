@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import java.util.Set;
 import javax.persistence.*;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "case_management")
 @Data
@@ -21,8 +25,14 @@ public class CaseManagement extends BaseModel {
     private CaseManagement refCase;
 
     private String caseNumber;
+    private String caseType;
     private String shareSource;
-    private String electronicCon;
+    private String electronicConsetFlag;
+    private String electronicConset;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Timestamp activityDate;
+
 
     @OneToOne(fetch = FetchType.LAZY)
     private User actionUser;
@@ -41,6 +51,30 @@ public class CaseManagement extends BaseModel {
 
     @OneToOne(fetch = FetchType.LAZY)
     private Machine machine4;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    private Machine machine5;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Machine machine6;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Machine machine7;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Machine machine8;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    private Machine machine9;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Machine machine10;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Installation installation;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Prescription prescription;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement")
     private Set<FileUpload> fileUploads;
