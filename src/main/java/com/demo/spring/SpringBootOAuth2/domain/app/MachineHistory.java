@@ -24,12 +24,14 @@ public class MachineHistory  {
     private String actionBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected Timestamp beginDate;
+    protected Timestamp actionDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected Timestamp endDate;
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    // protected Timestamp endDate;
 
     private String status;
+
+    private String caseNumber;
 
     public Long getId() {
         return id;
@@ -62,6 +64,14 @@ public class MachineHistory  {
     public void setStatus(String status){
         this.status = status;
     }
+
+    public String getCaseNumber(){
+        return caseNumber;
+    }
+
+    public void setCaseNumber(String caseNumber){
+        this.caseNumber = caseNumber;
+    }
     
     public String getActionBy(){
         return actionBy;
@@ -71,19 +81,19 @@ public class MachineHistory  {
         this.actionBy = actionBy;
     }
 
-    public Timestamp getBeginDate(){
-        return beginDate;
+    public Timestamp getActionDate(){
+        return actionDate;
     }
 
-    public void setBeginDate(Timestamp beginDate){
-        this.beginDate = beginDate;
+    public void setActionDate(Timestamp actionDate){
+        this.actionDate = actionDate;
     }
 
-    public Timestamp getEndDate(){
-        return endDate;
-    }
+    // public Timestamp getEndDate(){
+    //     return endDate;
+    // }
 
-    public void setEndDate(Timestamp endDate){
-        this.endDate = endDate;
-    }
+    // public void setEndDate(Timestamp endDate){
+    //     this.endDate = endDate;
+    // }
 }

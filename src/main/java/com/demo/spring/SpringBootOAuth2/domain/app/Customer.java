@@ -15,59 +15,75 @@ public class Customer extends BaseMasterEntity {
 
     @JsonIgnore
     private Long version;
-    private String address;
-    private String telephoneNumber;
+    private String telNo;
     private String email;
-    private String idCard;
+    private String customerType;
+    private String hospitalName;
+    private String nationId;    
+    private String patientName;    
+    private String patientLastName;    
+    private String currentAddress1;
+    private String currentAddress2;
+    private String currentSubDistrict;
+    private String currentDistrict;
+    private String currentProvince;
+    private String currentZipCode;
+    private String shippingAddress1;
+    private String shippingAddress2;
+    private String shippingSubDistrict;
+    private String shippingDistrict;
+    private String shippingProvince;
+    private String shippingZipCode;
 
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // public Long getId() {
+    //     return id;
+    // }
 
-    public Long getVersion() {
-        return version;
-    }
+    // public void setId(Long id) {
+    //     this.id = id;
+    // }
 
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+    // public Long getVersion() {
+    //     return version;
+    // }
 
-    public String getAddress(String address){
-        return address;
-    }
+    // public void setVersion(Long version) {
+    //     this.version = version;
+    // }
 
-    public void setAddress(String address){
-        this.address = address;
-    }
+    // public String getAddress(String address){
+    //     return address;
+    // }
 
-    public String getTelephoneNumber(String telephoneNumber){
-        return telephoneNumber;
-    }
+    // public void setAddress(String address){
+    //     this.address = address;
+    // }
 
-    public void setTelephoneNumber(String telephoneNumber){
-        this.telephoneNumber = telephoneNumber;
-    }
+    // public String getTelephoneNumber(String telephoneNumber){
+    //     return telephoneNumber;
+    // }
 
-    public String getEmail(String email){
-        return email;
-    }
+    // public void setTelephoneNumber(String telephoneNumber){
+    //     this.telephoneNumber = telephoneNumber;
+    // }
 
-    public void setEmail(String email){
-        this.email = email;
-    }
+    // public String getEmail(String email){
+    //     return email;
+    // }
 
-    public String getIdCard(String idCard){
-        return idCard;
-    }
+    // public void setEmail(String email){
+    //     this.email = email;
+    // }
 
-    public void setIdCard(String idCard){
-        this.idCard = idCard;
-    }
+    // public String getIdCard(String idCard){
+    //     return idCard;
+    // }
+
+    // public void setIdCard(String idCard){
+    //     this.idCard = idCard;
+    // }
 
 
 }
