@@ -40,18 +40,20 @@ public class CaseManagementRepositoryCustom {
             }
         }
 
-      public Long autoGenerateMachineByTypeAndStatusEqActive(String machineType){
+      public Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef){
         try{
-             LOGGER.debug("autoGenerateMachineByTypeAndStatusEqActive result type: {}  ",machineType );
+             LOGGER.debug("autoGenerateMachineByTypeAndStatusEqActive result type  ");
              Long result = null;
              List<Long> resultList = new ArrayList<>();
              List<Object[]> listfromQuery = new ArrayList<>();
              StringBuilder criteriaSqlData = new StringBuilder();
              criteriaSqlData.append(" SELECT M.ID , M.CODE FROM MACHINE M  ");
-             criteriaSqlData.append(" WHERE M.MACHINE_TYPE = :machineType  and M.STATUS = 1 ");
+             criteriaSqlData.append(" WHERE M.MACHINE_TYPE = :machineType  and M.STATUS = 1  and M.MODEL_REF = :modelRef");
              criteriaSqlData.append(" ORDER BY M.CODE ");
              Query query = em.createNativeQuery(criteriaSqlData.toString());
              query.setParameter("machineType",machineType);
+             query.setParameter("modelRef",modelRef);
+
              listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){
                 Long id = col[0] == null? null : Long.valueOf( col[0].toString() );
@@ -62,7 +64,7 @@ public class CaseManagementRepositoryCustom {
              }else{
                 result = resultList.get(0);
              }
-             LOGGER.debug("autoGenerateMachineByTypeAndStatusEqActive result type: {} ID :{} ",machineType ,result);
+             LOGGER.debug("autoGenerateMachineByTypeAndStatusEqActive result type: {} ref :{} ID :{} ",machineType,modelRef ,result);
 
              return result;
         }catch(Exception e){
