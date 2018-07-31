@@ -3,11 +3,14 @@ package com.demo.spring.SpringBootOAuth2.service.impl;
 import com.demo.spring.SpringBootOAuth2.domain.app.CaseManagement;
 import com.demo.spring.SpringBootOAuth2.domain.app.FileUpload;
 import com.demo.spring.SpringBootOAuth2.domain.app.Parameter;
+import com.demo.spring.SpringBootOAuth2.domain.app.Customer;
 import com.demo.spring.SpringBootOAuth2.domain.app.ParameterDetail;
 import com.demo.spring.SpringBootOAuth2.domain.app.Machine;
 import com.demo.spring.SpringBootOAuth2.domain.app.MachineHistory;
 
 import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepository;
+import com.demo.spring.SpringBootOAuth2.repository.CustomerRepository;
+
 import com.demo.spring.SpringBootOAuth2.repository.FileUploadRepository;
 import com.demo.spring.SpringBootOAuth2.service.CaseManagementService;
 import com.demo.spring.SpringBootOAuth2.service.FileUploadService;
@@ -83,6 +86,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     @Autowired
     private MachineHistoryRepository machineHistoryRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
 
   private static DecimalFormat FORMAT_RUNNING = new DecimalFormat("00");
   private static DecimalFormat FORMAT_YEAR = new DecimalFormat("0000");
@@ -183,15 +188,85 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             ObjectMapper mapper = new ObjectMapper();
             JSONObject jsonObject = new JSONObject(json);
             CaseManagement caseManagement = mapper.readValue(jsonObject.toString(),CaseManagement.class);
+            Map<String,Object> customerDtl = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.get("customer").toString());
+            List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machine").toString());
+           
+            // create Customer
+            Customer customer = new Customer();
+            customer.setCustomerType( customerDtl.get("customerType")==null?null:customerDtl.get("customerType").toString() );
+            customer.setHospitalName( customerDtl.get("hospitalName")==null?null:customerDtl.get("hospitalName").toString() );
+            customer.setPatientName( customerDtl.get("patientName")==null?null:customerDtl.get("patientName").toString() );
+            customer.setNationId( customerDtl.get("nationId")==null?null:customerDtl.get("nationId").toString() );
+            customer.setTelNo( customerDtl.get("telNo")==null?null:customerDtl.get("telNo").toString() );
+            customer.setCurrentAddress1( customerDtl.get("currentAddress1")==null?null:customerDtl.get("currentAddress1").toString() );
+            customer.setCurrentAddress2( customerDtl.get("currentAddress2")==null?null:customerDtl.get("currentAddress2").toString() );
+            customer.setCurrentSubDistrict( customerDtl.get("currentSubDistrict")==null?null:customerDtl.get("currentSubDistrict").toString() );
+            customer.setCurrentDistrict( customerDtl.get("currentDistrict")==null?null:customerDtl.get("currentDistrict").toString() );
+            customer.setCurrentProvince( customerDtl.get("currentProvince")==null?null:customerDtl.get("currentProvince").toString() );
+            customer.setCurrentZipCode( customerDtl.get("currentZipCode")==null?null:customerDtl.get("currentZipCode").toString() );
+            
+            customer.setShippingAddress1( customerDtl.get("shippingAddress1")==null?null:customerDtl.get("shippingAddress1").toString() );
+            customer.setShippingAddress2( customerDtl.get("shippingAddress2")==null?null:customerDtl.get("shippingAddress2").toString() );
+            customer.setShippingSubDistrict( customerDtl.get("shippingSubDistrict")==null?null:customerDtl.get("shippingSubDistrict").toString() );
+            customer.setShippingDistrict( customerDtl.get("shippingDistrict")==null?null:customerDtl.get("shippingDistrict").toString() );
+            customer.setShippingProvince( customerDtl.get("shippingProvince")==null?null:customerDtl.get("shippingProvince").toString() );
+            customer.setShippingZipCode( customerDtl.get("shippingZipCode")==null?null:customerDtl.get("shippingZipCode").toString() );
+            
+            customerRepository.saveAndFlush(customer);
+            // 
+            caseManagement.setCustomer(customer);
             caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
             caseManagement.setCaseType("CR");
+            String caseNumber = generateCaseNumber(caseManagement.getCaseType());
+            caseManagement.setCaseNumber(caseNumber);
+            LOGGER.debug("machine size :{}",machineData.size());
+            if(machineData.size()>10){
+                throw new RuntimeException("Oversize of Machine");
+            }
+            Integer machineRunning = 1;
+            for(Map<String,Object> machineInfo: machineData){   
+                String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
+                String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
+                String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
+                // generate Machine by Condition
+                Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+                // update Status Machine 
+                updateMachineStatus(machineId , 0 , caseNumber ,"SYSTEM");
+                Machine machineUsed = machineRepository.findOne(machineId);
+                if(machineRunning == 1){
+                    caseManagement.setMachine1(machineUsed);
+                }else if(machineRunning == 2 ){
+                    caseManagement.setMachine2(machineUsed);
+                }else if(machineRunning == 3 ){
+                    caseManagement.setMachine3(machineUsed);
+                }else if(machineRunning == 4 ){
+                    caseManagement.setMachine4(machineUsed);
+                }else if(machineRunning == 5 ){
+                    caseManagement.setMachine5(machineUsed);
+                }else if(machineRunning == 6 ){
+                    caseManagement.setMachine6(machineUsed);
+                }else if(machineRunning == 7 ){
+                    caseManagement.setMachine7(machineUsed);
+                }else if(machineRunning == 8 ){
+                    caseManagement.setMachine8(machineUsed);
+                }else if(machineRunning == 9 ){
+                    caseManagement.setMachine9(machineUsed);
+                }else if(machineRunning == 10 ){
+                    caseManagement.setMachine10(machineUsed);
+                }else{
+
+                    throw new RuntimeException("Oversize of machine");
+                }
+                machineRunning++;
+            }
+
+
             caseManagementRepository.save(caseManagement);
-          
             Map<String,Object> returnResult = new HashMap<>();
             returnResult.put("status","success");
             returnResult.put("caseNumber",caseManagement.getCaseNumber());
 
-            return null;
+            return returnResult;
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -229,10 +304,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
 
     @Override
-    public synchronized Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef){
-        LOGGER.info("autoGenerateMachineByTypeAndStatusEqActive : {} :{} ",machineType,modelRef);
+    public synchronized Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef,String serialNo){
+        LOGGER.info("autoGenerateMachineByTypeAndStatusEqActive : {} :{} :{} ",machineType,modelRef,serialNo);
         try{
-            return caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef);
+            return caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
