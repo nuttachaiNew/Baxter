@@ -40,7 +40,7 @@ public class CaseManagementRepositoryCustom {
             }
         }
 
-      public Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef){
+      public Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef,String serialNumber){
         try{
              LOGGER.debug("autoGenerateMachineByTypeAndStatusEqActive result type  ");
              Long result = null;
@@ -49,17 +49,18 @@ public class CaseManagementRepositoryCustom {
              StringBuilder criteriaSqlData = new StringBuilder();
              criteriaSqlData.append(" SELECT M.ID , M.CODE FROM MACHINE M  ");
              criteriaSqlData.append(" WHERE M.MACHINE_TYPE = :machineType  and M.STATUS = 1  and M.MODEL_REF = :modelRef");
+             if( !"".equalsIgnoreCase(serialNumber) ) criteriaSqlData.append(" AND M.SERIAL_NUMBER  = :serialNumber ");
              criteriaSqlData.append(" ORDER BY M.CODE ");
              Query query = em.createNativeQuery(criteriaSqlData.toString());
              query.setParameter("machineType",machineType);
              query.setParameter("modelRef",modelRef);
-
+             if( !"".equalsIgnoreCase(serialNumber) ) query.setParameter("serialNumber",serialNumber);
              listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){
                 Long id = col[0] == null? null : Long.valueOf( col[0].toString() );
                 resultList.add(id);
              }
-             if(resultList.size()<=0){
+             if(resultList.size() == 0){
                 throw new RuntimeException("Machine not Available active size = 0");
              }else{
                 result = resultList.get(0);
