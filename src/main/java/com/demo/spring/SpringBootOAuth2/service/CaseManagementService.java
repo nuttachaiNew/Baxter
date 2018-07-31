@@ -10,7 +10,7 @@ public interface CaseManagementService {
     InputStream downloadFileByCaseIdAndFileType(Long caseId,String fileTpye);
     Map<String,Object> saveCase(String json);
     String generateCaseNumber(String caseType);
-    Long autoGenerateMachineByTypeAndStatusEqActive(String machineType);
+    Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef);
     void updateMachineStatus(Long machineId ,Integer status,String caseNumber,String actionBy); 
 }
 

@@ -229,10 +229,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
 
     @Override
-    public synchronized Long autoGenerateMachineByTypeAndStatusEqActive(String machineType){
-        LOGGER.info("autoGenerateMachineByTypeAndStatusEqActive : {} ",machineType);
+    public synchronized Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef){
+        LOGGER.info("autoGenerateMachineByTypeAndStatusEqActive : {} :{} ",machineType,modelRef);
         try{
-            return caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType);
+            return caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef);
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
