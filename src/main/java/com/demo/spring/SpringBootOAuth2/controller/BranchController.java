@@ -99,7 +99,7 @@ public class BranchController {
     }
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    ResponseEntity<String> deleteBranch(String json){
+    ResponseEntity<String> deleteBranch(@RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try{
