@@ -51,9 +51,6 @@ public class MachineServiceImpl implements MachineService {
             JSONObject jsonObject = new JSONObject(json);
             Machine machine = mapper.readValue(jsonObject.toString(),Machine.class);
             machine.setCreatedDate(StandardUtil.getCurrentDate());
-            machine.setCreatedBy(user);
-            machine.setUpdatedDate(StandardUtil.getCurrentDate());
-            machine.setUpdatedBy(user);
             machineRepository.saveAndFlush(machine);
             result.put("code",machine.getCode());
             return result;
@@ -81,7 +78,6 @@ public class MachineServiceImpl implements MachineService {
                         ( machineNew.getVersion().equals(machineOld.getVersion()) )
                         ){
                     machineNew.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineNew.setUpdatedBy(user);
                     machineRepository.saveAndFlush(machineNew);
                 }else{
                     throw new RuntimeException("Version machine is not match");
@@ -146,7 +142,6 @@ public class MachineServiceImpl implements MachineService {
                     if(machine != null){
                         machine.setStatus(0);
                         machine.setUpdatedDate(StandardUtil.getCurrentDate());
-                        machine.setUpdatedBy(user);
                         machineRepository.saveAndFlush(machine);
                     }
                 }

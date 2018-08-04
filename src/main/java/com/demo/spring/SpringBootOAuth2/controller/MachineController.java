@@ -33,9 +33,8 @@ public class MachineController {
     public ResponseEntity<String> saveMachine(HttpServletRequest request , @RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
-        LOGGER.info("[saveMachine][Controller] user:{} ",request.getHeader("USER"));
         try {
-            String user = request.getHeader("USER");
+            String user = null;
             Map<String,String> result = machineService.saveMachine(json,user);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
@@ -52,9 +51,8 @@ public class MachineController {
     public ResponseEntity<String> updateMachine(HttpServletRequest request , @RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
-        LOGGER.info("[updateMachine][Controller] user:{} ",request.getHeader("USER"));
         try {
-            String user = request.getHeader("USER");
+            String user = null;
             Map<String,String> result = machineService.updateMachine(json,user);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
@@ -108,7 +106,7 @@ public class MachineController {
 
     @RequestMapping(value ="/findMachineByCriteria", method = RequestMethod.GET)
     @ResponseBody
-    ResponseEntity<String> findMachineByCriteria(@RequestBody String json){
+    ResponseEntity<String> findMachineByCriteria(@RequestParam(value = "json",required = false)String json){
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
@@ -127,15 +125,14 @@ public class MachineController {
 
     }
 
-    @RequestMapping(value ="/deleteMachine", method = RequestMethod.GET)
+    @RequestMapping(value ="/deleteMachine", method = RequestMethod.POST)
     ResponseEntity<String> deleteMachine(HttpServletRequest request , @RequestBody String json){
 
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
-        LOGGER.info("[deleteMachine][Controller] user:{} ",request.getHeader("USER"));
         try {
-            String user = request.getHeader("USER");
+            String user = null;
             JSONObject object = new JSONObject(json);
             machineService.deleteMachine(object,user);
             headers.add("errorStatus", "N");

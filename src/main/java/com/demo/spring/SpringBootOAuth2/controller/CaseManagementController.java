@@ -63,9 +63,8 @@ public class CaseManagementController {
                                                                 MultipartHttpServletRequest multipartHttpServletRequest, HttpServletRequest request) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        LOGGER.info("[uploadfileByCaseIdAndFileType][Controller] user:{} ",request.getHeader("USER"));
         try{
-            String user = request.getHeader("USER");
+            String user = null;
             MultipartFile multipartFile = multipartHttpServletRequest.getFile("file");
             String name = multipartHttpServletRequest.getParameter("name");
             String status = caseManagementService.uploadfileByCaseIdAndFileType(name,multipartFile,Long.valueOf(id),fileType,user);
