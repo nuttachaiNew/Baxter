@@ -141,8 +141,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                     fileUpload.setFileType(fileTpye);
                     fileUpload.setFileName(originalFilename);
                     fileUpload.setCaseManagement(caseManagement);
-                    fileUpload.setUpdatedBy(user);
-                    fileUpload.setUpdatdDate(StandardUtil.getCurrentDate());
                     fileUploadRepository.saveAndFlush(fileUpload);
 
                     //---Set FileUpload in set case and save
@@ -150,9 +148,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                     setFileUpload.add(fileUpload);
                     caseManagement.setFileUploads(setFileUpload);
                     caseManagementRepository.saveAndFlush(caseManagement);
+                }else{
+                    fileUpload.setFileName(originalFilename);
+                    fileUpload.setUpdatdDate(StandardUtil.getCurrentDate());
                 }
 
-                File path = new File(pathFile + FileName + typeFile);
+                File path = new File(pathFile + FileName + "." +typeFile);
                 FileCopyUtils.copy(bytes, new FileOutputStream(path));
             }
 
@@ -175,11 +176,11 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
             if(fileUpload != null){
 
-                String FileName = caseId + "_" + fileTpye;
+                String fileName = caseId + "_" + fileTpye;
                 String pathFile = parameterDetail.getParameterValue();
                 String originalFilename = fileUpload.getFileName();
 
-                inputStream = new FileInputStream(pathFile+FileName+originalFilename.split("\\.")[1]);
+                inputStream = new FileInputStream(pathFile+fileName+ "." +originalFilename.split("\\.")[1]);
             }else{
                 throw new RuntimeException("File not found.");
             }
