@@ -103,13 +103,12 @@ public class CaseManagementController {
 
 
     @RequestMapping(value ="/saveCase", method = RequestMethod.POST)
-    public ResponseEntity<String> saveCase(@RequestBody String json){
+    public ResponseEntity<String> saveCase(@RequestBody String json,MultipartHttpServletRequest multipartHttpServletRequest){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
             // LOGGER.info("JSON   :   {}",json);
-            Map<String,Object> result = caseManagementService.saveCase(json);
-            result.put("status","success");
+            Map<String,Object> result = caseManagementService.saveCase(json,multipartHttpServletRequest);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);

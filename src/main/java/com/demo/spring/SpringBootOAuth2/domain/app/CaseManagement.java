@@ -23,12 +23,17 @@ public class CaseManagement extends BaseModel {
 
     @OneToOne(fetch = FetchType.LAZY)
     private CaseManagement refCase;
-
+    private String caseStatus;
     private String caseNumber;
     private String caseType;
     private String shareSource;
     private String electronicConsetFlag;
     private String electronicConset;
+
+    private String assignTs;
+    private String assignFn;
+    private String assignCs;
+    private String assignAsm;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp activityDate;
