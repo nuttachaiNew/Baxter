@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class BranchController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    ResponseEntity<String> saveBranch(String json){
+    ResponseEntity<String> saveBranch(@RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try{
@@ -82,7 +83,7 @@ public class BranchController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    ResponseEntity<String> updateBranch(String json){
+    ResponseEntity<String> updateBranch(@RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try{

@@ -4,13 +4,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.Map;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 
 public interface CaseManagementService {
     String uploadfileByCaseIdAndFileType(String name, MultipartFile multipartFile,Long caseId,String fileTpye,String user);
     InputStream downloadFileByCaseIdAndFileType(Long caseId,String fileTpye);
-    Map<String,Object> saveCase(String json);
+    Map<String,Object> saveCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     String generateCaseNumber(String caseType);
     Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef,String serialNumber);
     void updateMachineStatus(Long machineId ,Integer status,String caseNumber,String actionBy); 
+    // Map<String,Object> updateCase(String json);
+    void submitToASM(Long id,String updBy);
+
 }
 

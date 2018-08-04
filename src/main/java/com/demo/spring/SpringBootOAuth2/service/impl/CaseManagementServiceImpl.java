@@ -7,6 +7,8 @@ import com.demo.spring.SpringBootOAuth2.domain.app.Customer;
 import com.demo.spring.SpringBootOAuth2.domain.app.ParameterDetail;
 import com.demo.spring.SpringBootOAuth2.domain.app.Machine;
 import com.demo.spring.SpringBootOAuth2.domain.app.MachineHistory;
+import com.demo.spring.SpringBootOAuth2.domain.app.CaseActivity;
+import com.demo.spring.SpringBootOAuth2.domain.app.User;
 
 import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepository;
 import com.demo.spring.SpringBootOAuth2.repository.CustomerRepository;
@@ -54,7 +56,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import com.demo.spring.SpringBootOAuth2.repository.MachineRepository;
 import com.demo.spring.SpringBootOAuth2.repository.MachineHistoryRepository;
+import com.demo.spring.SpringBootOAuth2.repository.CaseActivityRepository;
+import com.demo.spring.SpringBootOAuth2.repository.UserRepository;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 @Service
@@ -88,6 +93,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CaseActivityRepository caseActivityRepository;
 
   private static DecimalFormat FORMAT_RUNNING = new DecimalFormat("00");
   private static DecimalFormat FORMAT_YEAR = new DecimalFormat("0000");
@@ -182,7 +193,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     @Override
     @Transactional
-    public Map<String,Object> saveCase(String json){
+    public Map<String,Object> saveCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
         try{
             LOGGER.debug("saveCase :{} ",json);
             ObjectMapper mapper = new ObjectMapper();
@@ -254,13 +265,23 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 }else if(machineRunning == 10 ){
                     caseManagement.setMachine10(machineUsed);
                 }else{
-
                     throw new RuntimeException("Oversize of machine");
                 }
                 machineRunning++;
             }
+            caseManagement.setCaseStatus("I");
+            // init caseActivity
+            CaseActivity caseActivity = new CaseActivity();
+            Set<CaseActivity> activitys = new HashSet<>();
+            User user = userRepository.findByUsername(caseManagement.getCreatedBy());
+            caseActivity.setUser(user);
+            caseActivity.setActionStatus("create case");
+            caseActivity.setActionDate(StandardUtil.getCurrentDate());
+            caseActivity.setCaseManagement(caseManagement);
+            caseActivityRepository.save(caseActivity);
+            activitys.add(caseActivity);
 
-
+            caseManagement.setCaseActivitys(activitys);
             caseManagementRepository.save(caseManagement);
             Map<String,Object> returnResult = new HashMap<>();
             returnResult.put("status","success");
@@ -338,6 +359,39 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             machine.setMachineHistory(machineHis); 
             machineRepository.saveAndFlush(machine);
             LOGGER.debug("machine :{} is status : {} ",machine.getCode() , machine.getStatus() );
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);   
+        }
+    }
+    @Override
+    @Transactional
+    public void submitToASM(Long id,String updBy){
+        try{
+ //  I > W > R|F > W > F
+            LOGGER.debug("submitToASM :{} :{}",id,updBy);
+            CaseManagement caseMng = caseManagementRepository.findOne(id);
+            if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
+                caseMng.setCaseStatus("W");
+                caseMng.setUpdatedBy(updBy);
+                caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
+                Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
+                CaseActivity caseAct = new CaseActivity();
+                User user = userRepository.findByUsername( updBy );
+                caseAct.setUser(user);
+                caseAct.setActionStatus("submit to ASM");
+                caseAct.setActionDate(StandardUtil.getCurrentDate());
+                caseAct.setCaseManagement(caseMng);    
+                caseActivityRepository.save(caseAct);
+                caseActivitys.add(caseAct);
+                caseMng.setCaseActivitys(caseActivitys);
+                caseManagementRepository.save(caseMng);
+            }else{
+                throw new RuntimeException("Error with flow case status not Init or Reject");
+            }
+           
+
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
