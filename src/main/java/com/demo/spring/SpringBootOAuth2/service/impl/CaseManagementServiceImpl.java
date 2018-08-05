@@ -199,7 +199,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             LOGGER.debug("saveCase :{} ",json);
             ObjectMapper mapper = new ObjectMapper();
             JSONObject jsonObject = new JSONObject(json);
-            CaseManagement caseManagement = mapper.readValue(jsonObject.toString(),CaseManagement.class);
+            // CaseManagement caseManagement = mapper.readValue(jsonObject.toString(),CaseManagement.class);
+            CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+
+            
             Map<String,Object> customerDtl = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.get("customer").toString());
             List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machine").toString());
            
