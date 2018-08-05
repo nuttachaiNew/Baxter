@@ -10,6 +10,10 @@ import org.springframework.web.servlet.config.annotation.ContentNegotiationConfi
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 @EnableWebMvc
@@ -21,6 +25,17 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter{
         configurer.favorPathExtension(true).
                 ignoreAcceptHeader(true).
                 useJaf(false).mediaType("json", MediaType.APPLICATION_JSON);
+    }
+
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/*").allowedOrigins("*").allowedMethods("POST","PUT", "DELETE");
+            }
+        };
     }
   
 }
