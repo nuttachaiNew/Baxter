@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/casemanagement")
@@ -46,6 +48,26 @@ public class CaseManagementController {
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
             CaseManagement caseManagement = caseManagementRepository.findOne(Long.valueOf(id));
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
+    @RequestMapping(value ="/findCaseManagementByCaseNumber", method = RequestMethod.GET)
+    ResponseEntity<String> findCaseManagementByCaseNumber(@RequestParam(value = "caseNumber",required = false)String caseNumber){
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            CaseManagement caseManagement = caseManagementService.findByCaseNumber(caseNumber);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
@@ -99,14 +121,11 @@ public class CaseManagementController {
         }
     }
 
-
-
     @RequestMapping(value ="/saveCase", method = RequestMethod.POST)
     public ResponseEntity<String> saveCase(@RequestBody String json,MultipartHttpServletRequest multipartHttpServletRequest){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            // LOGGER.info("JSON   :   {}",json);
             Map<String,Object> result = caseManagementService.saveCase(json,multipartHttpServletRequest);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
@@ -119,4 +138,51 @@ public class CaseManagementController {
         }
     }
 
+    @RequestMapping(value ="/findHistoryDocByAreaAndDocStatusAndRoleAndCase", method = RequestMethod.GET)
+    ResponseEntity<String> findHistoryDocByAreaAndDocStatusAndRoleAndCase(@RequestParam(value = "createdBy",required = false)String createdBy
+                                                                        , @RequestParam(value = "areaId",required = false)Long areaId
+                                                                        , @RequestParam(value = "caseStatus",required = false)String documentStatus
+                                                                        , @RequestParam(value = "roleBy",required = false)String roleBy
+                                                                        ){
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.findHistoryDocByAreaAndDocStatusAndRoleAndCase(createdBy,areaId,documentStatus,roleBy);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+   @RequestMapping(value ="/findCaseByCriteria", method = RequestMethod.GET)
+    ResponseEntity<String> findCaseByCriteria(                           @RequestParam(value = "date",required = false)String date
+                                                                        , @RequestParam(value = "caseNumber",required = false)String caseNumber
+                                                                        , @RequestParam(value = "areaId",required = false)String areaId
+                                                                        , @RequestParam(value = "description",required = false)String description
+                                                                        , @RequestParam(value = "firstResult",required = false)Integer firstResult
+                                                                        , @RequestParam(value = "maxResult",required = false)Integer maxResult
+                                                                        ){
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteria(date,caseNumber,areaId,description,firstResult,maxResult);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
 }

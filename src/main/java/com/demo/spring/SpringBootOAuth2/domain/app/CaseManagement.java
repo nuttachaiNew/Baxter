@@ -34,6 +34,7 @@ public class CaseManagement extends BaseModel {
     private String assignFn;
     private String assignCs;
     private String assignAsm;
+    private Long areaId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp activityDate;

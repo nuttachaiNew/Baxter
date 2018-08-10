@@ -231,7 +231,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             // 
             caseManagement.setCustomer(customer);
             caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
-            caseManagement.setCaseType("CR");
+            
+            String caseTypeData =  caseManagement.getCaseType()== null?"CR" :caseManagement.getCaseType()   ;
+            caseManagement.setCaseType(caseTypeData);
             String caseNumber = generateCaseNumber(caseManagement.getCaseType());
             caseManagement.setCaseNumber(caseNumber);
             LOGGER.debug("machine size :{}",machineData.size());
@@ -284,7 +286,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseActivity.setCaseManagement(caseManagement);
             caseActivityRepository.save(caseActivity);
             activitys.add(caseActivity);
-
+            caseManagement.setAreaId(user.getBranch().getId());
             caseManagement.setCaseActivitys(activitys);
             caseManagementRepository.save(caseManagement);
             Map<String,Object> returnResult = new HashMap<>();
@@ -318,7 +320,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                  caseNumber = caseType+FORMAT_MONTH.format(today.get(Calendar.MONTH) + 1)  + FORMAT_YEAR.format(today.get(Calendar.YEAR)).substring(2) 
                 +"/01/" +FORMAT_RUNNING.format( maxNumber.equalsIgnoreCase("")? 1 : Integer.valueOf( maxNumber.substring(maxNumber.length() -2  , maxNumber.length()) ) +1 ) ;
             }
-
             return caseNumber;
         }catch(Exception e){
             e.printStackTrace();
@@ -394,13 +395,47 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }else{
                 throw new RuntimeException("Error with flow case status not Init or Reject");
             }
-           
-
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e);   
         }
     }
+
+    @Override
+    public  CaseManagement findByCaseNumber(String caseNumber){
+        try{
+            LOGGER.debug("findByCaseNumber :{}",caseNumber);
+            return caseManagementRepository.findByCaseNumber(caseNumber);
+        }catch(Exception e){
+             e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);   
+        }
+    }
+
+    @Override
+    public  List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy){
+        try{
+            LOGGER.debug("findHistoryDocByAreaAndDocStatusAndRoleAndCase :{} : {} :{} :{}",createdBy,areaId,documentStatus,roleBy);
+            return caseManagementRepositoryCustom.findHistoryDocByAreaAndDocStatusAndRoleAndCase(createdBy,areaId,documentStatus,roleBy);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+    }
+
+   @Override
+   public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String description ,Integer firstResult ,Integer maxResult){
+     try{
+        LOGGER.info("findCaseByCriteria : {}",date);
+        return caseManagementRepositoryCustom.findCaseByCriteria(date,caseNumber,areaId,description,firstResult,maxResult);
+     }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   } 
 
 }

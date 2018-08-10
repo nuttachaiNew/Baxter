@@ -74,5 +74,85 @@ public class CaseManagementRepositoryCustom {
         }
       }
 
+    public List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy){
+        try{
+            LOGGER.debug("findHistoryDocByAreaAndDocStatusAndRoleAndCase :{}:{}:{}",createdBy,areaId,documentStatus);
+            List<Object[] > listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+            criteriaSqlData.append(" SELECT  CM.CASE_NUMBER , CA.ACTION_STATUS , CA.ACTION_DATE , AU.USERNAME  , CM.CASE_TYPE ,CM.ID ,AR.ROLE_NAME");
+            criteriaSqlData.append(" FROM CASE_ACTIVITY CA ");
+            criteriaSqlData.append(" JOIN CASE_MANAGEMENT CM ON CM.ID = CA.CASE_MANAGEMENT ");
+            criteriaSqlData.append(" JOIN APP_USER AU ON AU.ID = CA.USER ");
+            criteriaSqlData.append(" JOIN APP_ROLE AR ON AR.ID = AU.ROLE ");
+            criteriaSqlData.append(" WHERE CM.CASE_STATUS IN (:documentStatus) ");
+            if(areaId != null){
+               criteriaSqlData.append(" AND CM.AREA_ID = :areaId ");   
+            }
+            if(createdBy !=null ){
+                criteriaSqlData.append(" AND CM.CREATED_BY = :createdBy ");
+            }
+            criteriaSqlData.append(" WHERE CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ;");
+            Query query = em.createNativeQuery(criteriaSqlData.toString());
+            query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
+            if(areaId!=null) query.setParameter("areaId",areaId);
+            if(createdBy!=null) query.setParameter("createdBy",createdBy);
+             listfromQuery = query.getResultList();
+             for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("caseNumber",col[0]);
+                activity.put("actionStatus",col[1]);
+                activity.put("actionDate",col[2]);
+                activity.put("actionBy",col[3]);
+                activity.put("caseType",col[4]);
+                activity.put("caseId",col[5]);
+                activity.put("roleName",col[6]);
+                results.add(activity);
+             }
+             return results;
+        }catch(Exception e){
+            e.printStackTrace();   
+             throw new RuntimeException(e.getMessage()); 
+        }
+    }
+
+    public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String description ,Integer firstResult ,Integer maxResult){
+        try{
+            LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,description,firstResult,maxResult);
+            List<Object[] > listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
+            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
+            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER   ");
+            criteriaSqlData.append(" WHERE TRUNC(CM.CREATED_DATE) = TO_DATE(:date,'MM-YYYY') ");
+            criteriaSqlData.append(" AND CM.CASE_NUMBER  = :caseNumber  ");
+            if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
+            criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
+            Query query = em.createNativeQuery(criteriaSqlData.toString());
+            query.setParameter("date",date );
+            query.setParameter("caseNumber",caseNumber );
+            if(areaId!=null) query.setParameter("areaId",areaId );
+            listfromQuery = query.getResultList();
+             for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("id",col[0]);
+                activity.put("caseNumber",col[1]);
+                activity.put("createdDate",col[2]);
+                activity.put("caseType",col[3]);
+                activity.put("cutsomerName",col[4]);
+                activity.put("cutsomerType",col[5]);
+                activity.put("caseStatus",col[6]);
+                results.add(activity);
+             }
+             return results;
+        }catch(Exception e){
+            e.printStackTrace();   
+             throw new RuntimeException(e.getMessage()); 
+        }
+    }
+
+
+
 
 }
