@@ -427,15 +427,27 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String description ,Integer firstResult ,Integer maxResult){
+   public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
      try{
         LOGGER.info("findCaseByCriteria : {}",date);
-        return caseManagementRepositoryCustom.findCaseByCriteria(date,caseNumber,areaId,description,firstResult,maxResult);
+        return caseManagementRepositoryCustom.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e);
         }
    } 
+
+   @Override
+   public List<Map<String,Object>> findCaseforReturnCaseByCustomer(String caseType,String customer,String caseNumber){
+       try{
+        LOGGER.info("findCaseforReturnCaseByCustomer : {} :{} :{}",caseType,customer,caseNumber);
+        return caseManagementRepositoryCustom.findCaseforReturnCaseByCustomer(caseType,customer,caseNumber);
+       }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }  
+   }
 
 }

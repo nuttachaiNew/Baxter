@@ -22,6 +22,8 @@ public interface CaseManagementService {
     CaseManagement findByCaseNumber(String caseNumber);
     // void approveCaseByRole();
     List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy);
-    List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String description ,Integer firstResult ,Integer maxResult);
+    List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
+    List<Map<String,Object>> findCaseforReturnCaseByCustomer(String caseType,String customer,String caseNumber);
+
 }
 
