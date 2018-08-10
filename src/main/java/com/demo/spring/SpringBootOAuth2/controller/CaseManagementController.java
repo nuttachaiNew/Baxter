@@ -165,7 +165,7 @@ public class CaseManagementController {
     ResponseEntity<String> findCaseByCriteria(                           @RequestParam(value = "date",required = false)String date
                                                                         , @RequestParam(value = "caseNumber",required = false)String caseNumber
                                                                         , @RequestParam(value = "areaId",required = false)String areaId
-                                                                        , @RequestParam(value = "description",required = false)String description
+                                                                        , @RequestParam(value = "caseStatus",required = false)String documentStatus
                                                                         , @RequestParam(value = "firstResult",required = false)Integer firstResult
                                                                         , @RequestParam(value = "maxResult",required = false)Integer maxResult
                                                                         ){
@@ -174,7 +174,29 @@ public class CaseManagementController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteria(date,caseNumber,areaId,description,firstResult,maxResult);
+            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value ="/findCaseforReturnCaseByCustomer", method = RequestMethod.GET)
+    ResponseEntity<String> findCaseforReturnCaseByCustomer(       
+                      @RequestParam(value = "caseType",required = false)String caseType
+                 ,    @RequestParam(value = "customer",required = false)String customer
+                 ,    @RequestParam(value = "caseNumber",required = false)String caseNumber
+             ){
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.findCaseforReturnCaseByCustomer(caseType,customer,caseNumber);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);

@@ -116,9 +116,9 @@ public class CaseManagementRepositoryCustom {
         }
     }
 
-    public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String description ,Integer firstResult ,Integer maxResult){
+    public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult){
         try{
-            LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,description,firstResult,maxResult);
+            LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
@@ -128,10 +128,12 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" WHERE TRUNC(CM.CREATED_DATE) = TO_DATE(:date,'MM-YYYY') ");
             criteriaSqlData.append(" AND CM.CASE_NUMBER  = :caseNumber  ");
             if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
+            if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus  ");
             criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("date",date );
             query.setParameter("caseNumber",caseNumber );
+            if(documentStatus!=null ) query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId );
             listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){
@@ -152,7 +154,45 @@ public class CaseManagementRepositoryCustom {
         }
     }
 
+    public List<Map<String,Object>> findCaseforReturnCaseByCustomer(String caseType,String customer,String caseNumber){
+        try{
+            LOGGER.debug("findCaseforReturnCaseByCustomer : {} :{} :{}",caseType,customer,caseNumber);
+            List<Object[] > listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
+            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
+            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER  ");
+            criteriaSqlData.append(" WHERE CM.CASE_STATUS = 'F'  ");
+            criteriaSqlData.append(" AND (CUST.patient_Name = :customer) OR  (CUST.Hospital_Name = :customer) ");
+            criteriaSqlData.append(" AND CM.CASE_TYPE = :caseType  ");
+            criteriaSqlData.append(" AND CM.CASE_NUMBER = :caseNumber  ");
+            criteriaSqlData.append(" ORDER BY CM.CASE_NUMBER ");
 
+            Query query = em.createNativeQuery(criteriaSqlData.toString());
+            query.setParameter("caseType",caseType );
+            query.setParameter("customer",customer );
+            query.setParameter("caseNumber",caseNumber );
+            listfromQuery = query.getResultList();
+            for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("id",col[0]);
+                activity.put("caseNumber",col[1]);
+                activity.put("createdDate",col[2]);
+                activity.put("caseType",col[3]);
+                activity.put("cutsomerName",col[4]);
+                activity.put("cutsomerType",col[5]);
+                activity.put("caseStatus",col[6]);
+                results.add(activity);
+             }
+             return results;
+
+
+        }catch(Exception e){
+             e.printStackTrace();   
+             throw new RuntimeException(e.getMessage());
+        }
+    }
 
 
 }
