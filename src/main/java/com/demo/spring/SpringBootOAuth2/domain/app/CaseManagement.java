@@ -76,19 +76,19 @@ public class CaseManagement extends BaseModel {
     @OneToOne(fetch = FetchType.LAZY)
     private Machine machine10;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Installation installation;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Prescription prescription;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement" , orphanRemoval = true)
     private Set<FileUpload> fileUploads;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement" , orphanRemoval = true)
     private Set<CaseActivity> caseActivitys;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement" , orphanRemoval = true)
     private Set<LineApprove> lineApproves;
 
 }

@@ -27,7 +27,7 @@ public class CaseActivity {
 
     private String remark;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "caseManagements")
     CaseManagement caseManagement;
 

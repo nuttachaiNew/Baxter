@@ -9,9 +9,11 @@ import com.demo.spring.SpringBootOAuth2.domain.app.Machine;
 import com.demo.spring.SpringBootOAuth2.domain.app.MachineHistory;
 import com.demo.spring.SpringBootOAuth2.domain.app.CaseActivity;
 import com.demo.spring.SpringBootOAuth2.domain.app.User;
+import com.demo.spring.SpringBootOAuth2.domain.app.*;
 
 import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepository;
 import com.demo.spring.SpringBootOAuth2.repository.CustomerRepository;
+import com.demo.spring.SpringBootOAuth2.repository.InstallationRepository;
 
 import com.demo.spring.SpringBootOAuth2.repository.FileUploadRepository;
 import com.demo.spring.SpringBootOAuth2.service.CaseManagementService;
@@ -99,6 +101,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     @Autowired
     private CaseActivityRepository caseActivityRepository;
+
+    @Autowired
+    private InstallationRepository installationRepository;
 
   private static DecimalFormat FORMAT_RUNNING = new DecimalFormat("00");
   private static DecimalFormat FORMAT_YEAR = new DecimalFormat("0000");
@@ -199,14 +204,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             LOGGER.debug("saveCase :{} ",json);
             ObjectMapper mapper = new ObjectMapper();
             JSONObject jsonObject = new JSONObject(json);
-            // CaseManagement caseManagement = mapper.readValue(jsonObject.toString(),CaseManagement.class);
+            
             CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
 
             
             Map<String,Object> customerDtl = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.get("customer").toString());
-            List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machine").toString());
+            List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
            
-            // create Customer
+            // // create Customer
             Customer customer = new Customer();
             customer.setCustomerType( customerDtl.get("customerType")==null?null:customerDtl.get("customerType").toString() );
             customer.setHospitalName( customerDtl.get("hospitalName")==null?null:customerDtl.get("hospitalName").toString() );
@@ -231,7 +236,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             // 
             caseManagement.setCustomer(customer);
             caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
-            
             String caseTypeData =  caseManagement.getCaseType()== null?"CR" :caseManagement.getCaseType()   ;
             caseManagement.setCaseType(caseTypeData);
             String caseNumber = generateCaseNumber(caseManagement.getCaseType());
@@ -275,25 +279,39 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 }
                 machineRunning++;
             }
+            LOGGER.debug("end with machine");
             caseManagement.setCaseStatus("I");
             // init caseActivity
+            
+            User user = userRepository.findByUsername(caseManagement.getCreatedBy());
+            LOGGER.debug("user :{}",user.getId());
+
+          
+            caseManagement.setAreaId(user.getBranch().getId());
+            // caseManagement.setCaseActivitys(activitys);
+            // caseActivity.setActionStatus("before save");
+            // Installation installation = caseManagement.getInstallation();
+            // installationRepository.save(installation);
+            // caseManagement.setInstallation(installation);
+            caseManagementRepository.save(caseManagement);
+            Map<String,Object> returnResult = new HashMap<>();
             CaseActivity caseActivity = new CaseActivity();
             Set<CaseActivity> activitys = new HashSet<>();
-            User user = userRepository.findByUsername(caseManagement.getCreatedBy());
             caseActivity.setUser(user);
             caseActivity.setActionStatus("create case");
             caseActivity.setActionDate(StandardUtil.getCurrentDate());
             caseActivity.setCaseManagement(caseManagement);
             caseActivityRepository.save(caseActivity);
-            activitys.add(caseActivity);
-            caseManagement.setAreaId(user.getBranch().getId());
-            caseManagement.setCaseActivitys(activitys);
-            caseManagementRepository.save(caseManagement);
-            Map<String,Object> returnResult = new HashMap<>();
+            // activitys.add(caseActivity);
+            // caseManagement.setCaseActivitys(activitys);
+            // caseManagementRepository.save(caseManagement);
+
             returnResult.put("status","success");
             returnResult.put("caseNumber",caseManagement.getCaseNumber());
 
             return returnResult;
+
+            // return null;
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -307,14 +325,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         try{
             // return null;
             Calendar today = new GregorianCalendar();
-            String createDate =  GEN_CASE_DATEFORMAT.format(today); 
+            String createDate =  GEN_CASE_DATEFORMAT.format(today.getTime()); 
              LOGGER.info("generateCaseNumber :{} :{} ",caseType,createDate);
 
             List<String> caseNumberMax = caseManagementRepositoryCustom.getLastedCaseNumberByCriteria(caseType,createDate);
             String maxNumber = "";
             String caseNumber = "";
             if( caseNumberMax.size()>0 ){
-                maxNumber = caseNumberMax.get(0);
+                maxNumber = caseNumberMax.get(0) == null ?"":  caseNumberMax.get(0);
             }
             if( "CR".equalsIgnoreCase(caseType) || "AR".equalsIgnoreCase(caseType)   ){
                  caseNumber = caseType+FORMAT_MONTH.format(today.get(Calendar.MONTH) + 1)  + FORMAT_YEAR.format(today.get(Calendar.YEAR)).substring(2) 
