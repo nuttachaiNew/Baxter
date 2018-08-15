@@ -19,10 +19,10 @@ public class ChangePrograme {
     @JsonIgnore
     private Long version;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Opd opd;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Tidal tidal;
 
 

@@ -24,9 +24,9 @@ public class NurseMenu {
     private String minDrawTime;
     private String negOfTime;
     private String postOfLimit;
-    private Integer smartDwells;
-    private Integer heaterBagEmpty;
-    private Integer tidalFullDrns;
+    private String smartDwells;
+    private String heaterBagEmpty;
+    private String tidalFullDrns;
     private String language;
     private String flush;
     private String programLocked;

@@ -23,6 +23,7 @@ public class CaseManagementRepositoryCustom {
             try{
                 // List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
                 List<String> listfromQuery = new ArrayList<>();
+                String result = "";
                 StringBuilder criteriaSqlData = new StringBuilder();
                 criteriaSqlData.append(" SELECT MAX(CM.CASE_NUMBER)  FROM CASE_MANAGEMENT CM  ");
                 criteriaSqlData.append(" WHERE CM.CASE_TYPE = :type ");
@@ -30,9 +31,9 @@ public class CaseManagementRepositoryCustom {
                 Query query = em.createNativeQuery(criteriaSqlData.toString());
                 query.setParameter("type",type);
                 query.setParameter("createdDate",createdDate);
-
                  listfromQuery = query.getResultList();
-                 LOGGER.debug("get max :{}",listfromQuery);
+
+                 LOGGER.debug("get max :{} :{}",listfromQuery,listfromQuery.size());
                  return listfromQuery;
             }catch(Exception e){
                  e.printStackTrace();   
@@ -42,7 +43,7 @@ public class CaseManagementRepositoryCustom {
 
       public Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef,String serialNumber){
         try{
-             LOGGER.debug("autoGenerateMachineByTypeAndStatusEqActive result type  ");
+             LOGGER.debug("autoGenerateMachineByTypeAndStatusEqActive result type :{} :{} :{}  ",machineType,modelRef,serialNumber);
              Long result = null;
              List<Long> resultList = new ArrayList<>();
              List<Object[]> listfromQuery = new ArrayList<>();

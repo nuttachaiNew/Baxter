@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import java.util.HashMap;
+
 import java.util.List;
 
 
@@ -121,12 +123,17 @@ public class CaseManagementController {
         }
     }
 
-    @RequestMapping(value ="/saveCase", method = RequestMethod.POST)
-    public ResponseEntity<String> saveCase(@RequestBody String json,MultipartHttpServletRequest multipartHttpServletRequest){
+    @RequestMapping(value ="/saveCase", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> saveCase(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+                // @RequestBody String json
+               // , 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            Map<String,Object> result = caseManagementService.saveCase(json,multipartHttpServletRequest);
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            Map<String,Object> result = caseManagementService.saveCase(multipartHttpServletRequest.getParameter("json"),null);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
