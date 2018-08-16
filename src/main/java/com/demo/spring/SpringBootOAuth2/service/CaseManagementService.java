@@ -14,6 +14,8 @@ public interface CaseManagementService {
     String uploadfileByCaseIdAndFileType(String name, MultipartFile multipartFile,Long caseId,String fileTpye,String user);
     InputStream downloadFileByCaseIdAndFileType(Long caseId,String fileTpye);
     Map<String,Object> saveCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> uploadTest(MultipartHttpServletRequest multipartHttpServletRequest);
+    
     String generateCaseNumber(String caseType);
     Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef,String serialNumber);
     void updateMachineStatus(Long machineId ,Integer status,String caseNumber,String actionBy); 

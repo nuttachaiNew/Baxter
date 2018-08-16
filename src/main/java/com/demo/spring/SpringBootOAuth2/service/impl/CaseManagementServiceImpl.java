@@ -62,6 +62,7 @@ import com.demo.spring.SpringBootOAuth2.repository.CaseActivityRepository;
 import com.demo.spring.SpringBootOAuth2.repository.UserRepository;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -466,6 +467,51 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e);
         }  
+   }
+
+   @Override
+   public Map<String,Object> uploadTest(MultipartHttpServletRequest multipartHttpServletRequest){
+    LOGGER.info("-========= uploadTest ============-");
+         try{
+            String json = multipartHttpServletRequest.getParameter("json");
+            JSONObject jsonObject = new JSONObject(json);
+            MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
+            MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
+            MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
+            CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+            List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
+            String caseType = caseManagement.getCaseType() == null ? "CR" :caseManagement.getCaseType() ;
+            String caseNumber = generateCaseNumber(caseType);
+    
+            Map<String ,Object> result = new HashMap<>();
+            result.put("caseNumberDummy",caseNumber);
+            List<Map<String,Object>> objFile = new ArrayList<>();
+
+            if(idCardFile!=null){
+                Map<String,Object> fileData = new HashMap<>();
+                fileData.put("fileType","ID");
+                fileData.put("fileName",idCardFile.getOriginalFilename());
+                objFile.add(fileData);
+            }
+            if(payslipFile!=null){
+                Map<String,Object> fileData = new HashMap<>();
+                fileData.put("fileType","PS");
+                fileData.put("fileName",payslipFile.getOriginalFilename());
+                objFile.add(fileData);
+            }
+            if(contractFile!=null){
+                Map<String,Object> fileData = new HashMap<>();
+                fileData.put("fileType","CT");
+                fileData.put("fileName",contractFile.getOriginalFilename());
+                objFile.add(fileData);
+            }
+            result.put("file",objFile);
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
    }
 
 }
