@@ -200,6 +200,29 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     @Override
     @Transactional
+    public Map<String,Object> updateCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+            Long id = updateCase.getId();
+            CaseManagement oldCase = caseManagementRepository.findOne(id);
+            updateCase.setCreatedDate(oldCase.getCreatedDate());
+            caseManagementRepository.save(updateCase);
+            Map returnResult = new HashMap<>();
+            returnResult.put("status","success");
+            returnResult.put("caseNumber",updateCase.getCaseNumber());
+            return returnResult;
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+    @Override
+    @Transactional
     public Map<String,Object> saveCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
         try{
             LOGGER.debug("saveCase :{} ",json);
@@ -213,29 +236,28 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
            
             // // create Customer
-            Customer customer = new Customer();
-            customer.setCustomerType( customerDtl.get("customerType")==null?null:customerDtl.get("customerType").toString() );
-            customer.setHospitalName( customerDtl.get("hospitalName")==null?null:customerDtl.get("hospitalName").toString() );
-            customer.setPatientName( customerDtl.get("patientName")==null?null:customerDtl.get("patientName").toString() );
-            customer.setNationId( customerDtl.get("nationId")==null?null:customerDtl.get("nationId").toString() );
-            customer.setTelNo( customerDtl.get("telNo")==null?null:customerDtl.get("telNo").toString() );
-            customer.setCurrentAddress1( customerDtl.get("currentAddress1")==null?null:customerDtl.get("currentAddress1").toString() );
-            customer.setCurrentAddress2( customerDtl.get("currentAddress2")==null?null:customerDtl.get("currentAddress2").toString() );
-            customer.setCurrentSubDistrict( customerDtl.get("currentSubDistrict")==null?null:customerDtl.get("currentSubDistrict").toString() );
-            customer.setCurrentDistrict( customerDtl.get("currentDistrict")==null?null:customerDtl.get("currentDistrict").toString() );
-            customer.setCurrentProvince( customerDtl.get("currentProvince")==null?null:customerDtl.get("currentProvince").toString() );
-            customer.setCurrentZipCode( customerDtl.get("currentZipCode")==null?null:customerDtl.get("currentZipCode").toString() );
+            // Customer customer = new Customer();
+            // customer.setCustomerType( customerDtl.get("customerType")==null?null:customerDtl.get("customerType").toString() );
+            // customer.setHospitalName( customerDtl.get("hospitalName")==null?null:customerDtl.get("hospitalName").toString() );
+            // customer.setPatientName( customerDtl.get("patientName")==null?null:customerDtl.get("patientName").toString() );
+            // customer.setNationId( customerDtl.get("nationId")==null?null:customerDtl.get("nationId").toString() );
+            // customer.setTelNo( customerDtl.get("telNo")==null?null:customerDtl.get("telNo").toString() );
+            // customer.setCurrentAddress1( customerDtl.get("currentAddress1")==null?null:customerDtl.get("currentAddress1").toString() );
+            // customer.setCurrentAddress2( customerDtl.get("currentAddress2")==null?null:customerDtl.get("currentAddress2").toString() );
+            // customer.setCurrentSubDistrict( customerDtl.get("currentSubDistrict")==null?null:customerDtl.get("currentSubDistrict").toString() );
+            // customer.setCurrentDistrict( customerDtl.get("currentDistrict")==null?null:customerDtl.get("currentDistrict").toString() );
+            // customer.setCurrentProvince( customerDtl.get("currentProvince")==null?null:customerDtl.get("currentProvince").toString() );
+            // customer.setCurrentZipCode( customerDtl.get("currentZipCode")==null?null:customerDtl.get("currentZipCode").toString() );
             
-            customer.setShippingAddress1( customerDtl.get("shippingAddress1")==null?null:customerDtl.get("shippingAddress1").toString() );
-            customer.setShippingAddress2( customerDtl.get("shippingAddress2")==null?null:customerDtl.get("shippingAddress2").toString() );
-            customer.setShippingSubDistrict( customerDtl.get("shippingSubDistrict")==null?null:customerDtl.get("shippingSubDistrict").toString() );
-            customer.setShippingDistrict( customerDtl.get("shippingDistrict")==null?null:customerDtl.get("shippingDistrict").toString() );
-            customer.setShippingProvince( customerDtl.get("shippingProvince")==null?null:customerDtl.get("shippingProvince").toString() );
-            customer.setShippingZipCode( customerDtl.get("shippingZipCode")==null?null:customerDtl.get("shippingZipCode").toString() );
+            // customer.setShippingAddress1( customerDtl.get("shippingAddress1")==null?null:customerDtl.get("shippingAddress1").toString() );
+            // customer.setShippingAddress2( customerDtl.get("shippingAddress2")==null?null:customerDtl.get("shippingAddress2").toString() );
+            // customer.setShippingSubDistrict( customerDtl.get("shippingSubDistrict")==null?null:customerDtl.get("shippingSubDistrict").toString() );
+            // customer.setShippingDistrict( customerDtl.get("shippingDistrict")==null?null:customerDtl.get("shippingDistrict").toString() );
+            // customer.setShippingProvince( customerDtl.get("shippingProvince")==null?null:customerDtl.get("shippingProvince").toString() );
+            // customer.setShippingZipCode( customerDtl.get("shippingZipCode")==null?null:customerDtl.get("shippingZipCode").toString() );
             
-            customerRepository.saveAndFlush(customer);
-            // 
-            caseManagement.setCustomer(customer);
+            // customerRepository.saveAndFlush(customer);
+            // caseManagement.setCustomer(customer);
             caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
             String caseTypeData =  caseManagement.getCaseType()== null?"CR" :caseManagement.getCaseType()   ;
             caseManagement.setCaseType(caseTypeData);
@@ -303,9 +325,54 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseActivity.setActionDate(StandardUtil.getCurrentDate());
             caseActivity.setCaseManagement(caseManagement);
             caseActivityRepository.save(caseActivity);
-            // activitys.add(caseActivity);
-            // caseManagement.setCaseActivitys(activitys);
-            // caseManagementRepository.save(caseManagement);
+                
+            MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
+            MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
+            MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
+            // Set<FileUpload> fileUpload = new HashSet<>();           
+            Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
+            ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
+
+            String pathFile ="";
+            if(parameterDetail!=null){
+                pathFile = parameterDetail.getParameterValue();    
+            } 
+            if(idCardFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = idCardFile.getBytes();
+                String FileName = caseManagement.getId() + "_" + file.getFileType();
+                // FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                file.setFileName(idCardFile.getOriginalFilename());
+                file.setFileType("ID");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(caseManagement);
+                fileUploadRepository.save(file);
+            }
+            if(payslipFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = caseManagement.getId() + "_" + file.getFileType();
+                // FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(payslipFile.getOriginalFilename());
+                file.setFileType("PS");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(caseManagement);
+                fileUploadRepository.save(file);
+            }
+            if(contractFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = caseManagement.getId() + "_" + file.getFileType();
+                // FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(contractFile.getOriginalFilename());
+                file.setFileType("CT");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(caseManagement);
+                fileUploadRepository.save(file);
+            }
+            
 
             returnResult.put("status","success");
             returnResult.put("caseNumber",caseManagement.getCaseNumber());

@@ -93,7 +93,7 @@ public class CaseManagementRepositoryCustom {
             if(createdBy !=null ){
                 criteriaSqlData.append(" AND CM.CREATED_BY = :createdBy ");
             }
-            criteriaSqlData.append(" WHERE CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ;");
+            criteriaSqlData.append(" WHERE CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId);
@@ -119,6 +119,7 @@ public class CaseManagementRepositoryCustom {
 
     public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult){
         try{
+            caseNumber = caseNumber == null?"":caseNumber;
             LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
@@ -127,13 +128,13 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER   ");
             criteriaSqlData.append(" WHERE TRUNC(CM.CREATED_DATE) = TO_DATE(:date,'MM-YYYY') ");
-            criteriaSqlData.append(" AND CM.CASE_NUMBER  = :caseNumber  ");
+            criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
             if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus  ");
             criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("date",date );
-            query.setParameter("caseNumber",caseNumber );
+            query.setParameter("caseNumber","%"+caseNumber+"%" );
             if(documentStatus!=null ) query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId );
             listfromQuery = query.getResultList();
