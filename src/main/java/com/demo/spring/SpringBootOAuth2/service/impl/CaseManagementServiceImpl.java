@@ -236,28 +236,27 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
            
             // // create Customer
-            // Customer customer = new Customer();
-            // customer.setCustomerType( customerDtl.get("customerType")==null?null:customerDtl.get("customerType").toString() );
-            // customer.setHospitalName( customerDtl.get("hospitalName")==null?null:customerDtl.get("hospitalName").toString() );
-            // customer.setPatientName( customerDtl.get("patientName")==null?null:customerDtl.get("patientName").toString() );
-            // customer.setNationId( customerDtl.get("nationId")==null?null:customerDtl.get("nationId").toString() );
-            // customer.setTelNo( customerDtl.get("telNo")==null?null:customerDtl.get("telNo").toString() );
-            // customer.setCurrentAddress1( customerDtl.get("currentAddress1")==null?null:customerDtl.get("currentAddress1").toString() );
-            // customer.setCurrentAddress2( customerDtl.get("currentAddress2")==null?null:customerDtl.get("currentAddress2").toString() );
-            // customer.setCurrentSubDistrict( customerDtl.get("currentSubDistrict")==null?null:customerDtl.get("currentSubDistrict").toString() );
-            // customer.setCurrentDistrict( customerDtl.get("currentDistrict")==null?null:customerDtl.get("currentDistrict").toString() );
-            // customer.setCurrentProvince( customerDtl.get("currentProvince")==null?null:customerDtl.get("currentProvince").toString() );
-            // customer.setCurrentZipCode( customerDtl.get("currentZipCode")==null?null:customerDtl.get("currentZipCode").toString() );
+            Customer customer = new Customer();
+            customer.setCustomerType( customerDtl.get("customerType")==null?null:customerDtl.get("customerType").toString() );
+            customer.setHospitalName( customerDtl.get("hospitalName")==null?null:customerDtl.get("hospitalName").toString() );
+            customer.setPatientName( customerDtl.get("patientName")==null?null:customerDtl.get("patientName").toString() );
+            customer.setNationId( customerDtl.get("nationId")==null?null:customerDtl.get("nationId").toString() );
+            customer.setTelNo( customerDtl.get("telNo")==null?null:customerDtl.get("telNo").toString() );
+            customer.setCurrentAddress1( customerDtl.get("currentAddress1")==null?null:customerDtl.get("currentAddress1").toString() );
+            customer.setCurrentAddress2( customerDtl.get("currentAddress2")==null?null:customerDtl.get("currentAddress2").toString() );
+            customer.setCurrentSubDistrict( customerDtl.get("currentSubDistrict")==null?null:customerDtl.get("currentSubDistrict").toString() );
+            customer.setCurrentDistrict( customerDtl.get("currentDistrict")==null?null:customerDtl.get("currentDistrict").toString() );
+            customer.setCurrentProvince( customerDtl.get("currentProvince")==null?null:customerDtl.get("currentProvince").toString() );
+            customer.setCurrentZipCode( customerDtl.get("currentZipCode")==null?null:customerDtl.get("currentZipCode").toString() );
             
-            // customer.setShippingAddress1( customerDtl.get("shippingAddress1")==null?null:customerDtl.get("shippingAddress1").toString() );
-            // customer.setShippingAddress2( customerDtl.get("shippingAddress2")==null?null:customerDtl.get("shippingAddress2").toString() );
-            // customer.setShippingSubDistrict( customerDtl.get("shippingSubDistrict")==null?null:customerDtl.get("shippingSubDistrict").toString() );
-            // customer.setShippingDistrict( customerDtl.get("shippingDistrict")==null?null:customerDtl.get("shippingDistrict").toString() );
-            // customer.setShippingProvince( customerDtl.get("shippingProvince")==null?null:customerDtl.get("shippingProvince").toString() );
-            // customer.setShippingZipCode( customerDtl.get("shippingZipCode")==null?null:customerDtl.get("shippingZipCode").toString() );
-            
-            // customerRepository.saveAndFlush(customer);
-            // caseManagement.setCustomer(customer);
+            customer.setShippingAddress1( customerDtl.get("shippingAddress1")==null?null:customerDtl.get("shippingAddress1").toString() );
+            customer.setShippingAddress2( customerDtl.get("shippingAddress2")==null?null:customerDtl.get("shippingAddress2").toString() );
+            customer.setShippingSubDistrict( customerDtl.get("shippingSubDistrict")==null?null:customerDtl.get("shippingSubDistrict").toString() );
+            customer.setShippingDistrict( customerDtl.get("shippingDistrict")==null?null:customerDtl.get("shippingDistrict").toString() );
+            customer.setShippingProvince( customerDtl.get("shippingProvince")==null?null:customerDtl.get("shippingProvince").toString() );
+            customer.setShippingZipCode( customerDtl.get("shippingZipCode")==null?null:customerDtl.get("shippingZipCode").toString() );
+            customerRepository.saveAndFlush(customer);
+            caseManagement.setCustomer(customer);
             caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
             String caseTypeData =  caseManagement.getCaseType()== null?"CR" :caseManagement.getCaseType()   ;
             caseManagement.setCaseType(caseTypeData);
@@ -330,13 +329,13 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
             // Set<FileUpload> fileUpload = new HashSet<>();           
-            Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
-            ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
+            // Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
+            // ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
 
-            String pathFile ="";
-            if(parameterDetail!=null){
-                pathFile = parameterDetail.getParameterValue();    
-            } 
+            // String pathFile ="";
+            // if(parameterDetail!=null){
+            //     pathFile = parameterDetail.getParameterValue();    
+            // } 
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();

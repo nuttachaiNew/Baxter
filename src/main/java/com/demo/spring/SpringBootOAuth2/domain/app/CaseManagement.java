@@ -43,7 +43,7 @@ public class CaseManagement extends BaseModel {
     @OneToOne(fetch = FetchType.LAZY)
     private User actionUser;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY )
     private Customer customer;
 
     @OneToOne(fetch = FetchType.LAZY)
