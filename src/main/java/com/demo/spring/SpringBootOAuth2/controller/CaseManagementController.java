@@ -52,7 +52,7 @@ public class CaseManagementController {
             CaseManagement caseManagement = caseManagementRepository.findOne(Long.valueOf(id));
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
-            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").deepSerialize(caseManagement), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
@@ -72,7 +72,7 @@ public class CaseManagementController {
             CaseManagement caseManagement = caseManagementService.findByCaseNumber(caseNumber);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
-            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").deepSerialize(caseManagement), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
