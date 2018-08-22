@@ -7,8 +7,18 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
+
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 public class FileUpload {
 
     @Id
