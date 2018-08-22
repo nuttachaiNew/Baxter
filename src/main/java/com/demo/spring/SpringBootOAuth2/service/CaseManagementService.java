@@ -20,7 +20,8 @@ public interface CaseManagementService {
     Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef,String serialNumber);
     void updateMachineStatus(Long machineId ,Integer status,String caseNumber,String actionBy); 
     Map<String,Object> updateCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
-    void submitToASM(Long id,String updBy);
+    // void submitToASM(Long id,String updBy);
+    void submitToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     CaseManagement findByCaseNumber(String caseNumber);
     // void approveCaseByRole();
     List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy);

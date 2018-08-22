@@ -123,6 +123,29 @@ public class CaseManagementController {
         }
     }
 
+    @RequestMapping(value ="/submitToASM", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> submitToASM(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            caseManagementService.submitToASM(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            Map result = new HashMap<>();
+            result.put("status","success");
+            result.put("caseStatus","W");
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
     @RequestMapping(value ="/saveCase", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
     public ResponseEntity<String> saveCase(
         MultipartHttpServletRequest multipartHttpServletRequest

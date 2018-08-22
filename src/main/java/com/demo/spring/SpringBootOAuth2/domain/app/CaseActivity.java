@@ -8,8 +8,21 @@ import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-@Entity
+
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+
 @Data
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 public class CaseActivity {
 
     @Id
@@ -17,7 +30,7 @@ public class CaseActivity {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST})
     private User user;
 
     private String actionStatus;
@@ -27,8 +40,8 @@ public class CaseActivity {
 
     private String remark;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "caseManagements")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "CASE_MANAGEMENT")
     CaseManagement caseManagement;
 
 }

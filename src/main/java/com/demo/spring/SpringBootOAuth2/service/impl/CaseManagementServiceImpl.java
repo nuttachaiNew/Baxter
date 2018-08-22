@@ -310,12 +310,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
           
             caseManagement.setAreaId(user.getBranch().getId());
-            // caseManagement.setCaseActivitys(activitys);
-            // caseActivity.setActionStatus("before save");
-            // Installation installation = caseManagement.getInstallation();
-            // installationRepository.save(installation);
-            // caseManagement.setInstallation(installation);
-            caseManagementRepository.save(caseManagement);
+            // caseManagementRepository.save(caseManagement);
             Map<String,Object> returnResult = new HashMap<>();
             CaseActivity caseActivity = new CaseActivity();
             Set<CaseActivity> activitys = new HashSet<>();
@@ -323,8 +318,16 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseActivity.setActionStatus("create case");
             caseActivity.setActionDate(StandardUtil.getCurrentDate());
             caseActivity.setCaseManagement(caseManagement);
-            caseActivityRepository.save(caseActivity);
+            // caseActivityRepository.save(caseActivity);
+            activitys.add(caseActivity);
+            caseManagement.setCaseActivitys(activitys);
+            caseManagementRepository.save(caseManagement);
                 
+          
+
+
+
+
             MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
@@ -457,26 +460,43 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
     @Override
     @Transactional
-    public void submitToASM(Long id,String updBy){
+    public void submitToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest){
         try{
  //  I > W > R|F > W > F
-            LOGGER.debug("submitToASM :{} :{}",id,updBy);
-            CaseManagement caseMng = caseManagementRepository.findOne(id);
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+            Map result = new HashMap<>();
+            if( updateCase.getId() == null ){
+                result = saveCase(json,multipartHttpServletRequest);
+            }else{
+                result = updateCase(json,multipartHttpServletRequest);
+            }
+            CaseManagement caseMng =  null ;
+            if(result.get("caseNumber") != null){
+                caseMng = findByCaseNumber(result.get("caseNumber").toString());
+            }else {
+                throw new RuntimeException("submit to ASM ERROR");
+            }
+
+            LOGGER.debug("submitToASM :{} ",caseMng.getCaseNumber());
+            // CaseManagement caseMng = caseManagementRepository.findOne(id);
             if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
                 caseMng.setCaseStatus("W");
-                caseMng.setUpdatedBy(updBy);
+                caseMng.setUpdatedBy("temp");
                 caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
                 Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
+                LOGGER.debug("caseActivity :{}",caseActivitys.size());
                 CaseActivity caseAct = new CaseActivity();
-                User user = userRepository.findByUsername( updBy );
+                User user = userRepository.findByUsername( "temp" );
                 caseAct.setUser(user);
                 caseAct.setActionStatus("submit to ASM");
                 caseAct.setActionDate(StandardUtil.getCurrentDate());
                 caseAct.setCaseManagement(caseMng);    
                 caseActivityRepository.save(caseAct);
-                caseActivitys.add(caseAct);
-                caseMng.setCaseActivitys(caseActivitys);
-                caseManagementRepository.save(caseMng);
+                // caseActivitys.add(caseAct);
+                // caseMng.setCaseActivitys(caseActivitys);
+                // caseManagementRepository.save(caseMng);
             }else{
                 throw new RuntimeException("Error with flow case status not Init or Reject");
             }

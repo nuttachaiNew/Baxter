@@ -19,6 +19,7 @@ public class CaseManagement extends BaseModel {
     private Long id;
 
     @JsonIgnore
+    @Version
     private Long version;
 
     @OneToOne(fetch = FetchType.LAZY)
