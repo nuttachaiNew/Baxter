@@ -26,8 +26,9 @@ public class Tidal {
     private String tidalVol;
     private String totalOf;
     private String lastFillVol;
-    private String dexRose;
+    private String dextRose;
     private String weightUnit;
     private String patientWeight;
+    private String fullDrainEvery;
  
 }

@@ -240,6 +240,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             customer.setCustomerType( customerDtl.get("customerType")==null?null:customerDtl.get("customerType").toString() );
             customer.setHospitalName( customerDtl.get("hospitalName")==null?null:customerDtl.get("hospitalName").toString() );
             customer.setPatientName( customerDtl.get("patientName")==null?null:customerDtl.get("patientName").toString() );
+            customer.setPatientLastName( customerDtl.get("patientLastName")==null?null:customerDtl.get("patientLastName").toString() );
+            
             customer.setNationId( customerDtl.get("nationId")==null?null:customerDtl.get("nationId").toString() );
             customer.setTelNo( customerDtl.get("telNo")==null?null:customerDtl.get("telNo").toString() );
             customer.setCurrentAddress1( customerDtl.get("currentAddress1")==null?null:customerDtl.get("currentAddress1").toString() );

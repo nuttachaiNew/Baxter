@@ -24,7 +24,7 @@ public class Opd {
     private String therapyTime;
     private String fillVol;
     private String lastFillVol;
-    private String dexRose;
+    private String dextRose;
     private String weightUnit;
     private String patientWeight;
  

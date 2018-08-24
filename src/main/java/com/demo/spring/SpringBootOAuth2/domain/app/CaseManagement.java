@@ -28,8 +28,11 @@ public class CaseManagement extends BaseModel {
     private String caseNumber;
     private String caseType;
     private String shareSource;
-    private String electronicConsetFlag;
-    private String electronicConset;
+    // private String electronicConsetFlag;
+    // private String electronicConset;
+
+    private String electronicConsentFlag;
+    private String electronicConsent;
 
     private String assignTs;
     private String assignFn;
@@ -37,8 +40,11 @@ public class CaseManagement extends BaseModel {
     private String assignAsm;
     private Long areaId;
 
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    // protected Timestamp activityDate;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected Timestamp activityDate;
+    protected Timestamp activeDate;
 
 
     @OneToOne(fetch = FetchType.LAZY)

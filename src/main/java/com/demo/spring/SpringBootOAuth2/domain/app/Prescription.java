@@ -22,7 +22,7 @@ public class Prescription {
     private String patientName;
     private String hospitalName;
     private String serialNumber;
-    private Integer setting;
+    private String setting;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private NurseMenu nurseMenu;
