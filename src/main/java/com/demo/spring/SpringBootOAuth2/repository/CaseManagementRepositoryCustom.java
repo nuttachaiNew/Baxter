@@ -27,7 +27,7 @@ public class CaseManagementRepositoryCustom {
                 StringBuilder criteriaSqlData = new StringBuilder();
                 criteriaSqlData.append(" SELECT MAX(CM.CASE_NUMBER)  FROM CASE_MANAGEMENT CM  ");
                 criteriaSqlData.append(" WHERE CM.CASE_TYPE = :type ");
-                criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE) = :createdDate ");
+                criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :createdDate ");
                 Query query = em.createNativeQuery(criteriaSqlData.toString());
                 query.setParameter("type",type);
                 query.setParameter("createdDate",createdDate);
@@ -62,7 +62,7 @@ public class CaseManagementRepositoryCustom {
                 resultList.add(id);
              }
              if(resultList.size() == 0){
-                throw new RuntimeException("Machine not Available active size = 0");
+                throw new RuntimeException(" Machine type "+ machineType +"  Model Ref "+modelRef+" not Available active ");
              }else{
                 result = resultList.get(0);
              }
