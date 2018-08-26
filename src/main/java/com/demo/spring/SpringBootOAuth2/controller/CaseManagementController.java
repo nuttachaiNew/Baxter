@@ -145,7 +145,7 @@ public class CaseManagementController {
             headers.add("errorMsg", ex.getMessage());
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
-             result.put("errorMsg",e.getMessage());
+             result.put("errorMsg",ex.getMessage());
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
@@ -168,7 +168,7 @@ public class CaseManagementController {
             headers.add("errorMsg", ex.getMessage());
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
-             result.put("errorMsg",e.getMessage());
+             result.put("errorMsg",ex.getMessage());
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
@@ -191,7 +191,7 @@ public class CaseManagementController {
             headers.add("errorMsg", ex.getMessage());
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
-             result.put("errorMsg",e.getMessage());
+             result.put("errorMsg",ex.getMessage());
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
@@ -308,7 +308,7 @@ public class CaseManagementController {
             headers.add("errorMsg", ex.getMessage());
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
-             result.put("errorMsg",e.getMessage());
+             result.put("errorMsg",ex.getMessage());
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
@@ -331,7 +331,7 @@ public class CaseManagementController {
             headers.add("errorMsg", ex.getMessage());
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
-             result.put("errorMsg",e.getMessage());
+             result.put("errorMsg",ex.getMessage());
 
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
@@ -355,7 +355,7 @@ public class CaseManagementController {
             headers.add("errorMsg", ex.getMessage());
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
-             result.put("errorMsg",e.getMessage());
+             result.put("errorMsg",ex.getMessage());
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
