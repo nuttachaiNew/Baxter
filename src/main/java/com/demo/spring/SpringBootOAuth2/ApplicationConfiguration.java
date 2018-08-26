@@ -33,7 +33,7 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter{
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/*").allowedOrigins("*").allowedMethods("POST","PUT", "DELETE");
+                registry.addMapping("/*").allowedOrigins("*").allowedMethods("GET","POST","PUT", "DELETE");
             }
         };
     }

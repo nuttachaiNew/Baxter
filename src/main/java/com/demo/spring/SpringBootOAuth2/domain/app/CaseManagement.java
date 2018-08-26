@@ -28,9 +28,6 @@ public class CaseManagement extends BaseModel {
     private String caseNumber;
     private String caseType;
     private String shareSource;
-    // private String electronicConsetFlag;
-    // private String electronicConset;
-
     private String electronicConsentFlag;
     private String electronicConsent;
 

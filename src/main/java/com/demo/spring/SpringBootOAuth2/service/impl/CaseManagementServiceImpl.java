@@ -203,15 +203,60 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     public Map<String,Object> updateCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
         try{
             ObjectMapper mapper = new ObjectMapper();
-            JSONObject jsonObject = new JSONObject(json);
+            JSONObject jsonObject = new JSONObject(json);          
             CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
             Long id = updateCase.getId();
-            CaseManagement oldCase = caseManagementRepository.findOne(id);
-            updateCase.setCreatedDate(oldCase.getCreatedDate());
-            caseManagementRepository.save(updateCase);
+            //Old case
+            CaseManagement caseManagement = caseManagementRepository.findOne(id);
+            Customer customer = caseManagement.getCustomer();
+            Customer updateCustomer = updateCase.getCustomer();
+            updateCustomer.setId(customer.getId());
+            caseManagement.setCustomer(updateCustomer);
+            User actionUser = caseManagement.getActionUser();
+            Installation installation = caseManagement.getInstallation();
+            Installation updateInstallation = updateCase.getInstallation();
+            updateInstallation.setId(installation.getId());
+            caseManagement.setInstallation(updateInstallation);
+            Prescription prescription = caseManagement.getPrescription();
+            NurseMenu nurseMenu = prescription.getNurseMenu();
+            MakeAdjustment makeAdjustment = prescription.getMakeAdjustment();
+            ChangePrograme changePrograme = prescription.getChangePrograme();
+            Prescription updatePrescription = updateCase.getPrescription();
+            NurseMenu updateNurseMenu = updatePrescription.getNurseMenu();
+            MakeAdjustment updateMakeAdjustment = updatePrescription.getMakeAdjustment();
+            ChangePrograme updateChangePrograme = updatePrescription.getChangePrograme();
+            updatePrescription.setId( prescription.getId() );
+            updateNurseMenu.setId(nurseMenu.getId());
+            updateMakeAdjustment.setId(makeAdjustment.getId());
+            updateChangePrograme.setId( changePrograme.getId());
+            updatePrescription.setNurseMenu(updateNurseMenu);
+            updatePrescription.setMakeAdjustment(updateMakeAdjustment);
+            updatePrescription.setChangePrograme(updateChangePrograme);
+            caseManagement.setPrescription(updatePrescription);
+            caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
+            caseManagement.setShareSource(updateCase.getShareSource());
+            caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
+            caseManagement.setElectronicConsent(updateCase.getElectronicConsent());
+            Machine machine1 = caseManagement.getMachine1();
+            Machine machine2 = caseManagement.getMachine2();
+            Machine machine3 = caseManagement.getMachine3();
+            Machine machine4 = caseManagement.getMachine4();
+            Machine machine5 = caseManagement.getMachine5();
+            Machine machine6 = caseManagement.getMachine6();
+            Machine machine7 = caseManagement.getMachine7();
+            Machine machine8 = caseManagement.getMachine8();
+            Machine machine9 = caseManagement.getMachine9();
+            Machine machine10 = caseManagement.getMachine10();
+            // Long installationId =  installation.getId();          
+            // Long prescriptionId =  prescription.getId();          
+            // Long nurseMenuId = nurseMenu.getId();
+            // Long makeAdjustmentId = makeAdjustment.getId();
+            // Long changeProgrameId = changePrograme.getId();
+            caseManagementRepository.save(caseManagement);
+
             Map returnResult = new HashMap<>();
             returnResult.put("status","success");
-            returnResult.put("caseNumber",updateCase.getCaseNumber());
+            returnResult.put("caseNumber",caseManagement.getCaseNumber());
             return returnResult;
         }catch(Exception e){
             e.printStackTrace();
@@ -324,23 +369,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             activitys.add(caseActivity);
             caseManagement.setCaseActivitys(activitys);
             caseManagementRepository.save(caseManagement);
-                
-          
-
-
-
-
             MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
-            // Set<FileUpload> fileUpload = new HashSet<>();           
-            // Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
-            // ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
 
-            // String pathFile ="";
-            // if(parameterDetail!=null){
-            //     pathFile = parameterDetail.getParameterValue();    
-            // } 
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();

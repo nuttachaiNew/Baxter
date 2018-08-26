@@ -31,6 +31,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/casemanagement")
 public class CaseManagementController {
 

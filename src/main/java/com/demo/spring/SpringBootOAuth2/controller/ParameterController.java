@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/parameter")
 // @RequestMapping("/menus")
 public class ParameterController {
