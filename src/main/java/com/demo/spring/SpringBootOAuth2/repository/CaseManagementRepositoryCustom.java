@@ -27,7 +27,7 @@ public class CaseManagementRepositoryCustom {
                 StringBuilder criteriaSqlData = new StringBuilder();
                 criteriaSqlData.append(" SELECT MAX(CM.CASE_NUMBER)  FROM CASE_MANAGEMENT CM  ");
                 criteriaSqlData.append(" WHERE CM.CASE_TYPE = :type ");
-                criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) = TO_DATE(:createdDate,'MM-YYYY') ");
+                criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE) = :createdDate ");
                 Query query = em.createNativeQuery(criteriaSqlData.toString());
                 query.setParameter("type",type);
                 query.setParameter("createdDate",createdDate);
