@@ -127,13 +127,14 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
-            criteriaSqlData.append(" WHERE TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
+            criteriaSqlData.append(" WHERE 1 =1 ");
+            if(date!=null) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
             criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
             if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus  ");
             criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
-            query.setParameter("date",date );
+            if(date!=null)query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
             if(documentStatus!=null ) query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId );

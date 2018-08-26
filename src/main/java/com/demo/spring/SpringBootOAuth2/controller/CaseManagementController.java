@@ -276,4 +276,71 @@ public class CaseManagementController {
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
     }
+
+
+    @RequestMapping(value ="/saveFromASM", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> saveFromASM(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            saveFromASM(multipartHttpServletRequest);
+            Map<String,Object> result = new HashMap<>();
+            result.put("json",multipartHttpServletRequest.getParameter("json"));
+            result.put("status","save Success");
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+   @RequestMapping(value ="/approveFromAsm", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> approveFromAsm(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            Map<String,Object> result = caseManagementService.approveFromAsm(multipartHttpServletRequest);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value ="/rejectFromAsm", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> rejectFromAsm(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            Map<String,Object> result = caseManagementService.rejectFromAsm(multipartHttpServletRequest);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
+
 }

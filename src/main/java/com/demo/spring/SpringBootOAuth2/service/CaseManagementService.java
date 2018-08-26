@@ -27,6 +27,11 @@ public interface CaseManagementService {
     List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy);
     List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
     List<Map<String,Object>> findCaseforReturnCaseByCustomer(String caseType,String customer,String caseNumber);
+    
+
+    Map<String,Object> rejectFromAsm(MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> approveFromAsm(MultipartHttpServletRequest multipartHttpServletRequest);
+    void saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest);
 
 }
 

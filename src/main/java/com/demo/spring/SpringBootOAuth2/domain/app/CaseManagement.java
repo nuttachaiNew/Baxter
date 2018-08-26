@@ -39,6 +39,12 @@ public class CaseManagement extends BaseModel {
 
     // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     // protected Timestamp activityDate;
+    private String asmRemark;
+    private String flagCheckIdCard;
+    private String flagCheckPayslip;
+    private String flagCheckContract;
+    private String flagCheckPrescription;
+    private String flagCheckInstallation;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp activeDate;

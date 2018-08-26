@@ -237,16 +237,16 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setShareSource(updateCase.getShareSource());
             caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
             caseManagement.setElectronicConsent(updateCase.getElectronicConsent());
-            Machine machine1 = caseManagement.getMachine1();
-            Machine machine2 = caseManagement.getMachine2();
-            Machine machine3 = caseManagement.getMachine3();
-            Machine machine4 = caseManagement.getMachine4();
-            Machine machine5 = caseManagement.getMachine5();
-            Machine machine6 = caseManagement.getMachine6();
-            Machine machine7 = caseManagement.getMachine7();
-            Machine machine8 = caseManagement.getMachine8();
-            Machine machine9 = caseManagement.getMachine9();
-            Machine machine10 = caseManagement.getMachine10();
+            // Machine machine1 = caseManagement.getMachine1();
+            // Machine machine2 = caseManagement.getMachine2();
+            // Machine machine3 = caseManagement.getMachine3();
+            // Machine machine4 = caseManagement.getMachine4();
+            // Machine machine5 = caseManagement.getMachine5();
+            // Machine machine6 = caseManagement.getMachine6();
+            // Machine machine7 = caseManagement.getMachine7();
+            // Machine machine8 = caseManagement.getMachine8();
+            // Machine machine9 = caseManagement.getMachine9();
+            // Machine machine10 = caseManagement.getMachine10();
             // Long installationId =  installation.getId();          
             // Long prescriptionId =  prescription.getId();          
             // Long nurseMenuId = nurseMenu.getId();
@@ -318,6 +318,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
                 String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
                 String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
+                serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
                 // generate Machine by Condition
                 Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
                 // update Status Machine 
@@ -451,6 +452,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
 
 
+
     @Override
     public synchronized Long autoGenerateMachineByTypeAndStatusEqActive(String machineType,String modelRef,String serialNo){
         LOGGER.info("autoGenerateMachineByTypeAndStatusEqActive : {} :{} :{} ",machineType,modelRef,serialNo);
@@ -540,6 +542,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             throw new RuntimeException(e);   
         }
     }
+
 
     @Override
     public  CaseManagement findByCaseNumber(String caseNumber){
@@ -633,5 +636,103 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             throw new RuntimeException(e);
         }
    }
+
+   @Override
+   @Transactional
+   public Map<String,Object> rejectFromAsm(MultipartHttpServletRequest multipartHttpServletRequest){
+    try{
+        LOGGER.debug("Reject From Asm");
+        String json = multipartHttpServletRequest.getParameter("json");
+        JSONObject jsonObject = new JSONObject(json);
+        Map<String,Object> caseManagerData = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.toString());
+        saveFromASM(multipartHttpServletRequest);
+        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("Id").toString() ) );
+        caseManagement.setCaseStatus("R");
+        caseManagementRepository.save(caseManagement);
+        Set<CaseActivity> caseActivitys = caseManagement.getCaseActivitys();
+        LOGGER.debug("caseActivity :{}",caseActivitys.size());
+        CaseActivity caseAct = new CaseActivity();
+        User user = userRepository.findByUsername( "asm" );
+        caseAct.setUser(user);
+        caseAct.setActionStatus("Reject from ASM ");
+        caseAct.setActionDate(StandardUtil.getCurrentDate());
+        caseAct.setCaseManagement(caseManagement);    
+        caseActivityRepository.save(caseAct);
+        Map<String,Object> resultResult = new HashMap<>();
+        resultResult.put("caseNumber",caseManagement.getCaseNumber());
+        resultResult.put("caseStatus",caseManagement.getCaseStatus());
+        resultResult.put("actionRole","ASM");
+        return resultResult;
+
+    }catch(Exception e){
+         e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+    }
+   }
+
+
+   @Override
+   @Transactional
+   public Map<String,Object> approveFromAsm(MultipartHttpServletRequest multipartHttpServletRequest){
+    try{
+        LOGGER.debug("Approve From Asm");
+
+        String json = multipartHttpServletRequest.getParameter("json");
+        JSONObject jsonObject = new JSONObject(json);
+        Map<String,Object> caseManagerData = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.toString());
+        saveFromASM(multipartHttpServletRequest);
+        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("Id").toString() ) );
+        caseManagement.setCaseStatus("F");
+        caseManagement.setAssignAsm("asm");
+        caseManagementRepository.save(caseManagement);
+        Set<CaseActivity> caseActivitys = caseManagement.getCaseActivitys();
+        LOGGER.debug("caseActivity :{}",caseActivitys.size());
+        CaseActivity caseAct = new CaseActivity();
+        User user = userRepository.findByUsername( "asm" );
+        caseAct.setUser(user);
+        caseAct.setActionStatus("Approve from ASM ");
+        caseAct.setActionDate(StandardUtil.getCurrentDate());
+        caseAct.setCaseManagement(caseManagement);    
+        caseActivityRepository.save(caseAct);
+
+        Map<String,Object> resultResult = new HashMap<>();
+        resultResult.put("caseNumber",caseManagement.getCaseNumber());
+        resultResult.put("caseStatus",caseManagement.getCaseStatus());
+        resultResult.put("actionRole","ASM");
+        return resultResult;
+    }catch(Exception e){
+         e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+    }
+   }
+
+   @Override
+   @Transactional
+   public void saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest){
+    try{
+        String json = multipartHttpServletRequest.getParameter("json");
+        LOGGER.debug("SaveFromASM :{}",json);
+
+        JSONObject jsonObject = new JSONObject(json);
+        Map<String,Object> caseManagerData = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.toString());
+        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("Id").toString() ) );
+        caseManagement.setUpdatedBy("asm");// change
+        caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
+        caseManagement.setAsmRemark( caseManagerData.get("asmRemark") ==null?"": caseManagerData.get("asmRemark").toString()  );
+        caseManagement.setAsmRemark( caseManagerData.get("flagCheckIdCard") ==null?"N": caseManagerData.get("flagCheckIdCard").toString()  );
+        caseManagement.setAsmRemark( caseManagerData.get("flagCheckPayslip") ==null?"N": caseManagerData.get("flagCheckPayslip").toString()  );
+        caseManagement.setAsmRemark( caseManagerData.get("flagCheckContract") ==null?"N": caseManagerData.get("flagCheckContract").toString()  );
+        caseManagement.setAsmRemark( caseManagerData.get("flagCheckPrescription") ==null?"N": caseManagerData.get("flagCheckPrescription").toString()  );
+        caseManagement.setAsmRemark( caseManagerData.get("flagCheckInstallation") ==null?"N": caseManagerData.get("flagCheckInstallation").toString()  );
+        caseManagementRepository.save(caseManagement);
+    }catch(Exception e){
+         e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+    }
+   }
+
 
 }
