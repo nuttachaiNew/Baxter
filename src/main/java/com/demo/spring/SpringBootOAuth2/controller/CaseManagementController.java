@@ -143,7 +143,10 @@ public class CaseManagementController {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
             headers.add("errorMsg", ex.getMessage());
-            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
         }
     }
 
@@ -163,7 +166,10 @@ public class CaseManagementController {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
             headers.add("errorMsg", ex.getMessage());
-            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
         }
     }
 
@@ -183,7 +189,10 @@ public class CaseManagementController {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
             headers.add("errorMsg", ex.getMessage());
-            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
         }
     }
 
@@ -297,7 +306,10 @@ public class CaseManagementController {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
             headers.add("errorMsg", ex.getMessage());
-            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
         }
     }
 
@@ -317,7 +329,11 @@ public class CaseManagementController {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
             headers.add("errorMsg", ex.getMessage());
-            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",e.getMessage());
+
+            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
         }
     }
 
@@ -337,7 +353,10 @@ public class CaseManagementController {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
             headers.add("errorMsg", ex.getMessage());
-            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
         }
     }
 
