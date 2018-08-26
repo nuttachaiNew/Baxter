@@ -146,7 +146,7 @@ public class CaseManagementController {
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
              result.put("errorMsg",e.getMessage());
-            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
 
@@ -169,7 +169,7 @@ public class CaseManagementController {
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
              result.put("errorMsg",e.getMessage());
-            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
 
@@ -192,7 +192,7 @@ public class CaseManagementController {
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
              result.put("errorMsg",e.getMessage());
-            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
 
@@ -309,7 +309,7 @@ public class CaseManagementController {
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
              result.put("errorMsg",e.getMessage());
-            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
 
@@ -333,7 +333,7 @@ public class CaseManagementController {
              result.put("status","error");
              result.put("errorMsg",e.getMessage());
 
-            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
 
@@ -356,7 +356,7 @@ public class CaseManagementController {
              Map<String,Object> result = new HashMap<>();
              result.put("status","error");
              result.put("errorMsg",e.getMessage());
-            return new ResponseEntity<String>(result, headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
 
