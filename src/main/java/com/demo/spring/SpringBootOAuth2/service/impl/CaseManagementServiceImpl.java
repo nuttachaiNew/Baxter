@@ -729,6 +729,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setAsmRemark( caseManagerData.get("flagCheckContract") ==null?"N": caseManagerData.get("flagCheckContract").toString()  );
         caseManagement.setAsmRemark( caseManagerData.get("flagCheckPrescription") ==null?"N": caseManagerData.get("flagCheckPrescription").toString()  );
         caseManagement.setAsmRemark( caseManagerData.get("flagCheckInstallation") ==null?"N": caseManagerData.get("flagCheckInstallation").toString()  );
+        caseManagement.setElectronicConsent( caseManagerData.get("electronicConsent") ==null?null: caseManagerData.get("electronicConsent").toString()  );
+        
         caseManagementRepository.save(caseManagement);
     }catch(Exception e){
          e.printStackTrace();
