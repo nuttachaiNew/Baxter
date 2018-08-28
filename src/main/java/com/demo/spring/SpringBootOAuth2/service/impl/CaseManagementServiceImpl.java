@@ -724,11 +724,11 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setUpdatedBy("asm");// change
         caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
         caseManagement.setAsmRemark( caseManagerData.get("asmRemark") ==null?"": caseManagerData.get("asmRemark").toString()  );
-        caseManagement.setAsmRemark( caseManagerData.get("flagCheckIdCard") ==null?"N": caseManagerData.get("flagCheckIdCard").toString()  );
-        caseManagement.setAsmRemark( caseManagerData.get("flagCheckPayslip") ==null?"N": caseManagerData.get("flagCheckPayslip").toString()  );
-        caseManagement.setAsmRemark( caseManagerData.get("flagCheckContract") ==null?"N": caseManagerData.get("flagCheckContract").toString()  );
-        caseManagement.setAsmRemark( caseManagerData.get("flagCheckPrescription") ==null?"N": caseManagerData.get("flagCheckPrescription").toString()  );
-        caseManagement.setAsmRemark( caseManagerData.get("flagCheckInstallation") ==null?"N": caseManagerData.get("flagCheckInstallation").toString()  );
+        caseManagement.setFlagCheckIdCard( caseManagerData.get("flagCheckIdCard") ==null?"N": caseManagerData.get("flagCheckIdCard").toString()  );
+        caseManagement.setFlagCheckPayslip( caseManagerData.get("flagCheckPayslip") ==null?"N": caseManagerData.get("flagCheckPayslip").toString()  );
+        caseManagement.setFlagCheckContract( caseManagerData.get("flagCheckContract") ==null?"N": caseManagerData.get("flagCheckContract").toString()  );
+        caseManagement.setFlagCheckPrescription( caseManagerData.get("flagCheckPrescription") ==null?"N": caseManagerData.get("flagCheckPrescription").toString()  );
+        caseManagement.setFlagCheckInstallation( caseManagerData.get("flagCheckInstallation") ==null?"N": caseManagerData.get("flagCheckInstallation").toString()  );
         caseManagement.setElectronicConsent( caseManagerData.get("electronicConsent") ==null?null: caseManagerData.get("electronicConsent").toString()  );
         caseManagementRepository.save(caseManagement);
     }catch(Exception e){
