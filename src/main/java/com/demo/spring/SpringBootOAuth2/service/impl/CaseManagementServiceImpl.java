@@ -720,7 +720,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
         JSONObject jsonObject = new JSONObject(json);
         Map<String,Object> caseManagerData = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.toString());
-        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("Id").toString() ) );
+        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("id").toString() ) );
         caseManagement.setUpdatedBy("asm");// change
         caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
         caseManagement.setAsmRemark( caseManagerData.get("asmRemark") ==null?"": caseManagerData.get("asmRemark").toString()  );
@@ -730,7 +730,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setAsmRemark( caseManagerData.get("flagCheckPrescription") ==null?"N": caseManagerData.get("flagCheckPrescription").toString()  );
         caseManagement.setAsmRemark( caseManagerData.get("flagCheckInstallation") ==null?"N": caseManagerData.get("flagCheckInstallation").toString()  );
         caseManagement.setElectronicConsent( caseManagerData.get("electronicConsent") ==null?null: caseManagerData.get("electronicConsent").toString()  );
-        
         caseManagementRepository.save(caseManagement);
     }catch(Exception e){
          e.printStackTrace();

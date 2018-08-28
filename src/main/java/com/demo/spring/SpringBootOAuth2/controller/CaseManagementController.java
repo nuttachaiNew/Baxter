@@ -295,8 +295,8 @@ public class CaseManagementController {
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
             LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
-            saveFromASM(multipartHttpServletRequest);
-            Map<String,Object> result = new HashMap<>();
+           caseManagementService.saveFromASM(multipartHttpServletRequest);
+             Map<String,Object> result = new HashMap<>();
             result.put("json",multipartHttpServletRequest.getParameter("json"));
             result.put("status","save Success");
             headers.add("errorStatus", "N");
