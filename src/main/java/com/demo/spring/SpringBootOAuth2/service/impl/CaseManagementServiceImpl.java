@@ -649,7 +649,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         JSONObject jsonObject = new JSONObject(json);
         Map<String,Object> caseManagerData = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.toString());
         saveFromASM(multipartHttpServletRequest);
-        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("Id").toString() ) );
+        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("id").toString() ) );
         caseManagement.setCaseStatus("R");
         caseManagementRepository.save(caseManagement);
         Set<CaseActivity> caseActivitys = caseManagement.getCaseActivitys();
@@ -685,7 +685,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         JSONObject jsonObject = new JSONObject(json);
         Map<String,Object> caseManagerData = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.toString());
         saveFromASM(multipartHttpServletRequest);
-        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("Id").toString() ) );
+        CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("id").toString() ) );
         caseManagement.setCaseStatus("F");
         caseManagement.setAssignAsm("asm");
         caseManagementRepository.save(caseManagement);
