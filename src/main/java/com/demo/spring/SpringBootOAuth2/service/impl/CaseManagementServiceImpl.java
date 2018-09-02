@@ -213,6 +213,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             Customer customer = caseManagement.getCustomer();
             Customer updateCustomer = updateCase.getCustomer();
             updateCustomer.setId(customer.getId());
+            customerRepository.saveAndFlush(updateCustomer);
+            
             caseManagement.setCustomer(updateCustomer);
             LOGGER.debug("updateCustomer Type :{} ",updateCase.getCustomer().getCustomerType());
             
