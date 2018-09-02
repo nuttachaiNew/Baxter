@@ -207,11 +207,17 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
             Long id = updateCase.getId();
             //Old case
+            LOGGER.debug("updateCase  :{} ",id);
             CaseManagement caseManagement = caseManagementRepository.findOne(id);
+
             Customer customer = caseManagement.getCustomer();
             Customer updateCustomer = updateCase.getCustomer();
             updateCustomer.setId(customer.getId());
             caseManagement.setCustomer(updateCustomer);
+            LOGGER.debug("updateCustomer Type :{} ",updateCase.getCustomer().getCustomerType());
+            
+            LOGGER.debug("Customer Type :{} ",caseManagement.getCustomer().getCustomerType());
+            
             User actionUser = caseManagement.getActionUser();
             Installation installation = caseManagement.getInstallation();
             Installation updateInstallation = updateCase.getInstallation();
@@ -237,6 +243,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setShareSource(updateCase.getShareSource());
             caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
             caseManagement.setElectronicConsent(updateCase.getElectronicConsent());
+            
             // Machine machine1 = caseManagement.getMachine1();
             // Machine machine2 = caseManagement.getMachine2();
             // Machine machine3 = caseManagement.getMachine3();
