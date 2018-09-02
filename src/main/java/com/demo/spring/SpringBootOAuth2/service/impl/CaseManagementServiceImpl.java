@@ -216,7 +216,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setCustomer(updateCustomer);
             LOGGER.debug("updateCustomer Type :{} ",updateCase.getCustomer().getCustomerType());
             
-            LOGGER.debug("Customer Type :{} ",caseManagement.getCustomer().getCustomerType());
             
             User actionUser = caseManagement.getActionUser();
             Installation installation = caseManagement.getInstallation();
@@ -260,6 +259,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             // Long makeAdjustmentId = makeAdjustment.getId();
             // Long changeProgrameId = changePrograme.getId();
             caseManagementRepository.save(caseManagement);
+            CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
+
+            LOGGER.debug("Customer Type :{} ",checkCaseManagement.getCustomer().getCustomerType());
 
             Map returnResult = new HashMap<>();
             returnResult.put("status","success");
