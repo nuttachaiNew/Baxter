@@ -45,6 +45,16 @@ public class CaseManagement extends BaseModel {
     private String flagCheckContract;
     private String flagCheckPrescription;
     private String flagCheckInstallation;
+     
+    //return case & chagecase
+    private String reporterName;
+    private String reporterLastName;
+    private String issueCase;
+    private String contactPersonName;
+    private String contactPersonLastName;
+    private String contactPersonTel;
+
+    private String closeFlag;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp activeDate;
@@ -91,6 +101,13 @@ public class CaseManagement extends BaseModel {
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Prescription prescription;
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Payslip payslip;
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Receipt receipt;
+
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement" , orphanRemoval = true)
     private Set<FileUpload> fileUploads;

@@ -1,0 +1,19 @@
+json = {
+   "refCaseId": ,//caseId
+   "createdBy":"temp" ,// username login default temp
+   "machines":[] // ทุกฟิลเหมือน savecase
+   "issueCase":"",//สาเหตุ
+   "contactPersonName":"",
+   "contactPersonLastName":"",
+   "contactPersonTel":"",
+   "installation":{}, //ทุกฟิลเหมือน Save Case 
+   "prescription":{
+   	"nurseMenu":{   },
+        "makeAdjustment":{},
+	"changePrograme":{ 
+		"tidal":{} , 
+		"opd":{}
+	} 
+   }, ทุกฟิลเหมือน Save Case 
+
+} 

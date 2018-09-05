@@ -380,7 +380,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseActivity.setActionStatus("create case");
             caseActivity.setActionDate(StandardUtil.getCurrentDate());
             caseActivity.setCaseManagement(caseManagement);
-            // caseActivityRepository.save(caseActivity);
             activitys.add(caseActivity);
             caseManagement.setCaseActivitys(activitys);
             caseManagementRepository.save(caseManagement);
@@ -582,6 +581,18 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         }
     }
 
+    @Override
+    public  List<Map<String,Object>> findCaseManagementforChangeMachineByCriteria(String keyword, String customerType,String hospitalName){
+        try{
+
+            return caseManagementRepositoryCustom.findCaseManagementforChangeMachineByCriteria(keyword,customerType,hospitalName);
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+    }
+
    @Override
    public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
      try{
@@ -749,5 +760,92 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
    }
 
+   @Override
+   @Transactional
+   public  Map<String,Object> saveChangeCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+     try{
+        LOGGER.debug("saveChangeCase :{} ",json);
+        JSONObject jsonObject = new JSONObject(json);
+        CaseManagement changeCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
+        List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
+        String refCaseId = jsonObject.get("refCaseId").toString();
+        CaseManagement refCase = caseManagementRepository.findOne(Long.valueOf(refCaseId));
+        User actionBy = userRepository.findByUsername(changeCase.getCreatedBy()); // fixed action user
+        
+        String oldCaseNumber  = refCase.getCaseNumber();
+        String[] subCaseNumber = oldCaseNumber.split("/");
+        String newCaseNumber = subCaseNumber[0]+"/02/"+subCaseNumber[2];
+        // close Case
+        refCase.setCloseFlag("Y"); 
+        refCase.setUpdatedDate( StandardUtil.getCurrentDate() );
+        refCase.setUpdatedBy(changeCase.getCreatedBy());
+        caseManagementRepository.save(refCase);
+        // close old case
+        changeCase.setRefCase(refCase);
+        changeCase.setCreatedDate( StandardUtil.getCurrentDate() );
+        changeCase.setCaseNumber(newCaseNumber);
+        changeCase.setCaseStatus("I");
+        changeCase.setCaseType("CH");
+        changeCase.setCustomer(refCase.getCustomer());
+        Integer machineRunning = 1;
+            for(Map<String,Object> machineInfo: machineData){   
+                String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
+                String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
+                String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
+                serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
+                // generate Machine by Condition
+                Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+                // update Status Machine 
+                updateMachineStatus(machineId , 0 , newCaseNumber ,"SYSTEM");
+                Machine machineUsed = machineRepository.findOne(machineId);
+                if(machineRunning == 1){
+                    changeCase.setMachine1(machineUsed);
+                }else if(machineRunning == 2 ){
+                    changeCase.setMachine2(machineUsed);
+                }else if(machineRunning == 3 ){
+                    changeCase.setMachine3(machineUsed);
+                }else if(machineRunning == 4 ){
+                    changeCase.setMachine4(machineUsed);
+                }else if(machineRunning == 5 ){
+                    changeCase.setMachine5(machineUsed);
+                }else if(machineRunning == 6 ){
+                    changeCase.setMachine6(machineUsed);
+                }else if(machineRunning == 7 ){
+                    changeCase.setMachine7(machineUsed);
+                }else if(machineRunning == 8 ){
+                    changeCase.setMachine8(machineUsed);
+                }else if(machineRunning == 9 ){
+                    changeCase.setMachine9(machineUsed);
+                }else if(machineRunning == 10 ){
+                    changeCase.setMachine10(machineUsed);
+                }else{
+                    throw new RuntimeException("Oversize of machine");
+                }
+                machineRunning++;
+            }
+            LOGGER.debug("end with machine");
+            LOGGER.debug("user :{}",actionBy.getId());
+            changeCase.setAreaId(actionBy.getBranch().getId());
+            Map<String,Object> returnResult = new HashMap<>();
+            CaseActivity caseActivity = new CaseActivity();
+            Set<CaseActivity> activitys = new HashSet<>();
+            caseActivity.setUser(actionBy);
+            caseActivity.setActionStatus("create Change Machine");
+            caseActivity.setActionDate(StandardUtil.getCurrentDate());
+            caseActivity.setCaseManagement(changeCase);
+            activitys.add(caseActivity);
+            changeCase.setCaseActivitys(activitys);
+            caseManagementRepository.save(changeCase);
+            returnResult.put("caseType",changeCase.getCaseType());
+            returnResult.put("status","success");
+            returnResult.put("caseNumber",changeCase.getCaseNumber());
+
+            return returnResult;
+     }catch(Exception e){
+          e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+     }
+   }
 
 }

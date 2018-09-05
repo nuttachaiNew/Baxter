@@ -82,6 +82,26 @@ public class CaseManagementController {
         }
     }
 
+    @RequestMapping(value ="/findCaseManagementforChangeMachineByCriteria", method = RequestMethod.GET)
+    ResponseEntity<String> findCaseManagementforChangeMachineByCriteria(@RequestParam(value = "keyword",required = false)String keyword,@RequestParam(value = "customerType",required = false)String customerType ,@RequestParam(value = "hospitalName",required = false)String hospitalName){
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.findCaseManagementforChangeMachineByCriteria(keyword,customerType,hospitalName);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
     @RequestMapping(value = "/uploadfileByCaseIdAndFileType", method = RequestMethod.POST, headers = "content-type=multipart/*")
     public ResponseEntity<String> uploadfileByCaseIdAndFileType(@RequestParam(value = "caseId",required = false)String id,
                                                                 @RequestParam(value = "fileType",required = false)String fileType,
@@ -360,6 +380,27 @@ public class CaseManagementController {
         }
     }
 
-
+    @RequestMapping(value ="/saveChangeCase", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> saveChangeCase(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            Map<String,Object> result = caseManagementService.saveChangeCase(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",ex.getMessage());
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        }
+    }
 
 }

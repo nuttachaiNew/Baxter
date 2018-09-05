@@ -33,5 +33,9 @@ public interface CaseManagementService {
     Map<String,Object> approveFromAsm(MultipartHttpServletRequest multipartHttpServletRequest);
     void saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest);
 
-}
+
+    // Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> saveChangeCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    List<Map<String,Object>> findCaseManagementforChangeMachineByCriteria(String keyword, String customerType,String hospitalName);
+}   
 

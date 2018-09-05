@@ -6,10 +6,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.math.BigDecimal;
 
 @Entity
 @Data
-public class Installation {
+public class Payslip {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -20,10 +21,23 @@ public class Installation {
     private Long version;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected Timestamp dates;
+    protected Timestamp createdDate;
 
-    private String patientName;
-    private String installationPlace;
-    private String orders;
+    private String createdBy;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Timestamp updatedDate;
+
+    private String updatedBy;
+
+     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp payDate;
+
+    private String paymentType;
+
+    private String bank;
+
+    private BigDecimal amount;
+
 
 }

@@ -189,8 +189,46 @@ public class CaseManagementRepositoryCustom {
                 results.add(activity);
              }
              return results;
+        }catch(Exception e){
+             e.printStackTrace();   
+             throw new RuntimeException(e.getMessage());
+        }
+    }
 
+      public List<Map<String,Object>>  findCaseManagementforChangeMachineByCriteria(String keyword, String customerType,String hospitalName){
+        try{
+            LOGGER.debug("findCaseManagementforChangeMachineByCriteria : {} :{} :{}",keyword,customerType,hospitalName);
+            List<Object[] > listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
+            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
+            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER  ");
+            criteriaSqlData.append(" WHERE CM.CASE_STATUS = 'F'  ");
+            if(keyword!=null) criteriaSqlData.append(" AND (CUST.patient_Name LIKE :keyword  OR CM.CASE_NUMBER = :case ) ") ; 
+            if(hospitalName!=null)criteriaSqlData.append(" AND  (CUST.Hospital_Name like :hospitalName) ");
+            criteriaSqlData.append(" AND CUST.CUSTOMER_TYPE = :customerType  ");
+            // criteriaSqlData.append(" AND CM.CASE_NUMBER = :caseNumber  ");
+            criteriaSqlData.append(" ORDER BY CM.CASE_NUMBER ");
 
+            Query query = em.createNativeQuery(criteriaSqlData.toString());
+           if(keyword!=null)  query.setParameter("keyword","%"+keyword+"%" );
+           if(keyword!=null)  query.setParameter("case",keyword );
+            query.setParameter("customerType",customerType );
+           if(hospitalName!=null) query.setParameter("hospitalName","%"+hospitalName+"%" );
+            listfromQuery = query.getResultList();
+            for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("id",col[0]);
+                activity.put("caseNumber",col[1]);
+                activity.put("createdDate",col[2]);
+                activity.put("caseType",col[3]);
+                activity.put("cutsomerName",col[4]);
+                activity.put("cutsomerType",col[5]);
+                activity.put("caseStatus",col[6]);
+                results.add(activity);
+             }
+             return results;
         }catch(Exception e){
              e.printStackTrace();   
              throw new RuntimeException(e.getMessage());

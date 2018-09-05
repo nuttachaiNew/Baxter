@@ -6,10 +6,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.math.BigDecimal;
 
 @Entity
 @Data
-public class Installation {
+public class ReceiptDtl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -19,11 +20,13 @@ public class Installation {
     @JsonIgnore
     private Long version;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    protected Timestamp dates;
+    private String productOrder;
+    private String productNo;
+    private String productGroup;
+    private BigDecimal pricePerUnit;
 
-    private String patientName;
-    private String installationPlace;
-    private String orders;
 
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    @JoinColumn(name = "receipt")
+    Receipt receipt;
 }
