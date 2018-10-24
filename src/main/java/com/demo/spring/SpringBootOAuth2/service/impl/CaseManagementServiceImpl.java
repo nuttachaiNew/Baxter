@@ -848,4 +848,59 @@ public class CaseManagementServiceImpl implements CaseManagementService {
      }
    }
 
+
+   @Override
+   @Transactional
+   public  Map<String,Object> confirmByTS(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+    LOGGER.info("confirmByTs ");
+    try{
+       
+        JSONObject jsonObject = new JSONObject(json);
+        CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
+        Long id = caseManagement.getId();
+        
+
+        return null;
+    }catch(Exception e){
+          e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+    }
+   } 
+
+   @Override
+   @Transactional
+   public  Map<String,Object> confirmByFN(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+    LOGGER.info("confirmByFN ");
+    try{
+        JSONObject jsonObject = new JSONObject(json);
+        CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
+        Long id = caseManagement.getId();
+        
+        return null;
+    }catch(Exception e){
+          e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+    }
+   } 
+
+   @Override
+   @Transactional
+   public  Map<String,Object> confirmByCS(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+    LOGGER.info("confirmByCS ");
+    try{
+        JSONObject jsonObject = new JSONObject(json);
+        CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
+        Long id = caseManagement.getId();
+        
+
+        return null;
+    }catch(Exception e){
+          e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+    }
+   } 
+
 }
