@@ -1,6 +1,7 @@
 package com.demo.spring.SpringBootOAuth2.service.impl;
 
 import com.demo.spring.SpringBootOAuth2.domain.app.Machine;
+import com.demo.spring.SpringBootOAuth2.domain.app.User;
 import com.demo.spring.SpringBootOAuth2.repository.MachineRepository;
 import com.demo.spring.SpringBootOAuth2.repository.MachineRepositoryCustom;
 import com.demo.spring.SpringBootOAuth2.service.MachineService;
@@ -74,14 +75,14 @@ public class MachineServiceImpl implements MachineService {
             machineNew = mapper.readerForUpdating(machineOld).readValue(gson.toJson(machineNew));
 
             if(machineOld != null && machineNew != null){
-                if( (machineNew.getVersion() != null && machineOld.getVersion() != null ) &&
-                        ( machineNew.getVersion().equals(machineOld.getVersion()) )
-                        ){
+//                if( (machineNew.getVersion() != null && machineOld.getVersion() != null ) &&
+//                        ( machineNew.getVersion().equals(machineOld.getVersion()) )
+//                        ){
                     machineNew.setUpdatedDate(StandardUtil.getCurrentDate());
                     machineRepository.saveAndFlush(machineNew);
-                }else{
-                    throw new RuntimeException("Version machine is not match");
-                }
+//                }else{
+//                    throw new RuntimeException("Version machine is not match");
+//                }
             }else{
                 throw new RuntimeException("Machine is null");
             }
@@ -129,12 +130,12 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     @Transactional
-    public void deleteMachine(JSONObject jsonObject,String user) {
+    public void inActiveMachine(JSONObject jsonObject,String user) {
 
         try{
             LOGGER.info("===============Machine deleteMachine===============");
 
-            JSONArray jsonArray = jsonObject.getJSONArray("delete");
+            JSONArray jsonArray = jsonObject.getJSONArray("id");
             if (jsonArray != null && jsonArray.length() > 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     Long id = Long.valueOf(jsonArray.get(i).toString());
@@ -161,5 +162,33 @@ public class MachineServiceImpl implements MachineService {
         return machineRepositoryCustom.findMachineByMachineType(type,ref);
     }
 
+
+    @Override
+    @Transactional
+    public Map<String,String> deleteMachine(JSONObject jsonObject) {
+
+        Map<String,String> result = new HashMap<>();
+        try{
+
+            LOGGER.info("===============Machine deleteMachine===============");
+            JSONArray jsonArray = jsonObject.getJSONArray("id");
+            if (jsonArray != null && jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    Long id = Long.valueOf(jsonArray.get(i).toString());
+                    Machine machine = machineRepository.findOne(id);
+                    if(machine != null){
+                        machineRepository.delete(machine);
+                    }
+                }
+            }
+            result.put("msg","delete "+String.valueOf(jsonArray.length())+" success");
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("Exception : {}",e);
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

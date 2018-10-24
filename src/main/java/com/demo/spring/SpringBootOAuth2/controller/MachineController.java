@@ -107,12 +107,22 @@ public class MachineController {
 
     @RequestMapping(value ="/findMachineByCriteria", method = RequestMethod.GET)
     @ResponseBody
-    ResponseEntity<String> findMachineByCriteria(@RequestParam(value = "json",required = false)String json){
+    ResponseEntity<String> findMachineByCriteria(@RequestParam(value = "machineType",required = false)String machineType,
+                                                 @RequestParam(value = "status",required = false)String status,
+                                                 @RequestParam(value = "search",required = false)String search,
+                                                 @RequestParam(value = "usedDateFrom",required = false)String usedDateFrom,
+                                                 @RequestParam(value = "usedDateTo",required = false)String usedDateTo
+                                                 ){
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            JSONObject object = new JSONObject(json);
+            JSONObject object = new JSONObject();
+            object.put("machineType",machineType);
+            object.put("status",status);
+            object.put("search",search);
+            object.put("usedDateFrom",usedDateFrom);
+            object.put("usedDateTo",usedDateTo);
             List<Map<String,Object>> machineList = machineService.findMachineByCriteria(object);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
@@ -126,8 +136,8 @@ public class MachineController {
 
     }
 
-    @RequestMapping(value ="/deleteMachine", method = RequestMethod.POST)
-    ResponseEntity<String> deleteMachine(HttpServletRequest request , @RequestBody String json){
+    @RequestMapping(value ="/inActiveMachine", method = RequestMethod.POST)
+    ResponseEntity<String> inActiveMachine(HttpServletRequest request , @RequestBody String json){
 
 
         HttpHeaders headers = new HttpHeaders();
@@ -135,7 +145,7 @@ public class MachineController {
         try {
             String user = null;
             JSONObject object = new JSONObject(json);
-            machineService.deleteMachine(object,user);
+            machineService.inActiveMachine(object,user);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize("SUCCESS"), headers, HttpStatus.OK);
@@ -167,5 +177,22 @@ public class MachineController {
         }
     }
 
+    @RequestMapping(value ="/deleteMachine", method = RequestMethod.POST)
+    public ResponseEntity<String> deleteMachine(@RequestBody String json){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            JSONObject object = new JSONObject(json);
+            Map<String,String> result = machineService.deleteMachine(object);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
 
 }
