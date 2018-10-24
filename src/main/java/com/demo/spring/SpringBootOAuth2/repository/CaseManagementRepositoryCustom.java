@@ -165,7 +165,7 @@ public class CaseManagementRepositoryCustom {
             List<Map<String,Object>> results = new ArrayList<>();
             criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
-            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER  ");
+            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID  ");
             criteriaSqlData.append(" WHERE CM.CASE_STATUS = 'F'  ");
             criteriaSqlData.append(" AND (CUST.patient_Name = :customer) OR  (CUST.Hospital_Name = :customer) ");
             criteriaSqlData.append(" AND CM.CASE_TYPE = :caseType  ");
@@ -203,7 +203,7 @@ public class CaseManagementRepositoryCustom {
             List<Map<String,Object>> results = new ArrayList<>();
             criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
-            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER  ");
+            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID  ");
             criteriaSqlData.append(" WHERE CM.CASE_STATUS = 'F'  ");
             if(keyword!=null) criteriaSqlData.append(" AND (CUST.patient_Name LIKE :keyword  OR CM.CASE_NUMBER = :case ) ") ; 
             if(hospitalName!=null)criteriaSqlData.append(" AND  (CUST.Hospital_Name like :hospitalName) ");
