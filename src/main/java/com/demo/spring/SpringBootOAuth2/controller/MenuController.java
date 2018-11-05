@@ -16,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/roles")
+@RequestMapping("/api/menus")
 // @RequestMapping("/menus")
 public class MenuController {
 

@@ -82,6 +82,7 @@ public class RoleServiceImpl implements RoleService{
             LOGGER.info("Delete Role");
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray("id");
+            LOGGER.debug("delete :{}",jsonArray);
             if (jsonArray != null && jsonArray.length() > 0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     Long id = Long.valueOf(jsonArray.get(i).toString());

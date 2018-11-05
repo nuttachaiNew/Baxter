@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.codec.binary.Base64;
+import java.security.MessageDigest;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -44,6 +46,24 @@ public class UserServiceImpl implements UserService{
         }
     };
 
+    public static String encodeSha256(String message){
+        try{
+          MessageDigest md = MessageDigest.getInstance("SHA-256");
+          md.update(message.getBytes());
+          String hash = bytesToHex(md.digest());
+          return hash;
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    } 
+
+    public static String bytesToHex(byte[] bytes) {
+        StringBuffer result = new StringBuffer();
+        for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
+        return result.toString();
+    }
+
     protected Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").registerTypeAdapter(Date.class, deser).create();
 
     @Override
@@ -60,7 +80,7 @@ public class UserServiceImpl implements UserService{
             Branch branch = branchRepository.findOne(user.getBranch().getId());
             LOGGER.info("Password   :   {}",user.getPassword());
 
-            String password = StandardUtil.generateEncryptFromStringToMD5(user.getPassword());
+            String password = encodeSha256(user.getPassword());
 
             user.setRole(role);
             user.setBranch(branch);
@@ -96,7 +116,7 @@ public class UserServiceImpl implements UserService{
             newUser = mapper.readerForUpdating(oldUser).readValue(gson.toJson(newUser));
 
             String newPassword = newUser.getPassword();
-            String newPasswordMD5 = StandardUtil.generateEncryptFromStringToMD5(newPassword);
+            String newPasswordMD5 = encodeSha256(newPassword);
 
             newUser.setRole(role);
             newUser.setBranch(branch);
