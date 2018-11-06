@@ -211,6 +211,7 @@ public class CaseManagementRepositoryCustom {
             // criteriaSqlData.append(" AND CM.CASE_NUMBER = :caseNumber  ");
             criteriaSqlData.append(" ORDER BY CM.CASE_NUMBER ");
 
+            LOGGER.debug("statement :{} ",criteriaSqlData);
             Query query = em.createNativeQuery(criteriaSqlData.toString());
            if(keyword!=null)  query.setParameter("keyword","%"+keyword+"%" );
            if(keyword!=null)  query.setParameter("case",keyword );
