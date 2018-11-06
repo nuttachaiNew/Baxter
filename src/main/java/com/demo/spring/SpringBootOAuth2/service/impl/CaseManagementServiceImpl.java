@@ -776,7 +776,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         String[] subCaseNumber = oldCaseNumber.split("/");
         String newCaseNumber = subCaseNumber[0]+"/02/"+subCaseNumber[2];
         if( refCase.getCloseFlag()!= null && "Y".equalsIgnoreCase(refCase.getCloseFlag()) ){
-            throw RuntimeException(" Can't Create change case ( this case already reference case ) ");
+            throw new RuntimeException(" Can't Create change case ( this case already reference case ) ");
         }
         // close Case
         refCase.setCloseFlag("Y"); 
@@ -923,7 +923,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         String[] subCaseNumber = oldCaseNumber.split("/");
         String newCaseNumber = subCaseNumber[0]+"/02/"+subCaseNumber[2];
         if( refCase.getCloseFlag()!= null && "Y".equalsIgnoreCase(refCase.getCloseFlag())){
-            throw RuntimeException(" Can't Create change case ( this case already reference case ) ");
+            throw new RuntimeException(" Can't Create change case ( this case already reference case ) ");
         }
         // close Case
         
