@@ -42,6 +42,7 @@ public interface CaseManagementService {
     Map<String,Object> confirmByTS(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     Map<String,Object> confirmByFN(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     Map<String,Object> confirmByCS(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> mockSaveChangeCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
 
 }   
 
