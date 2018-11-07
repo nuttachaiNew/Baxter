@@ -245,10 +245,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
             caseManagement.setElectronicConsent(updateCase.getElectronicConsent());
 
-            caseManagement.setIssueCase(updatePrescription.getIssueCase());
-            caseManagement.setContactPersonName(updatePrescription.getContactPersonName());
-            caseManagement.setContactPersonLastName(updatePrescription.getContactPersonLastName());
-            caseManagement.setContactPersonTel(updatePrescription.getContactPersonTel());
+            caseManagement.setIssueCase(updateCase.getIssueCase());
+            caseManagement.setContactPersonName(updateCase.getContactPersonName());
+            caseManagement.setContactPersonLastName(updateCase.getContactPersonLastName());
+            caseManagement.setContactPersonTel(updateCase.getContactPersonTel());
 
             caseManagementRepository.save(caseManagement);
             CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
