@@ -244,22 +244,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setShareSource(updateCase.getShareSource());
             caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
             caseManagement.setElectronicConsent(updateCase.getElectronicConsent());
-            
-            // Machine machine1 = caseManagement.getMachine1();
-            // Machine machine2 = caseManagement.getMachine2();
-            // Machine machine3 = caseManagement.getMachine3();
-            // Machine machine4 = caseManagement.getMachine4();
-            // Machine machine5 = caseManagement.getMachine5();
-            // Machine machine6 = caseManagement.getMachine6();
-            // Machine machine7 = caseManagement.getMachine7();
-            // Machine machine8 = caseManagement.getMachine8();
-            // Machine machine9 = caseManagement.getMachine9();
-            // Machine machine10 = caseManagement.getMachine10();
-            // Long installationId =  installation.getId();          
-            // Long prescriptionId =  prescription.getId();          
-            // Long nurseMenuId = nurseMenu.getId();
-            // Long makeAdjustmentId = makeAdjustment.getId();
-            // Long changeProgrameId = changePrograme.getId();
+
+            caseManagement.setIssueCase(updatePrescription.getIssueCase());
+            caseManagement.setContactPersonName(updatePrescription.getContactPersonName());
+            caseManagement.setContactPersonLastName(updatePrescription.getContactPersonLastName());
+            caseManagement.setContactPersonTel(updatePrescription.getContactPersonTel());
+
             caseManagementRepository.save(caseManagement);
             CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
 
@@ -275,7 +265,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             throw new RuntimeException(e.getMessage());
         }
     }
-
 
     @Override
     @Transactional
@@ -999,5 +988,58 @@ public class CaseManagementServiceImpl implements CaseManagementService {
          throw new RuntimeException(e);
      }
    }
+
+
+    @Override
+    @Transactional
+    public void changeCaseToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+        try{
+ //  I > W > R|F > W > F
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+            Map result = new HashMap<>();
+            if( updateCase.getId() == null ){
+                result = saveChangeCase(json,multipartHttpServletRequest);
+            }else{
+                result = updateCase(json,multipartHttpServletRequest);
+            }
+            CaseManagement caseMng =  null ;
+            if(result.get("caseNumber") != null){
+                caseMng = findByCaseNumber(result.get("caseNumber").toString());
+            }else {
+                throw new RuntimeException("submit to ASM ERROR");
+            }
+
+            LOGGER.debug("changeCaseToASM :{} ",caseMng.getCaseNumber());
+            // CaseManagement caseMng = caseManagementRepository.findOne(id);
+            if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
+                caseMng.setCaseStatus("W");
+                caseMng.setUpdatedBy("temp");
+                caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
+                Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
+                LOGGER.debug("caseActivity :{}",caseActivitys.size());
+                CaseActivity caseAct = new CaseActivity();
+                User user = userRepository.findByUsername( "temp" );
+                caseAct.setUser(user);
+                caseAct.setActionStatus("submit to ASM");
+                caseAct.setActionDate(StandardUtil.getCurrentDate());
+                caseAct.setCaseManagement(caseMng);    
+                caseActivityRepository.save(caseAct);
+                // caseActivitys.add(caseAct);
+                // caseMng.setCaseActivitys(caseActivitys);
+                // caseManagementRepository.save(caseMng);
+            }else{
+                throw new RuntimeException("Error with flow case status not Init or Reject");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);   
+        }
+    }
+
+
+
 
 }
