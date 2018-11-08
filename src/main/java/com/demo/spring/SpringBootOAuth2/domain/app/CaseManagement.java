@@ -37,8 +37,8 @@ public class CaseManagement extends BaseModel {
     private String assignAsm;
     private Long areaId;
 
-    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    // protected Timestamp activityDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Timestamp activityDate;
     private String asmRemark;
     private String flagCheckIdCard;
     private String flagCheckPayslip;
@@ -53,7 +53,7 @@ public class CaseManagement extends BaseModel {
     private String contactPersonName;
     private String contactPersonLastName;
     private String contactPersonTel;
-
+    private String changeCause; 
     private String closeFlag;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
