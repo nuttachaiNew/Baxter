@@ -245,10 +245,61 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
             caseManagement.setElectronicConsent(updateCase.getElectronicConsent());
 
+            caseManagement.setChangeCause(updateCase.getChangeCause());
             caseManagement.setIssueCase(updateCase.getIssueCase());
             caseManagement.setContactPersonName(updateCase.getContactPersonName());
             caseManagement.setContactPersonLastName(updateCase.getContactPersonLastName());
             caseManagement.setContactPersonTel(updateCase.getContactPersonTel());
+
+            List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
+            LOGGER.debug("machine size :{}",machineData.size());
+            if(machineData.size()>10){
+                throw new RuntimeException("Oversize of Machine");
+            }
+            String caseNumber = caseManagement.getCaseNumber();
+            Integer machineRunning = 1 ;
+            for(Map<String,Object> machineInfo: machineData){   
+                String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
+                String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
+                String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
+                String flagEdit = machineInfo.get("flagEdit") ==null?"0" :machineInfo.get("flagEdit").toString();
+                serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
+                if( "1".equalsIgnoreCase(flagEdit) ){
+                    // generate Machine by Condition
+                        Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+                        // update Status Machine 
+                        updateMachineStatus(machineId , 0 , caseNumber ,"SYSTEM");
+                        Machine machineUsed = machineRepository.findOne(machineId);
+                        if(machineRunning == 1){
+                            caseManagement.setMachine1(machineUsed);
+                        }else if(machineRunning == 2 ){
+                            caseManagement.setMachine2(machineUsed);
+                        }else if(machineRunning == 3 ){
+                            caseManagement.setMachine3(machineUsed);
+                        }else if(machineRunning == 4 ){
+                            caseManagement.setMachine4(machineUsed);
+                        }else if(machineRunning == 5 ){
+                            caseManagement.setMachine5(machineUsed);
+                        }else if(machineRunning == 6 ){
+                            caseManagement.setMachine6(machineUsed);
+                        }else if(machineRunning == 7 ){
+                            caseManagement.setMachine7(machineUsed);
+                        }else if(machineRunning == 8 ){
+                            caseManagement.setMachine8(machineUsed);
+                        }else if(machineRunning == 9 ){
+                            caseManagement.setMachine9(machineUsed);
+                        }else if(machineRunning == 10 ){
+                            caseManagement.setMachine10(machineUsed);
+                        }else{
+                            throw new RuntimeException("Oversize of machine");
+                        }
+
+                }
+
+                
+                machineRunning++;
+}
+
 
             caseManagementRepository.save(caseManagement);
             CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
