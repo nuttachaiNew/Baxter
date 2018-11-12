@@ -222,8 +222,11 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             User actionUser = caseManagement.getActionUser();
             Installation installation = caseManagement.getInstallation();
             Installation updateInstallation = updateCase.getInstallation();
+            LOGGER.debug("installation id :{}",installation.getId());
+         
             updateInstallation.setId(installation.getId());
             caseManagement.setInstallation(updateInstallation);
+            
             Prescription prescription = caseManagement.getPrescription();
             NurseMenu nurseMenu = prescription.getNurseMenu();
             MakeAdjustment makeAdjustment = prescription.getMakeAdjustment();
