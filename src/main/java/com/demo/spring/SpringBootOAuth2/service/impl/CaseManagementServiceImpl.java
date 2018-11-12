@@ -220,29 +220,54 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             
             
             User actionUser = caseManagement.getActionUser();
-            Installation installation = caseManagement.getInstallation();
             Installation updateInstallation = updateCase.getInstallation();
-            LOGGER.debug("installation id :{}",installation.getId());
-         
-            // updateInstallation.setId(installation.getId());
-            // caseManagement.setInstallation(updateInstallation);
-            
+
+            Installation installation = caseManagement.getInstallation();
+            updateInstallation.setId(installation.getId());
+            installation  = updateInstallation;
+            caseManagement.setInstallation(installation);
+            // old
             Prescription prescription = caseManagement.getPrescription();
             NurseMenu nurseMenu = prescription.getNurseMenu();
             MakeAdjustment makeAdjustment = prescription.getMakeAdjustment();
             ChangePrograme changePrograme = prescription.getChangePrograme();
+            //new  
             Prescription updatePrescription = updateCase.getPrescription();
-            NurseMenu updateNurseMenu = updatePrescription.getNurseMenu();
-            MakeAdjustment updateMakeAdjustment = updatePrescription.getMakeAdjustment();
-            ChangePrograme updateChangePrograme = updatePrescription.getChangePrograme();
-            updatePrescription.setId( prescription.getId() );
-            updateNurseMenu.setId(nurseMenu.getId());
-            updateMakeAdjustment.setId(makeAdjustment.getId());
-            updateChangePrograme.setId( changePrograme.getId());
-            updatePrescription.setNurseMenu(updateNurseMenu);
-            updatePrescription.setMakeAdjustment(updateMakeAdjustment);
-            updatePrescription.setChangePrograme(updateChangePrograme);
-            caseManagement.setPrescription(updatePrescription);
+            updatePrescription.setId(prescription.getId());
+            prescription = updatePrescription;
+            NurseMenu nurseMenuUpdate = prescription.getNurseMenu();
+            MakeAdjustment makeAdjustmentUpdate = prescription.getMakeAdjustment();
+            ChangePrograme changeProgrameUpdate = prescription.getChangePrograme();
+            nurseMenuUpdate.setId(nurseMenu.getId());            
+            makeAdjustmentUpdate.setId(makeAdjustment.getId());
+            changeProgrameUpdate.setId(changePrograme.getId());
+
+            nurseMenu = nurseMenuUpdate;
+            makeAdjustment = makeAdjustmentUpdate;
+            changePrograme = changeProgrameUpdate;
+            prescription.setNurseMenu(nurseMenu);
+            prescription.setMakeAdjustment(makeAdjustment);
+            prescription.setChangePrograme(changePrograme);
+            
+            caseManagement.setPrescription(prescription);
+
+            // NurseMenu updateNurseMenu = updatePrescription.getNurseMenu();
+            // updateNurseMenu.setId(nurseMenu.getId());
+            // nurseMenu = updateNurseMenu;
+
+            // prescription.setNurseMenu(nurseMenu);
+            // caseManagement.setPrescription(prescription);
+        
+            // MakeAdjustment updateMakeAdjustment = updatePrescription.getMakeAdjustment();
+            // ChangePrograme updateChangePrograme = updatePrescription.getChangePrograme();
+            // updatePrescription.setId( prescription.getId() );
+            // updateNurseMenu.setId(nurseMenu.getId());
+            // updateMakeAdjustment.setId(makeAdjustment.getId());
+            // updateChangePrograme.setId( changePrograme.getId());
+            // updatePrescription.setNurseMenu(updateNurseMenu);
+            // updatePrescription.setMakeAdjustment(updateMakeAdjustment);
+            // updatePrescription.setChangePrograme(updateChangePrograme);
+            
             caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
             caseManagement.setShareSource(updateCase.getShareSource());
             caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
@@ -272,10 +297,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                         LOGGER.debug("running : {}",machineRunning);
                         Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
                         // update Status Machine 
+                        LOGGER.debug("before update Machine");
                         updateMachineStatus(machineId , 0 , caseNumber ,"SYSTEM");
+                        LOGGER.debug("afer update Machine");
+                        
                         Machine machineUsed = machineRepository.findOne(machineId);
                         
                         if(machineRunning == 1){
+                            Machine oldMachine = caseManagement.getMachine1();
                             caseManagement.setMachine1(machineUsed);
                         }else if(machineRunning == 2 ){
                             caseManagement.setMachine2(machineUsed);
