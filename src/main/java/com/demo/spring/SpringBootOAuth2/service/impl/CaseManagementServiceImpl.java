@@ -269,10 +269,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
                 if( "1".equalsIgnoreCase(flagEdit) ){
                     // generate Machine by Condition
+                        LOGGER.debug("running : {}",machineRunning);
                         Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
                         // update Status Machine 
                         updateMachineStatus(machineId , 0 , caseNumber ,"SYSTEM");
                         Machine machineUsed = machineRepository.findOne(machineId);
+                        
                         if(machineRunning == 1){
                             caseManagement.setMachine1(machineUsed);
                         }else if(machineRunning == 2 ){
@@ -302,7 +304,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 
                 machineRunning++;
 }
-
+LOGGER.debug("end of update machine");
 
             caseManagementRepository.save(caseManagement);
             CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
