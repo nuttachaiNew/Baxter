@@ -59,7 +59,7 @@ public class CaseManagementRepositoryCustom {
              if( !"".equalsIgnoreCase(serialNumber) ) query.setParameter("serialNumber",serialNumber);
             LOGGER.debug("before ");
              
-             listfromQuery = query.getResultList();
+            listfromQuery = query.getResultList();
             LOGGER.debug("after ");
          
              for(Object[] col : listfromQuery){

@@ -295,7 +295,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 if( "1".equalsIgnoreCase(flagEdit) ){
                     // generate Machine by Condition
                         LOGGER.debug("running : {}",machineRunning);
-                        Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+                        // Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+                        Long machineId =  caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);
                         // update Status Machine 
                         LOGGER.debug("before update Machine");
                         updateMachineStatus(machineId , 0 , caseNumber ,"SYSTEM");
