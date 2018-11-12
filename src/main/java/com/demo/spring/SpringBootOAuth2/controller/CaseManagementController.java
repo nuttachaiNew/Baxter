@@ -266,13 +266,15 @@ public class CaseManagementController {
                                                                         , @RequestParam(value = "caseStatus",required = false)String documentStatus
                                                                         , @RequestParam(value = "firstResult",required = false)Integer firstResult
                                                                         , @RequestParam(value = "maxResult",required = false)Integer maxResult
+                                                                        , @RequestParam(value = "caseType",required = false)String caseType
+                                                                        
                                                                         ){
 
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult);
+            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult,caseType);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
@@ -405,6 +407,7 @@ public class CaseManagementController {
 
 
 
+
     @RequestMapping(value ="/confirmByTS", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
     public ResponseEntity<String> confirmByTS(
         MultipartHttpServletRequest multipartHttpServletRequest
@@ -534,7 +537,51 @@ public class CaseManagementController {
     }
 
 
+    @RequestMapping(value ="/saveReturnCase", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> saveReturnCase(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            Map<String,Object> result = caseManagementService.saveReturnCase(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",ex.getMessage());
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        }
+    }
 
+   @RequestMapping(value ="/sendReturnCaseToNextRole", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> sendReturnCaseToNextRole(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            Map<String,Object> result = caseManagementService.sendReturnCaseToNextRole(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",ex.getMessage());
 
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        }
+    }
 
 }

@@ -123,7 +123,7 @@ public class CaseManagementRepositoryCustom {
         }
     }
 
-    public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult){
+    public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType){
         try{
             caseNumber = caseNumber == null?"":caseNumber;
             LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
@@ -138,12 +138,17 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
             if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus  ");
+            if(caseType!=null) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
             criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             if(date!=null)query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
+            // SALE send I  , R 
+            // ASM send W 
+            // Other F
             if(documentStatus!=null ) query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId );
+            if(caseType!=null)query.setParameter("caseType",caseType);
             listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){
                 Map<String,Object> activity = new HashMap<>();

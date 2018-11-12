@@ -65,7 +65,7 @@ public class CaseManagementServiceTest  {
 
     @Test
 	public void   findCaseByCriteria(){
-		List<Map<String,Object>> results = caseManagementService.findCaseByCriteria("08-2018","%" ,null , null ,0 ,10);
+		List<Map<String,Object>> results = caseManagementService.findCaseByCriteria("08-2018","%" ,null , null ,0 ,10,null);
         Assert.assertTrue(results.size()!=0);
 	}
 

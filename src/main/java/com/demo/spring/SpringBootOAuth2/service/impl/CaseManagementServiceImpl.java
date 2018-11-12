@@ -305,24 +305,61 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                         
                         if(machineRunning == 1){
                             Machine oldMachine = caseManagement.getMachine1();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine1(machineUsed);
                         }else if(machineRunning == 2 ){
+                            Machine oldMachine = caseManagement.getMachine2();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine2(machineUsed);
                         }else if(machineRunning == 3 ){
+
+                            Machine oldMachine = caseManagement.getMachine3();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine3(machineUsed);
                         }else if(machineRunning == 4 ){
+
+                            Machine oldMachine = caseManagement.getMachine4();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine4(machineUsed);
                         }else if(machineRunning == 5 ){
+
+                            Machine oldMachine = caseManagement.getMachine5();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine5(machineUsed);
                         }else if(machineRunning == 6 ){
+
+                            Machine oldMachine = caseManagement.getMachine6();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine6(machineUsed);
                         }else if(machineRunning == 7 ){
+
+                            Machine oldMachine = caseManagement.getMachine7();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine7(machineUsed);
                         }else if(machineRunning == 8 ){
+
+                            Machine oldMachine = caseManagement.getMachine8();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine8(machineUsed);
                         }else if(machineRunning == 9 ){
+
+                            Machine oldMachine = caseManagement.getMachine9();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine9(machineUsed);
                         }else if(machineRunning == 10 ){
+
+                            Machine oldMachine = caseManagement.getMachine2();
+                            oldMachine.setStatus(0);
+                            machineRepository.save(oldMachine);
                             caseManagement.setMachine10(machineUsed);
                         }else{
                             throw new RuntimeException("Oversize of machine");
@@ -668,10 +705,10 @@ LOGGER.debug("end of update machine");
     }
 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+   public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String caseType){
      try{
         LOGGER.info("findCaseByCriteria : {}",date);
-        return caseManagementRepositoryCustom.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult);
+        return caseManagementRepositoryCustom.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult,caseType);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -925,6 +962,96 @@ LOGGER.debug("end of update machine");
      }
    }
 
+   // @Override
+   // @Transactional
+   // public  Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+   //   try{
+   //      LOGGER.debug("saveReturnCase :{} ",json);
+   //      JSONObject jsonObject = new JSONObject(json);
+   //      CaseManagement changeCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
+   //      List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
+   //      String refCaseId = jsonObject.get("refCaseId").toString();
+   //      CaseManagement refCase = caseManagementRepository.findOne(Long.valueOf(refCaseId));
+   //      User actionBy = userRepository.findByUsername(changeCase.getCreatedBy()); // fixed action user
+        
+   //      String oldCaseNumber  = refCase.getCaseNumber();
+   //      String[] subCaseNumber = oldCaseNumber.split("/");
+   //      String newCaseNumber = subCaseNumber[0]+"/02/"+subCaseNumber[2];
+   //      if( refCase.getCloseFlag()!= null && "Y".equalsIgnoreCase(refCase.getCloseFlag()) ){
+   //          throw new RuntimeException(" Can't Create change case ( this case already reference case ) ");
+   //      }
+   //      // close Case
+   //      refCase.setCloseFlag("Y"); 
+   //      refCase.setUpdatedDate( StandardUtil.getCurrentDate() );
+   //      refCase.setUpdatedBy(changeCase.getCreatedBy());
+   //      caseManagementRepository.save(refCase);
+   //      // close old case
+   //      changeCase.setRefCase(refCase);
+   //      changeCase.setCreatedDate( StandardUtil.getCurrentDate() );
+   //      changeCase.setCaseNumber(newCaseNumber);
+   //      changeCase.setCaseStatus("I");
+   //      changeCase.setCaseType("CH");
+   //      changeCase.setCustomer(refCase.getCustomer());
+   //      Integer machineRunning = 1;
+   //          for(Map<String,Object> machineInfo: machineData){   
+   //              String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
+   //              String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
+   //              String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
+   //              serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
+   //              // generate Machine by Condition
+   //              Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+   //              // update Status Machine 
+   //              updateMachineStatus(machineId , 0 , newCaseNumber ,"SYSTEM");
+   //              Machine machineUsed = machineRepository.findOne(machineId);
+   //              if(machineRunning == 1){
+   //                  changeCase.setMachine1(machineUsed);
+   //              }else if(machineRunning == 2 ){
+   //                  changeCase.setMachine2(machineUsed);
+   //              }else if(machineRunning == 3 ){
+   //                  changeCase.setMachine3(machineUsed);
+   //              }else if(machineRunning == 4 ){
+   //                  changeCase.setMachine4(machineUsed);
+   //              }else if(machineRunning == 5 ){
+   //                  changeCase.setMachine5(machineUsed);
+   //              }else if(machineRunning == 6 ){
+   //                  changeCase.setMachine6(machineUsed);
+   //              }else if(machineRunning == 7 ){
+   //                  changeCase.setMachine7(machineUsed);
+   //              }else if(machineRunning == 8 ){
+   //                  changeCase.setMachine8(machineUsed);
+   //              }else if(machineRunning == 9 ){
+   //                  changeCase.setMachine9(machineUsed);
+   //              }else if(machineRunning == 10 ){
+   //                  changeCase.setMachine10(machineUsed);
+   //              }else{
+   //                  throw new RuntimeException("Oversize of machine");
+   //              }
+   //              machineRunning++;
+   //          }
+   //          LOGGER.debug("end with machine");
+   //          LOGGER.debug("user :{}",actionBy.getId());
+   //          changeCase.setAreaId(actionBy.getBranch().getId());
+   //          Map<String,Object> returnResult = new HashMap<>();
+   //          CaseActivity caseActivity = new CaseActivity();
+   //          Set<CaseActivity> activitys = new HashSet<>();
+   //          caseActivity.setUser(actionBy);
+   //          caseActivity.setActionStatus("create Change Machine");
+   //          caseActivity.setActionDate(StandardUtil.getCurrentDate());
+   //          caseActivity.setCaseManagement(changeCase);
+   //          activitys.add(caseActivity);
+   //          changeCase.setCaseActivitys(activitys);
+   //          caseManagementRepository.save(changeCase);
+   //          returnResult.put("caseType",changeCase.getCaseType());
+   //          returnResult.put("status","success");
+   //          returnResult.put("caseNumber",changeCase.getCaseNumber());
+
+   //          return returnResult;
+   //   }catch(Exception e){
+   //        e.printStackTrace();
+   //       LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+   //       throw new RuntimeException(e);
+   //   }
+   // }
 
    @Override
    @Transactional
@@ -1124,6 +1251,153 @@ LOGGER.debug("end of update machine");
         }
     }
 
+
+
+  @Override
+   @Transactional
+   public  Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+     try{
+        LOGGER.debug("saveReturnCase :{} ",json);
+        JSONObject jsonObject = new JSONObject(json);
+        CaseManagement changeCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
+        List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
+        String refCaseId = jsonObject.get("refCaseId").toString();
+        CaseManagement refCase = caseManagementRepository.findOne(Long.valueOf(refCaseId));
+        User actionBy = userRepository.findByUsername(changeCase.getCreatedBy()); // fixed action user
+        
+        String oldCaseNumber  = refCase.getCaseNumber();
+        String[] subCaseNumber = oldCaseNumber.split("/");
+
+        String runningSub = "0"+Integer.valueOf( subCaseNumber[1]) +1 ;
+        String newCaseNumber = subCaseNumber[0]+"/"+runningSub+"/"+subCaseNumber[2];
+        if( refCase.getCloseFlag()!= null && "Y".equalsIgnoreCase(refCase.getCloseFlag()) ){
+            throw new RuntimeException(" Can't Create return machine ( this case already reference case ) ");
+        }
+        // close Case
+        refCase.setCloseFlag("Y"); 
+        refCase.setUpdatedDate( StandardUtil.getCurrentDate() );
+        refCase.setUpdatedBy(changeCase.getCreatedBy());
+        caseManagementRepository.save(refCase);
+        // close old case
+        changeCase.setRefCase(refCase);
+        changeCase.setCreatedDate( StandardUtil.getCurrentDate() );
+        changeCase.setCaseNumber(newCaseNumber);
+        changeCase.setCaseStatus("I");
+        changeCase.setCaseType("RT");
+        changeCase.setCustomer(refCase.getCustomer());
+        Integer machineRunning =1;
+            for(Map<String,Object> machineInfo: machineData){   
+                String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
+                String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
+                String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
+                serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
+                // generate Machine by Condition
+                Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+                // update Status Machine 
+                updateMachineStatus(machineId , 0 , newCaseNumber ,"SYSTEM");
+                Machine machineUsed = machineRepository.findOne(machineId);
+                if(machineRunning == 1){
+                    changeCase.setMachine1(machineUsed);
+                }else if(machineRunning == 2 ){
+                    changeCase.setMachine2(machineUsed);
+                }else if(machineRunning == 3 ){
+                    changeCase.setMachine3(machineUsed);
+                }else if(machineRunning == 4 ){
+                    changeCase.setMachine4(machineUsed);
+                }else if(machineRunning == 5 ){
+                    changeCase.setMachine5(machineUsed);
+                }else if(machineRunning == 6 ){
+                    changeCase.setMachine6(machineUsed);
+                }else if(machineRunning == 7 ){
+                    changeCase.setMachine7(machineUsed);
+                }else if(machineRunning == 8 ){
+                    changeCase.setMachine8(machineUsed);
+                }else if(machineRunning == 9 ){
+                    changeCase.setMachine9(machineUsed);
+                }else if(machineRunning == 10 ){
+                    changeCase.setMachine10(machineUsed);
+                }else{
+                    throw new RuntimeException("Oversize of machine");
+                }
+                machineRunning++;
+            }
+            LOGGER.debug("end with machine");
+            LOGGER.debug("user :{}",actionBy.getId());
+            changeCase.setAreaId(actionBy.getBranch().getId());
+            Map<String,Object> returnResult = new HashMap<>();
+            CaseActivity caseActivity = new CaseActivity();
+            Set<CaseActivity> activitys = new HashSet<>();
+            caseActivity.setUser(actionBy);
+            caseActivity.setActionStatus("create Change Machine");
+            caseActivity.setActionDate(StandardUtil.getCurrentDate());
+            caseActivity.setCaseManagement(changeCase);
+            activitys.add(caseActivity);
+            changeCase.setCaseActivitys(activitys);
+            caseManagementRepository.save(changeCase);
+            returnResult.put("caseType",changeCase.getCaseType());
+            returnResult.put("status","success");
+            returnResult.put("caseNumber",changeCase.getCaseNumber());
+
+            return returnResult;
+     }catch(Exception e){
+          e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+     }
+   }
+
+
+   @Override
+   @Transactional
+   public  Map<String,Object> sendReturnCaseToNextRole(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+     try{
+
+             ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+            Map result = new HashMap<>();
+            if( updateCase.getId() == null ){
+                result = saveReturnCase(json,multipartHttpServletRequest);
+            }else{
+                result = updateCase(json,multipartHttpServletRequest);
+            }
+            CaseManagement caseMng =  null ;
+            if(result.get("caseNumber") != null){
+                caseMng = findByCaseNumber(result.get("caseNumber").toString());
+            }else {
+                throw new RuntimeException("submit to Other Role ERROR");
+            }
+            Map resultResult = new HashMap<>();
+             if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
+                caseMng.setCaseStatus("F");
+                caseMng.setUpdatedBy("temp");
+                caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
+                Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
+                LOGGER.debug("caseActivity :{}",caseActivitys.size());
+                CaseActivity caseAct = new CaseActivity();
+                User user = userRepository.findByUsername( "temp" );
+                caseAct.setUser(user);
+                caseAct.setActionStatus("submit return machine to Other role");
+                caseAct.setActionDate(StandardUtil.getCurrentDate());
+                caseAct.setCaseManagement(caseMng);    
+                caseActivityRepository.save(caseAct);
+
+                resultResult.put("caseNumber",caseMng.getCaseNumber());
+                resultResult.put("caseStatus",caseMng.getCaseStatus());
+                resultResult.put("actionRole","SALE");
+                return resultResult;
+
+            }else{
+                throw new RuntimeException("Error with flow case status not Init or Reject");
+            }
+
+
+     }catch(Exception e){
+          e.printStackTrace();
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+         throw new RuntimeException(e);
+     }
+   }
 
 
 

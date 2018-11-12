@@ -25,7 +25,7 @@ public interface CaseManagementService {
     CaseManagement findByCaseNumber(String caseNumber);
     // void approveCaseByRole();
     List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy);
-    List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
+    List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String caseType);
     List<Map<String,Object>> findCaseforReturnCaseByCustomer(String caseType,String customer,String caseNumber);
     
 
@@ -34,7 +34,9 @@ public interface CaseManagementService {
     void saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest);
 
 
-    // Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> sendReturnCaseToNextRole(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+   
     Map<String,Object> saveChangeCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     List<Map<String,Object>> findCaseManagementforChangeMachineByCriteria(String keyword, String customerType,String hospitalName);
 
