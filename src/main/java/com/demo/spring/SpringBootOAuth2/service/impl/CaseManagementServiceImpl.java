@@ -279,11 +279,36 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setContactPersonLastName(updateCase.getContactPersonLastName());
             caseManagement.setContactPersonTel(updateCase.getContactPersonTel());
 
-            List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
+
+            caseManagementRepository.save(caseManagement);
+            CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
+            updateMachine(jsonObject.get("machines").toString(),id);
+
+            LOGGER.debug("Customer Type :{} ",checkCaseManagement.getCustomer().getCustomerType());
+
+            Map returnResult = new HashMap<>();
+            returnResult.put("status","success");
+            returnResult.put("caseNumber",caseManagement.getCaseNumber());
+            return returnResult;
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+
+    @Transactional 
+    public void updateMachine(String json , Long caseId){
+        try{
+            LOGGER.info("updateMachine : {}",caseId);
+            List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(json);
             LOGGER.debug("machine size :{}",machineData.size());
             if(machineData.size()>10){
                 throw new RuntimeException("Oversize of Machine");
             }
+            CaseManagement caseManagement = caseManagementRepository.findOne(caseId);
             String caseNumber = caseManagement.getCaseNumber();
             Integer machineRunning = 1 ;
             for(Map<String,Object> machineInfo: machineData){   
@@ -306,88 +331,70 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                         
                         if(machineRunning == 1){
                             Machine oldMachine = caseManagement.getMachine1();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
+                            
                             caseManagement.setMachine1(machineUsed);
                         }else if(machineRunning == 2 ){
                             Machine oldMachine = caseManagement.getMachine2();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine2(machineUsed);
                         }else if(machineRunning == 3 ){
-
                             Machine oldMachine = caseManagement.getMachine3();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine3(machineUsed);
                         }else if(machineRunning == 4 ){
-
                             Machine oldMachine = caseManagement.getMachine4();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine4(machineUsed);
                         }else if(machineRunning == 5 ){
-
                             Machine oldMachine = caseManagement.getMachine5();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine5(machineUsed);
                         }else if(machineRunning == 6 ){
-
                             Machine oldMachine = caseManagement.getMachine6();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine6(machineUsed);
                         }else if(machineRunning == 7 ){
-
                             Machine oldMachine = caseManagement.getMachine7();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine7(machineUsed);
                         }else if(machineRunning == 8 ){
-
                             Machine oldMachine = caseManagement.getMachine8();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine8(machineUsed);
                         }else if(machineRunning == 9 ){
-
                             Machine oldMachine = caseManagement.getMachine9();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine9(machineUsed);
                         }else if(machineRunning == 10 ){
-
                             Machine oldMachine = caseManagement.getMachine2();
-                            oldMachine.setStatus(0);
+                            oldMachine.setStatus(1);
                             machineRepository.save(oldMachine);
                             caseManagement.setMachine10(machineUsed);
                         }else{
                             throw new RuntimeException("Oversize of machine");
                         }
-
                 }
-
-                
                 machineRunning++;
 }
 LOGGER.debug("end of update machine");
-
-            caseManagementRepository.save(caseManagement);
-            CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
-
-            LOGGER.debug("Customer Type :{} ",checkCaseManagement.getCustomer().getCustomerType());
-
-            Map returnResult = new HashMap<>();
-            returnResult.put("status","success");
-            returnResult.put("caseNumber",caseManagement.getCaseNumber());
-            return returnResult;
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e.getMessage());
         }
     }
+
+
 
     @Override
     @Transactional

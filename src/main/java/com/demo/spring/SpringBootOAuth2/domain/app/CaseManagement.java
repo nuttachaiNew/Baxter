@@ -96,17 +96,17 @@ public class CaseManagement extends BaseModel {
     @OneToOne(fetch = FetchType.LAZY)
     private Machine machine10;
 
-    @OneToOne(fetch = FetchType.LAZY ,orphanRemoval=true)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval=true)
     private Installation installation;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval=true)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval=true)
     private Prescription prescription;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval=true)
-    private Payslip payslip;
+    // @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval=true)
+    // private Payslip payslip;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval=true)
-    private Receipt receipt;
+    // @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval=true)
+    // private Receipt receipt;
 
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement" , orphanRemoval = true)
