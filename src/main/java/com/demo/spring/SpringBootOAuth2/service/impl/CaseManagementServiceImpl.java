@@ -309,15 +309,59 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 throw new RuntimeException("Oversize of Machine");
             }
             CaseManagement caseManagement = caseManagementRepository.findOne(caseId);
+            LOGGER.debug("clear machine");
+            caseManagement.setMachine1(null);
+            caseManagement.setMachine2(null);
+            caseManagement.setMachine3(null);
+            caseManagement.setMachine4(null);
+            caseManagement.setMachine5(null);
+            caseManagement.setMachine6(null);
+            caseManagement.setMachine7(null);
+            caseManagement.setMachine8(null);
+            caseManagement.setMachine9(null);
+            caseManagement.setMachine10(null);
+
+
+            // 
+            LOGGER.debug("clear set flag 0 ");
+
+            Machine machine1 =caseManagement.getMachine1();
+            Machine machine2 =caseManagement.getMachine2();
+            Machine machine3 =caseManagement.getMachine3();
+            Machine machine4 =caseManagement.getMachine4();
+            Machine machine5 =caseManagement.getMachine5();
+            Machine machine6 =caseManagement.getMachine6();
+            Machine machine7 =caseManagement.getMachine7();
+            Machine machine8 =caseManagement.getMachine8();
+            Machine machine9 =caseManagement.getMachine9();
+            Machine machine10 =caseManagement.getMachine10();
+            List<Machine> listMachine = new ArrayList<>();
+            listMachine.add(machine1);
+            listMachine.add(machine2);
+            listMachine.add(machine3);
+            listMachine.add(machine4);
+            listMachine.add(machine5);
+            listMachine.add(machine6);
+            listMachine.add(machine7);
+            listMachine.add(machine8);
+            listMachine.add(machine9);
+            listMachine.add(machine10);
+            for(Machine data: listMachine){
+                if(data != null){
+                    data.setStatus(1);
+                    machineRepository.save(data);
+                }
+            }
+
             String caseNumber = caseManagement.getCaseNumber();
             Integer machineRunning = 1 ;
             for(Map<String,Object> machineInfo: machineData){   
                 String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
                 String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
                 String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
-                String flagEdit = machineInfo.get("flagEdit") ==null?"0" :machineInfo.get("flagEdit").toString();
+                // String flagEdit = machineInfo.get("flagEdit") ==null?"0" :machineInfo.get("flagEdit").toString();
                 serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
-                if( "1".equalsIgnoreCase(flagEdit) ){
+                // if( "1".equalsIgnoreCase(flagEdit) ){
                     // generate Machine by Condition
                         LOGGER.debug("running : {}",machineRunning);
                         // Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
@@ -330,60 +374,32 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                         Machine machineUsed = machineRepository.findOne(machineId);
                         
                         if(machineRunning == 1){
-                            Machine oldMachine = caseManagement.getMachine1();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             
                             caseManagement.setMachine1(machineUsed);
                         }else if(machineRunning == 2 ){
                             Machine oldMachine = caseManagement.getMachine2();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine2(machineUsed);
                         }else if(machineRunning == 3 ){
-                            Machine oldMachine = caseManagement.getMachine3();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine3(machineUsed);
                         }else if(machineRunning == 4 ){
-                            Machine oldMachine = caseManagement.getMachine4();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine4(machineUsed);
                         }else if(machineRunning == 5 ){
                             Machine oldMachine = caseManagement.getMachine5();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine5(machineUsed);
                         }else if(machineRunning == 6 ){
-                            Machine oldMachine = caseManagement.getMachine6();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine6(machineUsed);
                         }else if(machineRunning == 7 ){
-                            Machine oldMachine = caseManagement.getMachine7();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine7(machineUsed);
                         }else if(machineRunning == 8 ){
-                            Machine oldMachine = caseManagement.getMachine8();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine8(machineUsed);
                         }else if(machineRunning == 9 ){
-                            Machine oldMachine = caseManagement.getMachine9();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine9(machineUsed);
                         }else if(machineRunning == 10 ){
-                            Machine oldMachine = caseManagement.getMachine2();
-                            oldMachine.setStatus(1);
-                            machineRepository.save(oldMachine);
                             caseManagement.setMachine10(machineUsed);
                         }else{
                             throw new RuntimeException("Oversize of machine");
                         }
-                }
+                // }
                 machineRunning++;
 }
 LOGGER.debug("end of update machine");
