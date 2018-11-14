@@ -279,7 +279,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setContactPersonLastName(updateCase.getContactPersonLastName());
             caseManagement.setContactPersonTel(updateCase.getContactPersonTel());
 
-
+            caseManagement.setCauseReport(updateCase.getCauseReport());
+            caseManagement.setDocterReportName(updateCase.getDocterReportName());
+            caseManagement.setDocterReportLastName(updateCase.getDocterReportLastName());
             caseManagementRepository.save(caseManagement);
             CaseManagement checkCaseManagement = caseManagementRepository.findOne(id);
             updateMachine(jsonObject.get("machines").toString(),id);

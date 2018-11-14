@@ -56,6 +56,10 @@ public class CaseManagement extends BaseModel {
     private String changeCause; 
     private String closeFlag;
 
+    private String causeReport;
+    private String docterReportName;
+    private String docterReportLastName;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp activeDate;
 
