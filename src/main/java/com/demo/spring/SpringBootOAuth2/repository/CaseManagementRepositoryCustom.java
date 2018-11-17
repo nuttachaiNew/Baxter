@@ -91,7 +91,7 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" FROM CASE_ACTIVITY CA ");
             criteriaSqlData.append(" JOIN CASE_MANAGEMENT CM ON CM.ID = CA.CASE_MANAGEMENT ");
             criteriaSqlData.append(" JOIN APP_USER AU ON AU.ID = CA.USER_ID ");
-            criteriaSqlData.append(" JOIN APP_ROLE AR ON AR.ID = AU.ROLE ");
+            criteriaSqlData.append(" JOIN APP_ROLE AR ON AR.ID = AU.ROLE_ID ");
             criteriaSqlData.append(" WHERE CM.CASE_STATUS IN (:documentStatus) ");
             if(areaId != null){
                criteriaSqlData.append(" AND CM.AREA_ID = :areaId ");   
