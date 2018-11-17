@@ -88,22 +88,23 @@ public class CaseManagementRepositoryCustom {
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
             criteriaSqlData.append(" SELECT  CM.CASE_NUMBER , CA.ACTION_STATUS , CA.ACTION_DATE , AU.USERNAME  , CM.CASE_TYPE ,CM.ID ,AR.ROLE_NAME");
-            criteriaSqlData.append(" FROM CASE_ACTIVITY CA ");
-            criteriaSqlData.append(" JOIN CASE_MANAGEMENT CM ON CM.ID = CA.CASE_MANAGEMENT ");
-            criteriaSqlData.append(" JOIN APP_USER AU ON AU.ID = CA.USER_ID ");
-            criteriaSqlData.append(" JOIN APP_ROLE AR ON AR.ID = AU.ROLE_ID ");
-            criteriaSqlData.append(" WHERE CM.CASE_STATUS IN (:documentStatus) ");
+            criteriaSqlData.append("\n FROM CASE_ACTIVITY CA ");
+            criteriaSqlData.append("\n JOIN CASE_MANAGEMENT CM ON CM.ID = CA.CASE_MANAGEMENT ");
+            criteriaSqlData.append("\n JOIN APP_USER AU ON AU.ID = CA.USER_ID ");
+            criteriaSqlData.append("\n JOIN APP_ROLE AR ON AR.ID = AU.ROLE_ID ");
+            criteriaSqlData.append("\n WHERE CM.CASE_STATUS IN (:documentStatus) ");
             if(areaId != null){
-               criteriaSqlData.append(" AND CM.AREA_ID = :areaId ");   
+               criteriaSqlData.append("\n AND CM.AREA_ID = :areaId ");   
             }
             if(createdBy !=null ){
-                criteriaSqlData.append(" AND CM.CREATED_BY = :createdBy ");
+                criteriaSqlData.append("\n AND CM.CREATED_BY = :createdBy ");
             }
-            criteriaSqlData.append(" WHERE CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
+            criteriaSqlData.append("\n WHERE CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId);
             if(createdBy!=null) query.setParameter("createdBy",createdBy);
+            LOGGER.debug("statement : {}",criteriaSqlData);
              listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){
                 Map<String,Object> activity = new HashMap<>();
