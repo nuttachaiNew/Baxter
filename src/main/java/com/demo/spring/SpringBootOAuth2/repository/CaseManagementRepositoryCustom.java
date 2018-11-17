@@ -99,7 +99,7 @@ public class CaseManagementRepositoryCustom {
             if(createdBy !=null ){
                 criteriaSqlData.append("\n AND CM.CREATED_BY = :createdBy ");
             }
-            criteriaSqlData.append("\n WHERE CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
+            criteriaSqlData.append("\n ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId);
