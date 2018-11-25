@@ -1106,11 +1106,7 @@ LOGGER.debug("end of update machine");
         caseManagement.setUpdatedBy("TS");
 
     
-        Installation updateInstallation = updateCase.getInstallation();
-        Installation installation = caseManagement.getInstallation();
-            updateInstallation.setId(installation.getId());
-            installation  = updateInstallation;
-            caseManagement.setInstallation(installation);
+       
             // old
             Prescription prescription = caseManagement.getPrescription();
             NurseMenu nurseMenu = prescription.getNurseMenu();
@@ -1118,25 +1114,26 @@ LOGGER.debug("end of update machine");
             ChangePrograme changePrograme = prescription.getChangePrograme();
             //new  
             Prescription updatePrescription = updateCase.getPrescription();
-            updatePrescription.setId(prescription.getId());
-            prescription = updatePrescription;
-            NurseMenu nurseMenuUpdate = prescription.getNurseMenu();
-            MakeAdjustment makeAdjustmentUpdate = prescription.getMakeAdjustment();
-            ChangePrograme changeProgrameUpdate = prescription.getChangePrograme();
-            nurseMenuUpdate.setId(nurseMenu.getId());            
-            makeAdjustmentUpdate.setId(makeAdjustment.getId());
-            changeProgrameUpdate.setId(changePrograme.getId());
+            if(updatePrescription != null){
+                updatePrescription.setId(prescription.getId());
+                prescription = updatePrescription;
+                NurseMenu nurseMenuUpdate = prescription.getNurseMenu();
+                MakeAdjustment makeAdjustmentUpdate = prescription.getMakeAdjustment();
+                ChangePrograme changeProgrameUpdate = prescription.getChangePrograme();
+                nurseMenuUpdate.setId(nurseMenu.getId());            
+                makeAdjustmentUpdate.setId(makeAdjustment.getId());
+                changeProgrameUpdate.setId(changePrograme.getId());
 
-            nurseMenu = nurseMenuUpdate;
-            makeAdjustment = makeAdjustmentUpdate;
-            changePrograme = changeProgrameUpdate;
-            prescription.setNurseMenu(nurseMenu);
-            prescription.setMakeAdjustment(makeAdjustment);
-            prescription.setChangePrograme(changePrograme);
+                nurseMenu = nurseMenuUpdate;
+                makeAdjustment = makeAdjustmentUpdate;
+                changePrograme = changeProgrameUpdate;
+                prescription.setNurseMenu(nurseMenu);
+                prescription.setMakeAdjustment(makeAdjustment);
+                prescription.setChangePrograme(changePrograme);
+                
+                caseManagement.setPrescription(prescription);
+            }
             
-            caseManagement.setPrescription(prescription);
-
-
         caseManagementRepository.save(caseManagement);
 
         // LOGGER.debug("caseActivity :{}",caseActivitys.size());
