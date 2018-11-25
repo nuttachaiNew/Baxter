@@ -1084,13 +1084,77 @@ LOGGER.debug("end of update machine");
    public  Map<String,Object> confirmByTS(String json,MultipartHttpServletRequest multipartHttpServletRequest){
     LOGGER.info("confirmByTs ");
     try{
-       
         JSONObject jsonObject = new JSONObject(json);
-        CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
-        Long id = caseManagement.getId();
-        
+       
+        CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+        Long id = updateCase.getId();
+        //Old case
+        LOGGER.debug("updateCase  :{} ",id);
+        CaseManagement caseManagement = caseManagementRepository.findOne(id);
+        caseManagement.setAssignTs("TS");
+        caseManagement.setFlagCheckMachine1(updateCase.getFlagCheckMachine1());
+        caseManagement.setFlagCheckMachine2(updateCase.getFlagCheckMachine2());
+        caseManagement.setFlagCheckMachine3(updateCase.getFlagCheckMachine3());
+        caseManagement.setFlagCheckMachine4(updateCase.getFlagCheckMachine4());
+        caseManagement.setFlagCheckMachine5(updateCase.getFlagCheckMachine5());
+        caseManagement.setFlagCheckMachine6(updateCase.getFlagCheckMachine6());
+        caseManagement.setFlagCheckMachine7(updateCase.getFlagCheckMachine7());
+        caseManagement.setFlagCheckMachine8(updateCase.getFlagCheckMachine8());
+        caseManagement.setFlagCheckMachine9(updateCase.getFlagCheckMachine9());
+        caseManagement.setFlagCheckMachine10(updateCase.getFlagCheckMachine10());
+        caseManagement.setUpdatedDate( StandardUtil.getCurrentDate() );
+        caseManagement.setUpdatedBy("TS");
 
-        return null;
+    
+        Installation updateInstallation = updateCase.getInstallation();
+        Installation installation = caseManagement.getInstallation();
+            updateInstallation.setId(installation.getId());
+            installation  = updateInstallation;
+            caseManagement.setInstallation(installation);
+            // old
+            Prescription prescription = caseManagement.getPrescription();
+            NurseMenu nurseMenu = prescription.getNurseMenu();
+            MakeAdjustment makeAdjustment = prescription.getMakeAdjustment();
+            ChangePrograme changePrograme = prescription.getChangePrograme();
+            //new  
+            Prescription updatePrescription = updateCase.getPrescription();
+            updatePrescription.setId(prescription.getId());
+            prescription = updatePrescription;
+            NurseMenu nurseMenuUpdate = prescription.getNurseMenu();
+            MakeAdjustment makeAdjustmentUpdate = prescription.getMakeAdjustment();
+            ChangePrograme changeProgrameUpdate = prescription.getChangePrograme();
+            nurseMenuUpdate.setId(nurseMenu.getId());            
+            makeAdjustmentUpdate.setId(makeAdjustment.getId());
+            changeProgrameUpdate.setId(changePrograme.getId());
+
+            nurseMenu = nurseMenuUpdate;
+            makeAdjustment = makeAdjustmentUpdate;
+            changePrograme = changeProgrameUpdate;
+            prescription.setNurseMenu(nurseMenu);
+            prescription.setMakeAdjustment(makeAdjustment);
+            prescription.setChangePrograme(changePrograme);
+            
+            caseManagement.setPrescription(prescription);
+
+
+        caseManagementRepository.save(caseManagement);
+
+        // LOGGER.debug("caseActivity :{}",caseActivitys.size());
+        CaseActivity caseAct = new CaseActivity();
+        User user = userRepository.findByUsername( "ts" );
+        caseAct.setUser(user);
+        caseAct.setActionStatus("Send from TS ");
+        caseAct.setActionDate(StandardUtil.getCurrentDate());
+        caseAct.setCaseManagement(caseManagement);    
+        caseActivityRepository.save(caseAct);
+
+        Map<String,Object> returnResult = new HashMap();
+        returnResult.put("caseType",caseManagement.getCaseType());
+        returnResult.put("status","success");
+        returnResult.put("message","TS send success");
+        returnResult.put("caseNumber",caseManagement.getCaseNumber());
+
+        return returnResult;
     }catch(Exception e){
           e.printStackTrace();
          LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1426,5 +1490,38 @@ LOGGER.debug("end of update machine");
    }
 
 
+    @Override
+   public  List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+     try{
+        LOGGER.info("findCaseforOtherRole : {}",date);
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"TS");
+     }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   } 
+   @Override
+   public  List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+     try{
+        LOGGER.info("findCaseforOtherRole : {}",date);
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"FN");
+     }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   } 
+   @Override
+   public  List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+     try{
+        LOGGER.info("findCaseforOtherRole : {}",date);
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"CS");
+     }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   } 
 
 }

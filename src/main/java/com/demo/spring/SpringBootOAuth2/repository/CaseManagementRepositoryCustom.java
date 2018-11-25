@@ -249,4 +249,55 @@ public class CaseManagementRepositoryCustom {
     }
 
 
+
+    public List<Map<String,Object>> findCaseforOtherRole(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String role){
+        try{
+            caseNumber = caseNumber == null?"":caseNumber;
+            LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
+            List<Object[] > listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
+            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
+            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
+            criteriaSqlData.append(" WHERE 1 =1 ");
+            if(date!=null) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
+            criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
+            if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
+            if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus   AND CM.CLOSE_FLAG IS NULL  ");
+            if(caseType!=null) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
+            if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_TS  IS NULL  ");
+            if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_FN  IS NULL  ");
+            if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_CS  IS NULL  ");
+
+            criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
+            Query query = em.createNativeQuery(criteriaSqlData.toString());
+            if(date!=null)query.setParameter("date",date );
+            query.setParameter("caseNumber","%"+caseNumber+"%" );
+            // SALE send I  , R 
+            // ASM send W 
+            // Other F
+            if(documentStatus!=null ) query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
+            if(areaId!=null) query.setParameter("areaId",areaId );
+            if(caseType!=null)query.setParameter("caseType",caseType);
+            listfromQuery = query.getResultList();
+             for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("id",col[0]);
+                activity.put("caseNumber",col[1]);
+                activity.put("createdDate",col[2]);
+                activity.put("caseType",col[3]);
+                activity.put("cutsomerName",col[4]);
+                activity.put("cutsomerType",col[5]);
+                activity.put("caseStatus",col[6]);
+                results.add(activity);
+             }
+             return results;
+        }catch(Exception e){
+            e.printStackTrace();   
+             throw new RuntimeException(e.getMessage()); 
+        }
+    }
+
+
 }
