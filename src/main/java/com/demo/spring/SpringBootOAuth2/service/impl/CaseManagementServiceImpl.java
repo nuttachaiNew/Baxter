@@ -1375,42 +1375,55 @@ LOGGER.debug("end of update machine");
         changeCase.setCaseStatus("I");
         changeCase.setCaseType("RT");
         changeCase.setCustomer(refCase.getCustomer());
+
+        changeCase.setMachine1(refCase.getMachine1());
+        changeCase.setMachine2(refCase.getMachine2());
+        changeCase.setMachine3(refCase.getMachine3());
+        changeCase.setMachine4(refCase.getMachine4());
+        changeCase.setMachine5(refCase.getMachine5());
+        changeCase.setMachine6(refCase.getMachine6());
+        changeCase.setMachine7(refCase.getMachine7());
+        changeCase.setMachine8(refCase.getMachine8());
+        changeCase.setMachine9(refCase.getMachine9());
+        changeCase.setMachine10(refCase.getMachine10());
+
+
         Integer machineRunning =1;
-            for(Map<String,Object> machineInfo: machineData){   
-                String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
-                String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
-                String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
-                serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
-                // generate Machine by Condition
-                Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
-                // update Status Machine 
-                updateMachineStatus(machineId , 0 , newCaseNumber ,"SYSTEM");
-                Machine machineUsed = machineRepository.findOne(machineId);
-                if(machineRunning == 1){
-                    changeCase.setMachine1(machineUsed);
-                }else if(machineRunning == 2 ){
-                    changeCase.setMachine2(machineUsed);
-                }else if(machineRunning == 3 ){
-                    changeCase.setMachine3(machineUsed);
-                }else if(machineRunning == 4 ){
-                    changeCase.setMachine4(machineUsed);
-                }else if(machineRunning == 5 ){
-                    changeCase.setMachine5(machineUsed);
-                }else if(machineRunning == 6 ){
-                    changeCase.setMachine6(machineUsed);
-                }else if(machineRunning == 7 ){
-                    changeCase.setMachine7(machineUsed);
-                }else if(machineRunning == 8 ){
-                    changeCase.setMachine8(machineUsed);
-                }else if(machineRunning == 9 ){
-                    changeCase.setMachine9(machineUsed);
-                }else if(machineRunning == 10 ){
-                    changeCase.setMachine10(machineUsed);
-                }else{
-                    throw new RuntimeException("Oversize of machine");
-                }
-                machineRunning++;
-            }
+            // for(Map<String,Object> machineInfo: machineData){   
+            //     String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
+            //     String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
+            //     String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
+            //     serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
+            //     // generate Machine by Condition
+            //     Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
+            //     // update Status Machine 
+            //     updateMachineStatus(machineId , 0 , newCaseNumber ,"SYSTEM");
+            //     Machine machineUsed = machineRepository.findOne(machineId);
+            //     if(machineRunning == 1){
+            //         changeCase.setMachine1(machineUsed);
+            //     }else if(machineRunning == 2 ){
+            //         changeCase.setMachine2(machineUsed);
+            //     }else if(machineRunning == 3 ){
+            //         changeCase.setMachine3(machineUsed);
+            //     }else if(machineRunning == 4 ){
+            //         changeCase.setMachine4(machineUsed);
+            //     }else if(machineRunning == 5 ){
+            //         changeCase.setMachine5(machineUsed);
+            //     }else if(machineRunning == 6 ){
+            //         changeCase.setMachine6(machineUsed);
+            //     }else if(machineRunning == 7 ){
+            //         changeCase.setMachine7(machineUsed);
+            //     }else if(machineRunning == 8 ){
+            //         changeCase.setMachine8(machineUsed);
+            //     }else if(machineRunning == 9 ){
+            //         changeCase.setMachine9(machineUsed);
+            //     }else if(machineRunning == 10 ){
+            //         changeCase.setMachine10(machineUsed);
+            //     }else{
+            //         throw new RuntimeException("Oversize of machine");
+            //     }
+            //     machineRunning++;
+            // }
             LOGGER.debug("end with machine");
             LOGGER.debug("user :{}",actionBy.getId());
             changeCase.setAreaId(actionBy.getBranch().getId());
