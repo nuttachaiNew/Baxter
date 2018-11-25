@@ -417,7 +417,7 @@ public class CaseManagementController {
         try {
             LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
             Map<String,Object> result =  new HashMap<>();
-            // caseManagementService.confirmBySale(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            caseManagementService.confirmByTS(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
