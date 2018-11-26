@@ -1347,7 +1347,7 @@ LOGGER.debug("end of update machine");
         LOGGER.debug("saveReturnCase :{} ",json);
         JSONObject jsonObject = new JSONObject(json);
         CaseManagement changeCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
-        List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
+        // List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
         String refCaseId = jsonObject.get("refCaseId").toString();
         CaseManagement refCase = caseManagementRepository.findOne(Long.valueOf(refCaseId));
         User actionBy = userRepository.findByUsername(changeCase.getCreatedBy()); // fixed action user
@@ -1373,16 +1373,16 @@ LOGGER.debug("end of update machine");
         changeCase.setCaseType("RT");
         changeCase.setCustomer(refCase.getCustomer());
 
-        changeCase.setMachine1(refCase.getMachine1());
-        changeCase.setMachine2(refCase.getMachine2());
-        changeCase.setMachine3(refCase.getMachine3());
-        changeCase.setMachine4(refCase.getMachine4());
-        changeCase.setMachine5(refCase.getMachine5());
-        changeCase.setMachine6(refCase.getMachine6());
-        changeCase.setMachine7(refCase.getMachine7());
-        changeCase.setMachine8(refCase.getMachine8());
-        changeCase.setMachine9(refCase.getMachine9());
-        changeCase.setMachine10(refCase.getMachine10());
+        changeCase.setMachine1(refCase.getMachine1() == null? null: refCase.getMachine1() );
+        changeCase.setMachine2(refCase.getMachine2() == null? null: refCase.getMachine2() );
+        changeCase.setMachine3(refCase.getMachine3() == null? null: refCase.getMachine3() );
+        changeCase.setMachine4(refCase.getMachine4()== null? null: refCase.getMachine4);
+        changeCase.setMachine5(refCase.getMachine5() == null? null: refCase.getMachine5());
+        changeCase.setMachine6(refCase.getMachine6()== null? null: refCase.getMachine6());
+        changeCase.setMachine7(refCase.getMachine7()== null? null: refCase.getMachine7());
+        changeCase.setMachine8(refCase.getMachine8()== null? null: refCase.getMachine8());
+        changeCase.setMachine9(refCase.getMachine9()== null? null: refCase.getMachine9());
+        changeCase.setMachine10(refCase.getMachine10()== null? null: refCase.getMachine10());
 
 
         Integer machineRunning =1;
