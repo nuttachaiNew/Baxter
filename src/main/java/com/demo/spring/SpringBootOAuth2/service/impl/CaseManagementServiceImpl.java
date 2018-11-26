@@ -1376,7 +1376,7 @@ LOGGER.debug("end of update machine");
         changeCase.setMachine1(refCase.getMachine1() == null? null: refCase.getMachine1() );
         changeCase.setMachine2(refCase.getMachine2() == null? null: refCase.getMachine2() );
         changeCase.setMachine3(refCase.getMachine3() == null? null: refCase.getMachine3() );
-        changeCase.setMachine4(refCase.getMachine4()== null? null: refCase.getMachine4);
+        changeCase.setMachine4(refCase.getMachine4()== null? null: refCase.getMachine4());
         changeCase.setMachine5(refCase.getMachine5() == null? null: refCase.getMachine5());
         changeCase.setMachine6(refCase.getMachine6()== null? null: refCase.getMachine6());
         changeCase.setMachine7(refCase.getMachine7()== null? null: refCase.getMachine7());
