@@ -300,4 +300,92 @@ public class CaseManagementRepositoryCustom {
     }
 
 
+
+    public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate){
+        try{
+            LOGGER.debug("countCaseOverAll : {} :{} :{}",documentStatus,startDate,endDate);
+            List<Object[]> listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+           criteriaSqlData.append(" SELECT  \n");
+           criteriaSqlData.append(" CASE CM.CASE_TYPE   \n");
+           criteriaSqlData.append("   WHEN 'CH' THEN 'Change Case'  \n");
+           criteriaSqlData.append("   WHEN 'RT' THEN 'Return Case'   \n");
+           criteriaSqlData.append("   WHEN 'CR' THEN 'Chronic Case'   \n");
+           criteriaSqlData.append("   ELSE 'Acute Case'   \n");
+
+           criteriaSqlData.append(" FROM CASE_MANAGEMENT CM  \n");
+           criteriaSqlData.append(" WHERE CM.CASE_STATUS = :caseStatus  \n");
+           criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  \n");
+           criteriaSqlData.append(" GROUP BY CM.CASE_STATUS  \n");
+
+             Query query = em.createNativeQuery(criteriaSqlData.toString());
+             query.setParameter("startDate",startDate );
+             query.setParameter("endDate",endDate );
+             query.setParameter("caseStatus",caseStatus );
+            listfromQuery = query.getResultList();
+            for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("caseType",col[0]);  
+                activity.put("count",col[0]);  
+                results.add(activity);
+             }
+             return results;
+        }catch(Exception e){
+             e.printStackTrace();   
+             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+
+
+
+
+
+    public List<Map<String,Object>>  countCaseShowInDashboard(String caseType,String startDate, String endDate){
+        try{
+            LOGGER.debug("countCaseShowInDashboard : {} :{} :{}",documentStatus,startDate,endDate);
+            List<Object[]> listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+            criteriaSqlData.append("SELECT  ");
+            criteriaSqlData.append(" CASE CM.CASE_STATUS   ");
+            criteriaSqlData.append(" WHEN 'I' THEN 'Create'  ");
+            criteriaSqlData.append(" WHEN 'W' THEN 'Sent'  ");
+            criteriaSqlData.append(" WHEN 'F' THEN 'Approve'  ");
+            criteriaSqlData.append(" WHEN 'R' THEN 'Reject'  ");
+            criteriaSqlData.append(" END CASE_STATUS  ");
+            criteriaSqlData.append(" ,COUNT(1) QTY  ");
+            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM  ");
+            criteriaSqlData.append(" WHERE    ");
+            criteriaSqlData.append(" CM.CASE_TYPE = :caseType  ");
+            criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  ");
+            criteriaSqlData.append(" GROUP BY CM.CASE_STATUS  ");
+
+
+             Query query = em.createNativeQuery(criteriaSqlData.toString());
+          
+             query.setParameter("startDate",startDate );
+             query.setParameter("endDate",endDate );
+             query.setParameter("caseType",caseType );
+
+            listfromQuery = query.getResultList();
+            for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("caseStatus",col[0]);  
+                activity.put("count",col[0]);  
+                results.add(activity);
+             }
+             return results;
+        }catch(Exception e){
+             e.printStackTrace();   
+             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+
+
+
 }

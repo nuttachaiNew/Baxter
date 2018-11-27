@@ -661,4 +661,46 @@ public class CaseManagementController {
     }
 
 
+
+    @RequestMapping(value ="/countCaseShowInDashboard", method = RequestMethod.GET)
+    ResponseEntity<String> countCaseShowInDashboard(                           @RequestParam(value = "startDate",required = false)String startDate
+                                                                        , @RequestParam(value = "endDate",required = false)String endDate
+                                                                       ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagementService.countCaseShowInDashboard(startDate,endDate)), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
+
+    @RequestMapping(value ="/countCaseOverAll", method = RequestMethod.GET)
+    ResponseEntity<String> countCaseOverAll(                           @RequestParam(value = "startDate",required = false)String startDate
+                                                                        , @RequestParam(value = "endDate",required = false)String endDate
+                                                                        , @RequestParam(value = "caseStatus",required = false)String caseStatus
+                                                                       
+                                                                       ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagementService.countCaseOverAll(caseStatus,startDate,endDate)), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
 }

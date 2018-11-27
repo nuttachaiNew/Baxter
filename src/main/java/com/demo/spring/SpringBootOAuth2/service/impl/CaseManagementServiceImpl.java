@@ -1534,4 +1534,37 @@ LOGGER.debug("end of update machine");
         }
    } 
 
+   @Override
+   public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate){
+    try{
+        return caseManagementRepositoryCustom.countCaseOverAll(caseStatus,startDate,endDate);       
+    }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   }
+
+   @Override
+   public Map<String,Object> countCaseShowInDashboard(String startDate, String endDate){
+    try{
+        Map<String,Object> result = new HashMap<>();
+        List<Map<String,Object>> listCR = countCaseShowInDashboard("CR",startDate,endDate);
+        List<Map<String,Object>> listAR = countCaseShowInDashboard("AR",startDate,endDate);
+        List<Map<String,Object>> listCH = countCaseShowInDashboard("CH",startDate,endDate);
+        List<Map<String,Object>> listRT = countCaseShowInDashboard("RT",startDate,endDate);
+        
+        result.put("CR",listCR);
+        result.put("AR",listAR);
+        result.put("CH",listCH);
+        result.put("RT",listRT);
+        // List<Map<String,Object>>
+        return result;     
+    }catch(Exception e){
+        e.printStackTrace();
+        LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+
 }
