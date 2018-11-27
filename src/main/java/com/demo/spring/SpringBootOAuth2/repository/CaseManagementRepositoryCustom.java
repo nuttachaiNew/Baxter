@@ -303,7 +303,7 @@ public class CaseManagementRepositoryCustom {
 
     public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate){
         try{
-            LOGGER.debug("countCaseOverAll : {} :{} :{}",documentStatus,startDate,endDate);
+            LOGGER.debug("countCaseOverAll : {} :{} :{}",caseStatus,startDate,endDate);
             List<Object[]> listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
@@ -345,7 +345,7 @@ public class CaseManagementRepositoryCustom {
 
     public List<Map<String,Object>>  countCaseShowInDashboard(String caseType,String startDate, String endDate){
         try{
-            LOGGER.debug("countCaseShowInDashboard : {} :{} :{}",documentStatus,startDate,endDate);
+            LOGGER.debug("countCaseShowInDashboard : {} :{} :{}",caseType,startDate,endDate);
             List<Object[]> listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();

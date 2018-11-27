@@ -1549,10 +1549,10 @@ LOGGER.debug("end of update machine");
    public Map<String,Object> countCaseShowInDashboard(String startDate, String endDate){
     try{
         Map<String,Object> result = new HashMap<>();
-        List<Map<String,Object>> listCR = countCaseShowInDashboard("CR",startDate,endDate);
-        List<Map<String,Object>> listAR = countCaseShowInDashboard("AR",startDate,endDate);
-        List<Map<String,Object>> listCH = countCaseShowInDashboard("CH",startDate,endDate);
-        List<Map<String,Object>> listRT = countCaseShowInDashboard("RT",startDate,endDate);
+        List<Map<String,Object>> listCR = caseManagementRepositoryCustom.countCaseShowInDashboard("CR",startDate,endDate);
+        List<Map<String,Object>> listAR = caseManagementRepositoryCustom.countCaseShowInDashboard("AR",startDate,endDate);
+        List<Map<String,Object>> listCH = caseManagementRepositoryCustom.countCaseShowInDashboard("CH",startDate,endDate);
+        List<Map<String,Object>> listRT = caseManagementRepositoryCustom.countCaseShowInDashboard("RT",startDate,endDate);
         
         result.put("CR",listCR);
         result.put("AR",listAR);
