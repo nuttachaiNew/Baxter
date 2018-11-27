@@ -317,7 +317,7 @@ public class CaseManagementRepositoryCustom {
            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM  \n");
            criteriaSqlData.append(" WHERE CM.CASE_STATUS = :caseStatus  \n");
            criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  \n");
-           criteriaSqlData.append(" GROUP BY CM.CASE_STATUS  \n");
+           criteriaSqlData.append(" GROUP BY CM.CASE_TYPE  \n");
 
              Query query = em.createNativeQuery(criteriaSqlData.toString());
              query.setParameter("startDate",startDate );
