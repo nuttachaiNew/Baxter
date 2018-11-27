@@ -1546,13 +1546,13 @@ LOGGER.debug("end of update machine");
    }
 
    @Override
-   public Map<String,Object> countCaseShowInDashboard(String startDate, String endDate){
+   public Map<String,Object> countCaseShowInDashboard(String startDate, String endDate,String createdBy,String areaId ){
     try{
         Map<String,Object> result = new HashMap<>();
-        List<Map<String,Object>> listCR = caseManagementRepositoryCustom.countCaseShowInDashboard("CR",startDate,endDate);
-        List<Map<String,Object>> listAR = caseManagementRepositoryCustom.countCaseShowInDashboard("AR",startDate,endDate);
-        List<Map<String,Object>> listCH = caseManagementRepositoryCustom.countCaseShowInDashboard("CH",startDate,endDate);
-        List<Map<String,Object>> listRT = caseManagementRepositoryCustom.countCaseShowInDashboard("RT",startDate,endDate);
+        List<Map<String,Object>> listCR = caseManagementRepositoryCustom.countCaseShowInDashboard("CR",startDate,endDate,createdBy,areaId);
+        List<Map<String,Object>> listAR = caseManagementRepositoryCustom.countCaseShowInDashboard("AR",startDate,endDate,createdBy,areaId);
+        List<Map<String,Object>> listCH = caseManagementRepositoryCustom.countCaseShowInDashboard("CH",startDate,endDate,createdBy,areaId);
+        List<Map<String,Object>> listRT = caseManagementRepositoryCustom.countCaseShowInDashboard("RT",startDate,endDate,createdBy,areaId);
         
         result.put("CR",listCR);
         result.put("AR",listAR);

@@ -664,14 +664,16 @@ public class CaseManagementController {
 
     @RequestMapping(value ="/countCaseShowInDashboard", method = RequestMethod.GET)
     ResponseEntity<String> countCaseShowInDashboard(                           @RequestParam(value = "startDate",required = false)String startDate
-                                                                        , @RequestParam(value = "endDate",required = false)String endDate
+                                                                             , @RequestParam(value = "endDate",required = false)String endDate
+                                                                             , @RequestParam(value = "createdBy",required = false)String createdBy
+                                                                             , @RequestParam(value = "areaId",required = false)String areaId
                                                                        ){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
-            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagementService.countCaseShowInDashboard(startDate,endDate)), headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagementService.countCaseShowInDashboard(startDate,endDate,createdBy,areaId)), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");

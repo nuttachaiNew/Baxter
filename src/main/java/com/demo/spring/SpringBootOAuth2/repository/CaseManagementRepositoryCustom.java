@@ -346,7 +346,7 @@ public class CaseManagementRepositoryCustom {
 
 
 
-    public List<Map<String,Object>>  countCaseShowInDashboard(String caseType,String startDate, String endDate){
+    public List<Map<String,Object>>  countCaseShowInDashboard(String caseType,String startDate, String endDate ,String createdBy,String areaId ){
         try{
             LOGGER.debug("countCaseShowInDashboard : {} :{} :{}",caseType,startDate,endDate);
             List<Object[]> listfromQuery = new ArrayList<>();
@@ -364,6 +364,9 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" WHERE    ");
             criteriaSqlData.append(" CM.CASE_TYPE = :caseType  ");
             criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  ");
+            if(createdBy!=null)criteriaSqlData.append(" AND CM.CREATED_BY= :createdBy ");
+            if(areaId !=null) criteriaSqlData.append(" AND CM.AREA_ID = :areaId   \n"); 
+           
             criteriaSqlData.append(" GROUP BY CM.CASE_STATUS  ");
 
 
@@ -372,6 +375,8 @@ public class CaseManagementRepositoryCustom {
              query.setParameter("startDate",startDate );
              query.setParameter("endDate",endDate );
              query.setParameter("caseType",caseType );
+             if(createdBy!=null)query.setParameter("createdBy",createdBy);
+             if(areaId!=null)query.setParameter("areaId",areaId);
 
             listfromQuery = query.getResultList();
             for(Object[] col : listfromQuery){
