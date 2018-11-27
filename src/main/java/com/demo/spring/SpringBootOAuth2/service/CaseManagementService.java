@@ -54,6 +54,6 @@ public interface CaseManagementService {
     List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
     List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
     Map<String,Object>  countCaseShowInDashboard(String startDate, String endDate);
-    List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate);
+    List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate,String areaId);
 }   
 

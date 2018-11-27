@@ -1535,9 +1535,9 @@ LOGGER.debug("end of update machine");
    } 
 
    @Override
-   public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate){
+   public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate,String areaId){
     try{
-        return caseManagementRepositoryCustom.countCaseOverAll(caseStatus,startDate,endDate);       
+        return caseManagementRepositoryCustom.countCaseOverAll(caseStatus,startDate,endDate,areaId);       
     }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);

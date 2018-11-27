@@ -301,7 +301,7 @@ public class CaseManagementRepositoryCustom {
 
 
 
-    public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate){
+    public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate,String areaId){
         try{
             LOGGER.debug("countCaseOverAll : {} :{} :{}",caseStatus,startDate,endDate);
             List<Object[]> listfromQuery = new ArrayList<>();
@@ -317,12 +317,15 @@ public class CaseManagementRepositoryCustom {
            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM  \n");
            criteriaSqlData.append(" WHERE CM.CASE_STATUS = :caseStatus  \n");
            criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  \n");
+           if(areaId !=null) criteriaSqlData.append(" AND CM.AREA_ID = :areaId   \n"); 
+
            criteriaSqlData.append(" GROUP BY CM.CASE_TYPE  \n");
 
              Query query = em.createNativeQuery(criteriaSqlData.toString());
              query.setParameter("startDate",startDate );
              query.setParameter("endDate",endDate );
              query.setParameter("caseStatus",caseStatus );
+             if(areaId!=null) query.setParameter("areaId",areaId);
             listfromQuery = query.getResultList();
             for(Object[] col : listfromQuery){
                 Map<String,Object> activity = new HashMap<>();

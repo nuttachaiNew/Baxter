@@ -683,17 +683,17 @@ public class CaseManagementController {
 
 
     @RequestMapping(value ="/countCaseOverAll", method = RequestMethod.GET)
-    ResponseEntity<String> countCaseOverAll(                           @RequestParam(value = "startDate",required = false)String startDate
+    ResponseEntity<String> countCaseOverAll(                             @RequestParam(value = "startDate",required = false)String startDate
                                                                         , @RequestParam(value = "endDate",required = false)String endDate
                                                                         , @RequestParam(value = "caseStatus",required = false)String caseStatus
-                                                                       
+                                                                        , @RequestParam(value = "areaId",required = false)String areaId
                                                                        ){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
-            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagementService.countCaseOverAll(caseStatus,startDate,endDate)), headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagementService.countCaseOverAll(caseStatus,startDate,endDate,areaId)), headers, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.error("Exception : {}",ex);
             headers.add("errorStatus", "E");
