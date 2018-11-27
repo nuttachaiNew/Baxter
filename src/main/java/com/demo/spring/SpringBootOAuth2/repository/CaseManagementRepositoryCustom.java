@@ -312,7 +312,7 @@ public class CaseManagementRepositoryCustom {
            criteriaSqlData.append("   WHEN 'CH' THEN 'Change Case'  \n");
            criteriaSqlData.append("   WHEN 'RT' THEN 'Return Case'   \n");
            criteriaSqlData.append("   WHEN 'CR' THEN 'Chronic Case'   \n");
-           criteriaSqlData.append("   ELSE 'Acute Case'   \n");
+           criteriaSqlData.append("   ELSE 'Acute Case' ,count(1)    \n");
 
            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM  \n");
            criteriaSqlData.append(" WHERE CM.CASE_STATUS = :caseStatus  \n");
@@ -327,7 +327,7 @@ public class CaseManagementRepositoryCustom {
             for(Object[] col : listfromQuery){
                 Map<String,Object> activity = new HashMap<>();
                 activity.put("caseType",col[0]);  
-                activity.put("count",col[0]);  
+                activity.put("count",col[1]);  
                 results.add(activity);
              }
              return results;
@@ -374,7 +374,7 @@ public class CaseManagementRepositoryCustom {
             for(Object[] col : listfromQuery){
                 Map<String,Object> activity = new HashMap<>();
                 activity.put("caseStatus",col[0]);  
-                activity.put("count",col[0]);  
+                activity.put("count",col[1]);  
                 results.add(activity);
              }
              return results;
