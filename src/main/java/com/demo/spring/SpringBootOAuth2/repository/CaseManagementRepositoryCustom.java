@@ -312,7 +312,7 @@ public class CaseManagementRepositoryCustom {
            criteriaSqlData.append("   WHEN 'CH' THEN 'Change Case'  \n");
            criteriaSqlData.append("   WHEN 'RT' THEN 'Return Case'   \n");
            criteriaSqlData.append("   WHEN 'CR' THEN 'Chronic Case'   \n");
-           criteriaSqlData.append("   ELSE 'Acute Case' ,count(1)    \n");
+           criteriaSqlData.append("   ELSE 'Acute Case'  END CASE_STATUS ,count(1)    \n");
 
            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM  \n");
            criteriaSqlData.append(" WHERE CM.CASE_STATUS = :caseStatus  \n");
