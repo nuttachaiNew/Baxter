@@ -1354,8 +1354,8 @@ LOGGER.debug("end of update machine");
         
         String oldCaseNumber  = refCase.getCaseNumber();
         String[] subCaseNumber = oldCaseNumber.split("/");
-
-        String runningSub = "0"+Integer.valueOf( subCaseNumber[1]) +1 ;
+        Integer  run = Integer.valueOf( subCaseNumber[1]) +1;
+        String runningSub = "0"+run  ;
         String newCaseNumber = subCaseNumber[0]+"/"+runningSub+"/"+subCaseNumber[2];
         if( refCase.getCloseFlag()!= null && "Y".equalsIgnoreCase(refCase.getCloseFlag()) ){
             throw new RuntimeException(" Can't Create return machine ( this case already reference case ) ");
@@ -1485,6 +1485,8 @@ LOGGER.debug("end of update machine");
                 resultResult.put("caseNumber",caseMng.getCaseNumber());
                 resultResult.put("caseStatus",caseMng.getCaseStatus());
                 resultResult.put("actionRole","SALE");
+                resultResult.put("status","success");
+              
                 return resultResult;
 
             }else{
@@ -1565,6 +1567,18 @@ LOGGER.debug("end of update machine");
         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
         throw new RuntimeException(e);
     }
+   }
+
+
+   @Override
+   public List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String areaId,String caseType){
+    try{
+        return caseManagementRepositoryCustom.getCaseDetailShowInDashboard(caseStatus,startDate,endDate,areaId,caseType);       
+    }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
    }
 
 }

@@ -682,6 +682,29 @@ public class CaseManagementController {
         }
     }
 
+    @RequestMapping(value ="/getCaseDetailOverAll", method = RequestMethod.GET)
+    ResponseEntity<String> getCaseDetailShowInDashboard(                           @RequestParam(value = "startDate",required = false)String startDate
+                                                                             , @RequestParam(value = "endDate",required = false)String endDate
+                                                                             , @RequestParam(value = "areaId",required = false)String areaId
+                                                                            , @RequestParam(value = "caseStatus",required = false)String caseStatus
+                                                                             , @RequestParam(value = "caseType",required = false)String caseType
+
+                                                                       ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagementService.getCaseDetailShowInDashboard(caseStatus,startDate,endDate,areaId,caseType)), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
 
 
     @RequestMapping(value ="/countCaseOverAll", method = RequestMethod.GET)

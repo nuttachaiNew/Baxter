@@ -396,4 +396,50 @@ public class CaseManagementRepositoryCustom {
 
 
 
+    public List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String areaId,String caseType){
+        try{
+            LOGGER.debug("getCaseDetailShowInDashboard : {} :{} :{}",caseStatus,startDate,endDate);
+            List<Object[]> listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+           criteriaSqlData.append(" SELECT  \n");
+           criteriaSqlData.append(" ROWNUM ,  CM.CASE_NUMBER  , cs.patient_name || ' '||cs.patient_last_name customer  \n");
+           criteriaSqlData.append(",cs.current_address1 || ' '|| cs.current_address2 || ' '|| cs.current_sub_district || ' ' ||cs.current_district|| ' ' || cs.current_district || ' ' || cs.current_province  || ' ' || cs.current_zip_code address   \n");
+           criteriaSqlData.append(" , '' activeDate ");
+           criteriaSqlData.append(" FROM CASE_MANAGEMENT CM  \n");
+           criteriaSqlData.append(" JOIN CUSTOMER CS ON CS.ID = CM.CUSTOMER_ID ");
+           criteriaSqlData.append(" WHERE CM.CASE_STATUS = :caseStatus  \n");
+           criteriaSqlData.append(" AND CM.CASE_TYPE = :caseType ");
+           criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  \n");
+           if(areaId !=null) criteriaSqlData.append(" AND CM.AREA_ID = :areaId   \n"); 
+           criteriaSqlData.append(" ORDER BY CM.CASE_NUMBER ");
+
+
+             Query query = em.createNativeQuery(criteriaSqlData.toString());
+             query.setParameter("startDate",startDate );
+             query.setParameter("endDate",endDate );
+             query.setParameter("caseStatus",caseStatus );
+             query.setParameter("caseType",caseType );
+             if(areaId!=null) query.setParameter("areaId",areaId);
+            listfromQuery = query.getResultList();
+            for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("order",col[0]);
+                activity.put("caseNumber",col[1]);
+                activity.put("customer",col[2]);
+                activity.put("address",col[3]);
+                activity.put("activeDate",col[4]);
+                results.add(activity);
+             }
+             return results;
+        }catch(Exception e){
+             e.printStackTrace();   
+             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+
+
+
 }
