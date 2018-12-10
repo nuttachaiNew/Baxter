@@ -78,13 +78,13 @@ public class UserServiceImpl implements UserService{
             LOGGER.info("USER   :   {}",user);
             Role role = roleRepository.findOne(user.getRole().getId());
             Branch branch = branchRepository.findOne(user.getBranch().getId());
-            LOGGER.info("Password   :   {}",user.getPassword());
+            LOGGER.info("Password   :   {}",user.getAccessToken());
 
-            String password = encodeSha256(user.getPassword());
+            String password = encodeSha256(user.getAccessToken());
 
             user.setRole(role);
             user.setBranch(branch);
-            user.setPassword(password);
+            user.setAccessToken(password);
 
             userRepository.saveAndFlush(user);
             result.put("username",user.getUsername());
@@ -112,17 +112,17 @@ public class UserServiceImpl implements UserService{
             oldUser.setRole(null);
             oldUser.setBranch(null);
 
-            String oldPassword = oldUser.getPassword();
+            String oldPassword = oldUser.getAccessToken();
             newUser = mapper.readerForUpdating(oldUser).readValue(gson.toJson(newUser));
 
-            String newPassword = newUser.getPassword();
+            String newPassword = newUser.getAccessToken();
             String newPasswordMD5 = encodeSha256(newPassword);
 
             newUser.setRole(role);
             newUser.setBranch(branch);
 
             if(!newPassword.equals(oldPassword)){
-                newUser.setPassword(newPasswordMD5);
+                newUser.setAccessToken(newPasswordMD5);
             }
 
             userRepository.saveAndFlush(newUser);

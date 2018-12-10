@@ -3,6 +3,8 @@ package com.demo.spring.SpringBootOAuth2.domain.app;
 import com.demo.spring.SpringBootOAuth2.domain.general.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.Set;
+import java.util.HashSet;
 
 import javax.persistence.*;
 @Entity
@@ -21,7 +23,7 @@ public class User extends BaseModel {
     private String username;
 
     @Column(name = "password")
-    private String password;
+    private String   accessToken;
 
     @Column(name = "first_name")
     private String firstName;
@@ -34,11 +36,46 @@ public class User extends BaseModel {
     private String image;
     private String status;
 
+    private Boolean accountNonExpired;
+    private Boolean credentialsNonExpired;
+    private Boolean accountNonLocked;
+
+
+    public Boolean getAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public void setAccountNonExpired(Boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+
+    public Boolean getCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+    public Boolean getAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(Boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
     @OneToOne(fetch = FetchType.LAZY)
     private Branch branch;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Role role;
+
+    public Set<Role> getAuthorities() {
+        Set rolsdata =  new HashSet<>();
+        rolsdata.add(role.getName());
+        return rolsdata ;
+    }
 
     public Long getId() {
         return id;
@@ -64,12 +101,12 @@ public class User extends BaseModel {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getFirstName() {
@@ -142,7 +179,7 @@ public class User extends BaseModel {
                 "id=" + id +
                 ", version=" + version +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", accessToken='" + accessToken + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
