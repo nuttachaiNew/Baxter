@@ -73,7 +73,7 @@ public class User extends BaseModel {
 
     public Set<Role> getAuthorities() {
         Set rolsdata =  new HashSet<>();
-        rolsdata.add(role.getName());
+        rolsdata.add(role);
         return rolsdata ;
     }
 

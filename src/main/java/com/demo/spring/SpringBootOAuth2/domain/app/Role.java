@@ -4,6 +4,8 @@ import com.demo.spring.SpringBootOAuth2.domain.general.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import org.hibernate.annotations.Formula;
+
 
 @Entity
 @Table(name="app_role")
@@ -24,6 +26,10 @@ public class Role extends BaseModel {
 
     @Column
     private String code;
+
+    @Column
+    private @Formula("'ROLE_'||role_name")
+    String role;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -67,5 +73,13 @@ public class Role extends BaseModel {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
