@@ -175,7 +175,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     public InputStream downloadFileByCaseIdAndFileType(Long caseId,String fileTpye){
         InputStream inputStream =null;
         try {
-            LOGGER.debug("downloadFileByCaseIdAndFileType :{} : {}",caseId,fileType);
+            LOGGER.debug("downloadFileByCaseIdAndFileType :{} : {}",caseId,fileTpye);
             // Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
             // ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
 
