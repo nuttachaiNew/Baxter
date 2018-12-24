@@ -39,7 +39,7 @@ public class FileUpload {
     protected Timestamp updatdDate;
 
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "caseManagements")
     CaseManagement caseManagement;
 

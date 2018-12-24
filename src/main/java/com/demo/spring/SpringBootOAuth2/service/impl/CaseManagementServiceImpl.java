@@ -175,15 +175,17 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     public InputStream downloadFileByCaseIdAndFileType(Long caseId,String fileTpye){
         InputStream inputStream =null;
         try {
-            Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
-            ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
+            LOGGER.debug("downloadFileByCaseIdAndFileType :{} : {}",caseId,fileType);
+            // Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
+            // ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
 
             FileUpload fileUpload = fileUploadService.findFileUploadByCaseIdAndFileType(caseId,fileTpye);
 
             if(fileUpload != null){
 
                 String fileName = caseId + "_" + fileTpye;
-                String pathFile = parameterDetail.getParameterValue();
+                // String pathFile = parameterDetail.getParameterValue();
+                String pathFile ="/home/me/devNew/img/";
                 String originalFilename = fileUpload.getFileName();
 
                 inputStream = new FileInputStream(pathFile+fileName+ "." +originalFilename.split("\\.")[1]);
@@ -287,6 +289,53 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             updateMachine(jsonObject.get("machines").toString(),id);
 
             LOGGER.debug("Customer Type :{} ",checkCaseManagement.getCustomer().getCustomerType());
+
+            LOGGER.debug("upload file");
+            MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
+            MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
+            MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
+            String path="/home/me/devNew/img/";
+            Set<FileUpload> setFile =  checkCaseManagement.getFileUploads();
+
+            for(FileUpload fileData : setFile){
+                if(idCardFile != null && "ID".equalsIgnoreCase( fileData.getFileType()) ){
+                    // fileUploadRepository.delete(fileData);
+                    FileUpload file = fileData;
+                    byte[] bytes = idCardFile.getBytes();
+                    String FileName = checkCaseManagement.getId() + "_" + file.getFileType();
+                    FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                    file.setFileName(idCardFile.getOriginalFilename());
+                    file.setFileType( fileData.getFileType());
+                    file.setUpdatdDate(StandardUtil.getCurrentDate());
+                    file.setCaseManagement(checkCaseManagement);
+                    fileUploadRepository.save(file);
+
+                }else if(payslipFile != null &&  "PS".equalsIgnoreCase(fileData.getFileType()) ){
+                    // fileUploadRepository.delete(fileData);
+                    FileUpload file = fileData;
+                    byte[] bytes = idCardFile.getBytes();
+                    String FileName = checkCaseManagement.getId() + "_" + file.getFileType();
+                    FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                    file.setFileName(idCardFile.getOriginalFilename());
+                    file.setFileType( fileData.getFileType());
+                    file.setUpdatdDate(StandardUtil.getCurrentDate());
+                    file.setCaseManagement(checkCaseManagement);
+                    fileUploadRepository.save(file);
+                }else if(contractFile != null && "CT".equalsIgnoreCase(fileData.getFileType())){
+                    // fileUploadRepository.delete(fileData);
+                    FileUpload file = fileData;
+                    byte[] bytes = idCardFile.getBytes();
+                    String FileName = checkCaseManagement.getId() + "_" + file.getFileType();
+                    FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                    file.setFileName(idCardFile.getOriginalFilename());
+                    file.setFileType( fileData.getFileType());
+                    file.setUpdatdDate(StandardUtil.getCurrentDate());
+                    file.setCaseManagement(checkCaseManagement);
+                    fileUploadRepository.save(file);
+                }
+            }
+
+           
 
             Map returnResult = new HashMap<>();
             returnResult.put("status","success");
@@ -403,8 +452,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                         }
                 // }
                 machineRunning++;
-}
-LOGGER.debug("end of update machine");
+}       
+            LOGGER.debug("end of update machine");
+        caseManagementRepository.save(caseManagement);
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -520,15 +570,16 @@ LOGGER.debug("end of update machine");
             activitys.add(caseActivity);
             caseManagement.setCaseActivitys(activitys);
             caseManagementRepository.save(caseManagement);
+            LOGGER.debug("upload file ");
             MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
-
+            String path="/home/me/devNew/img/";
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();
                 String FileName = caseManagement.getId() + "_" + file.getFileType();
-                // FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
                 file.setFileName(idCardFile.getOriginalFilename());
                 file.setFileType("ID");
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
@@ -539,7 +590,7 @@ LOGGER.debug("end of update machine");
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
                 String FileName = caseManagement.getId() + "_" + file.getFileType();
-                // FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(payslipFile.getOriginalFilename());
                 file.setFileType("PS");
@@ -551,7 +602,7 @@ LOGGER.debug("end of update machine");
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
                 String FileName = caseManagement.getId() + "_" + file.getFileType();
-                // FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(contractFile.getOriginalFilename());
                 file.setFileType("CT");
@@ -976,6 +1027,50 @@ LOGGER.debug("end of update machine");
             activitys.add(caseActivity);
             changeCase.setCaseActivitys(activitys);
             caseManagementRepository.save(changeCase);
+
+
+            LOGGER.debug("upload file ");
+            MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
+            MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
+            MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
+            String path="/home/me/devNew/img/";
+            if(idCardFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = idCardFile.getBytes();
+                String FileName = changeCase.getId() + "_" + file.getFileType();
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                file.setFileName(idCardFile.getOriginalFilename());
+                file.setFileType("ID");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(changeCase);
+                fileUploadRepository.save(file);
+            }
+            if(payslipFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = changeCase.getId() + "_" + file.getFileType();
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(payslipFile.getOriginalFilename());
+                file.setFileType("PS");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(changeCase);
+                fileUploadRepository.save(file);
+            }
+            if(contractFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = changeCase.getId() + "_" + file.getFileType();
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(contractFile.getOriginalFilename());
+                file.setFileType("CT");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(changeCase);
+                fileUploadRepository.save(file);
+            }
+
+
             returnResult.put("caseType",changeCase.getCaseType());
             returnResult.put("status","success");
             returnResult.put("caseNumber",changeCase.getCaseNumber());
@@ -1434,6 +1529,49 @@ LOGGER.debug("end of update machine");
             activitys.add(caseActivity);
             changeCase.setCaseActivitys(activitys);
             caseManagementRepository.save(changeCase);
+
+            LOGGER.debug("upload file ");
+            MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
+            MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
+            MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
+            String path="/home/me/devNew/img/";
+            if(idCardFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = idCardFile.getBytes();
+                String FileName = changeCase.getId() + "_" + file.getFileType();
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                file.setFileName(idCardFile.getOriginalFilename());
+                file.setFileType("ID");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(changeCase);
+                fileUploadRepository.save(file);
+            }
+            if(payslipFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = changeCase.getId() + "_" + file.getFileType();
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(payslipFile.getOriginalFilename());
+                file.setFileType("PS");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(changeCase);
+                fileUploadRepository.save(file);
+            }
+            if(contractFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = changeCase.getId() + "_" + file.getFileType();
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(contractFile.getOriginalFilename());
+                file.setFileType("CT");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(changeCase);
+                fileUploadRepository.save(file);
+            }
+
+
             returnResult.put("caseType",changeCase.getCaseType());
             returnResult.put("status","success");
             returnResult.put("caseNumber",changeCase.getCaseNumber());
