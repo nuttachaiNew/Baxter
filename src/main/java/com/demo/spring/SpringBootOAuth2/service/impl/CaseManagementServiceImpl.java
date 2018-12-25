@@ -397,6 +397,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             listMachine.add(machine8);
             listMachine.add(machine9);
             listMachine.add(machine10);
+            LOGGER.debug("list size :{}",listMachine.size());
             for(Machine data: listMachine){
                 if(data != null){
                     data.setStatus(1);
