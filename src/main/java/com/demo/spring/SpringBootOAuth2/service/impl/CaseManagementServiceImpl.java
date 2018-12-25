@@ -583,7 +583,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();
-                String FileName = caseManagement.getId() + "_" + file.getFileType();
+                String FileName = caseManagement.getId() + "_" + "ID";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
                 file.setFileName(idCardFile.getOriginalFilename());
                 file.setFileType("ID");
@@ -594,7 +594,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(payslipFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
-                String FileName = caseManagement.getId() + "_" + file.getFileType();
+                String FileName = caseManagement.getId() + "_" +"PS";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(payslipFile.getOriginalFilename());
@@ -606,7 +606,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(contractFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
-                String FileName = caseManagement.getId() + "_" + file.getFileType();
+                String FileName = caseManagement.getId() + "_" + "CT";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(contractFile.getOriginalFilename());
@@ -1042,7 +1042,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();
-                String FileName = changeCase.getId() + "_" + file.getFileType();
+                String FileName = changeCase.getId() + "_" + "ID";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
                 file.setFileName(idCardFile.getOriginalFilename());
                 file.setFileType("ID");
@@ -1053,7 +1053,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(payslipFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
-                String FileName = changeCase.getId() + "_" + file.getFileType();
+                String FileName = changeCase.getId() + "_" + "PS";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(payslipFile.getOriginalFilename());
@@ -1065,7 +1065,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(contractFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
-                String FileName = changeCase.getId() + "_" + file.getFileType();
+                String FileName = changeCase.getId() + "_" + "CT";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(contractFile.getOriginalFilename());
@@ -1543,7 +1543,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();
-                String FileName = changeCase.getId() + "_" + file.getFileType();
+                String FileName = changeCase.getId() + "_" + "ID";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
                 file.setFileName(idCardFile.getOriginalFilename());
                 file.setFileType("ID");
@@ -1554,7 +1554,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(payslipFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
-                String FileName = changeCase.getId() + "_" + file.getFileType();
+                String FileName = changeCase.getId() + "_" + "PS";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(payslipFile.getOriginalFilename());
@@ -1566,7 +1566,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             if(contractFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = payslipFile.getBytes();
-                String FileName = changeCase.getId() + "_" + file.getFileType();
+                String FileName = changeCase.getId() + "_" + "CT";
                 FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
 
                 file.setFileName(contractFile.getOriginalFilename());
