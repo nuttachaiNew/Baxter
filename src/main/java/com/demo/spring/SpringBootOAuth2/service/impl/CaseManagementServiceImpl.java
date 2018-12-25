@@ -178,20 +178,16 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             LOGGER.debug("downloadFileByCaseIdAndFileType :{} : {}",caseId,fileTpye);
             // Parameter parameter = parameterService.findAppParameterByAppParameterCode(ConstantVariableUtil.PARAMETER_PATH_FILE_UPLOAD);
             // ParameterDetail parameterDetail = parameterDetailService.findParameterDetailByCodeAndAppParameter(ConstantVariableUtil.PARAMETER_DETAIL_PATH_FILE_UPLOAD,parameter.getId());
-
-            FileUpload fileUpload = fileUploadService.findFileUploadByCaseIdAndFileType(caseId,fileTpye);
-
-            if(fileUpload != null){
-
+            // FileUpload fileUpload = fileUploadService.findFileUploadByCaseIdAndFileType(caseId,fileTpye);
+            // if(fileUpload != null){
                 String fileName = caseId + "_" + fileTpye;
                 // String pathFile = parameterDetail.getParameterValue();
                 String pathFile ="/home/me/devNew/img/";
                 String originalFilename = fileUpload.getFileName();
-
                 inputStream = new FileInputStream(pathFile+fileName);
-            }else{
-                throw new RuntimeException("File not found.");
-            }
+            // }else{
+                // throw new RuntimeException("File not found.");
+            // }
 
         }catch (Exception e){
             e.printStackTrace();
