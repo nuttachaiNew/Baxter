@@ -361,6 +361,17 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
             CaseManagement caseManagement = caseManagementRepository.findOne(caseId);
             LOGGER.debug("clear machine");
+            Machine machine1 =caseManagement.getMachine1();
+            Machine machine2 =caseManagement.getMachine2();
+            Machine machine3 =caseManagement.getMachine3();
+            Machine machine4 =caseManagement.getMachine4();
+            Machine machine5 =caseManagement.getMachine5();
+            Machine machine6 =caseManagement.getMachine6();
+            Machine machine7 =caseManagement.getMachine7();
+            Machine machine8 =caseManagement.getMachine8();
+            Machine machine9 =caseManagement.getMachine9();
+            Machine machine10 =caseManagement.getMachine10();
+
             caseManagement.setMachine1(null);
             caseManagement.setMachine2(null);
             caseManagement.setMachine3(null);
@@ -376,16 +387,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             // 
             LOGGER.debug("clear set flag 0 ");
 
-            Machine machine1 =caseManagement.getMachine1();
-            Machine machine2 =caseManagement.getMachine2();
-            Machine machine3 =caseManagement.getMachine3();
-            Machine machine4 =caseManagement.getMachine4();
-            Machine machine5 =caseManagement.getMachine5();
-            Machine machine6 =caseManagement.getMachine6();
-            Machine machine7 =caseManagement.getMachine7();
-            Machine machine8 =caseManagement.getMachine8();
-            Machine machine9 =caseManagement.getMachine9();
-            Machine machine10 =caseManagement.getMachine10();
+            
             List<Machine> listMachine = new ArrayList<>();
             listMachine.add(machine1);
             listMachine.add(machine2);
@@ -399,6 +401,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             listMachine.add(machine10);
             LOGGER.debug("list size :{}",listMachine.size());
             for(Machine data: listMachine){
+                LOGGER.debug("data != null :{}",data != null);
                 if(data != null){
                     data.setStatus(1);
                     LOGGER.debug("machine : {} :{} ",data.getCode() ,data.getStatus());
