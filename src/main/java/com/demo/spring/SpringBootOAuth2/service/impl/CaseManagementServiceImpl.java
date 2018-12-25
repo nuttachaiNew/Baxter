@@ -400,7 +400,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             for(Machine data: listMachine){
                 if(data != null){
                     data.setStatus(1);
-                    machineRepository.save(data);
+                    machineRepository.saveAndFlush(data);
                 }
             }
 
@@ -414,7 +414,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
                 // if( "1".equalsIgnoreCase(flagEdit) ){
                     // generate Machine by Condition
-                        LOGGER.debug("running : {}",machineRunning);
+                        LOGGER.debug("running : {}   machineInfo :{} :{} :{}",machineRunning,machineType,modelRef,serialNo);
                         // Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
                         Long machineId =  caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);
                         // update Status Machine 
