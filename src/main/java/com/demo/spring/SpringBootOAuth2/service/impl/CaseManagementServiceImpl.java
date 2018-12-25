@@ -292,8 +292,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
             String path="/home/me/devNew/img/";
             Set<FileUpload> setFile =  checkCaseManagement.getFileUploads();
-
-            for(FileUpload fileData : setFile){
+            if(setFile.size()>0){
+                for(FileUpload fileData : setFile){
                 if(idCardFile != null && "ID".equalsIgnoreCase( fileData.getFileType()) ){
                     // fileUploadRepository.delete(fileData);
                     FileUpload file = fileData;
@@ -331,6 +331,46 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 }
             }
 
+            }else{
+              if(idCardFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = idCardFile.getBytes();
+                String FileName = caseManagement.getId() + "_" + "ID";
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                file.setFileName(idCardFile.getOriginalFilename());
+                file.setFileType("ID");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(caseManagement);
+                fileUploadRepository.save(file);
+            }
+            if(payslipFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = caseManagement.getId() + "_" +"PS";
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(payslipFile.getOriginalFilename());
+                file.setFileType("PS");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(caseManagement);
+                fileUploadRepository.save(file);
+            }
+            if(contractFile!=null){
+                FileUpload file = new FileUpload();
+                byte[] bytes = payslipFile.getBytes();
+                String FileName = caseManagement.getId() + "_" + "CT";
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+
+                file.setFileName(contractFile.getOriginalFilename());
+                file.setFileType("CT");
+                file.setUpdatdDate(StandardUtil.getCurrentDate());
+                file.setCaseManagement(caseManagement);
+                fileUploadRepository.save(file);
+            }
+                
+            }
+
+        
            
 
             Map returnResult = new HashMap<>();
