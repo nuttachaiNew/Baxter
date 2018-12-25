@@ -22,7 +22,7 @@ public class FileUploadRepositoryCustom {
         Criteria criteria = ((Session) em.getDelegate()).createCriteria(FileUpload.class,"FileUpload");
         criteria.createAlias("FileUpload.caseManagements","Case");
         criteria.add(Restrictions.eq("fileType", fileType).ignoreCase());
-        criteria.add(Restrictions.eq("Case.id", caseId));
+        criteria.add(Restrictions.eq("caseManagement.id", caseId));
         return (FileUpload)criteria.uniqueResult();
     }
 }

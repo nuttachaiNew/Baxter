@@ -188,7 +188,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 String pathFile ="/home/me/devNew/img/";
                 String originalFilename = fileUpload.getFileName();
 
-                inputStream = new FileInputStream(pathFile+fileName+ "." +originalFilename.split("\\.")[1]);
+                inputStream = new FileInputStream(pathFile+fileName);
             }else{
                 throw new RuntimeException("File not found.");
             }
