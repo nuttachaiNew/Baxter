@@ -400,7 +400,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             for(Machine data: listMachine){
                 if(data != null){
                     data.setStatus(1);
-                    LOGGER.debug("machine : {} :{} ",data.getCode() ,status);
+                    LOGGER.debug("machine : {} :{} ",data.getCode() ,data.getStatus());
                     machineRepository.saveAndFlush(data);
                 }
             }
