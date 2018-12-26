@@ -110,7 +110,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static DecimalFormat FORMAT_YEAR = new DecimalFormat("0000");
   private static DecimalFormat FORMAT_MONTH = new DecimalFormat("00");
   private static final SimpleDateFormat GEN_CASE_DATEFORMAT = new SimpleDateFormat("MM-yyyy", Locale.US);
-  private static final String IPSERVER = "http://58.181.168.159:8082/api/";
+  private static final String IPSERVER = "http://58.181.168.159:8082/file/downloadFileByCaseIdAndFileType";
 
     JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
         public Date deserialize(JsonElement json, Type typeOfT,
@@ -304,7 +304,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                     file.setFileType( fileData.getFileType());
                     file.setUpdatdDate(StandardUtil.getCurrentDate());
                     file.setCaseManagement(checkCaseManagement);
-                    file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                    file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
                     fileUploadRepository.save(file);
 
 
@@ -318,7 +318,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                     file.setFileType( fileData.getFileType());
                     file.setUpdatdDate(StandardUtil.getCurrentDate());
                     file.setCaseManagement(checkCaseManagement);
-                    file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                    file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                    // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
                     fileUploadRepository.save(file);
 
                 }else if(contractFile != null && "CT".equalsIgnoreCase(fileData.getFileType())){
@@ -331,7 +332,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                     file.setFileType( fileData.getFileType());
                     file.setUpdatdDate(StandardUtil.getCurrentDate());
                     file.setCaseManagement(checkCaseManagement);
-                    file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                    // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                    file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
 
                     fileUploadRepository.save(file);
                 }
@@ -349,7 +351,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setCaseManagement(caseManagement);
                 fileUploadRepository.save(file);
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+               
                 fileUploadRepository.save(file);
 
             }
@@ -364,7 +368,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(caseManagement);
                 fileUploadRepository.save(file);
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+           
                 fileUploadRepository.save(file);
             }
             if(contractFile!=null){
@@ -378,7 +384,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(caseManagement);
                 fileUploadRepository.save(file);
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+       
                 fileUploadRepository.save(file);
             }
                 
@@ -640,8 +648,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(caseManagement);
                 fileUploadRepository.save(file);
+                file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(payslipFile!=null){
@@ -655,8 +664,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(caseManagement);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(contractFile!=null){
@@ -670,8 +680,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(caseManagement);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+caseManagement.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             
@@ -1108,8 +1119,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(payslipFile!=null){
@@ -1123,8 +1135,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(contractFile!=null){
@@ -1138,8 +1151,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
 
@@ -1618,8 +1632,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(payslipFile!=null){
@@ -1633,8 +1648,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(contractFile!=null){
@@ -1648,8 +1664,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
+                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 
-                file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
 
