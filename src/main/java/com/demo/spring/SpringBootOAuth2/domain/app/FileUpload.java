@@ -32,7 +32,7 @@ public class FileUpload {
     private String filePath;
     private String fileType;
     private String fileName;
-
+    private String fileUrl;
     protected String updatedBy;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
