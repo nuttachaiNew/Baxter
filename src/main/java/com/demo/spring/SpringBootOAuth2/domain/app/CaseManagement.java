@@ -100,17 +100,17 @@ public class CaseManagement extends BaseModel {
     @OneToOne(fetch = FetchType.LAZY)
     private Machine machine10;
 
-    String flagCheckMachine1;
-    String flagCheckMachine2;
-    String flagCheckMachine3;
-    String flagCheckMachine4;
-    String flagCheckMachine5;
-    String flagCheckMachine6;
-    String flagCheckMachine7;
-    String flagCheckMachine8;
-    String flagCheckMachine9;
-    String flagCheckMachine10;
-
+   private String flagCheckMachine1;
+   private String flagCheckMachine2;
+   private String flagCheckMachine3;
+   private String flagCheckMachine4;
+   private String flagCheckMachine5;
+   private String flagCheckMachine6;
+   private String flagCheckMachine7;
+   private String flagCheckMachine8;
+   private String flagCheckMachine9;
+   private String flagCheckMachine10;
+   private String note;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval=true)
     private Installation installation;
