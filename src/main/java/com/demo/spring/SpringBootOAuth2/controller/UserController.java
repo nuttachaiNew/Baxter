@@ -102,6 +102,27 @@ public class UserController {
 
     }
 
+    @RequestMapping(value ="/findAllUser", method = RequestMethod.GET)
+    @ResponseBody
+    ResponseEntity<String> findAllUser(){
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            User user = userService.findAllUser();
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").deepSerialize(user), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+
+    }
+
+
 
 
     @RequestMapping(value ="/updateProfile", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
