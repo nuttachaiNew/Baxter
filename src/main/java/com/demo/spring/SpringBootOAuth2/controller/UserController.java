@@ -130,7 +130,7 @@ public class UserController {
     }
 
 
-     @RequestMapping(value ="/updateProfileWeb", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    @PostMapping("/updateProfileWeb")
     public ResponseEntity<String> updateProfileWeb(
               @RequestParam("file")MultipartFile file,
               @RequestParam("json")String json
