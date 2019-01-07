@@ -3,6 +3,7 @@ package com.demo.spring.SpringBootOAuth2.service;
 import com.demo.spring.SpringBootOAuth2.domain.app.User;
 
 import java.util.Map;
+import java.util.List;
 import java.io.InputStream;
 
 import org.springframework.web.multipart.MultipartFile;
