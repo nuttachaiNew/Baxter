@@ -109,7 +109,7 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            User user = userService.findAllUser();
+            List<User> user = userService.findAllUser();
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").deepSerialize(user), headers, HttpStatus.OK);
