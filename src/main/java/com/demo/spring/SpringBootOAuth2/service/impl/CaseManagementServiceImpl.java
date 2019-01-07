@@ -111,7 +111,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static DecimalFormat FORMAT_MONTH = new DecimalFormat("00");
   private static final SimpleDateFormat GEN_CASE_DATEFORMAT = new SimpleDateFormat("MM-yyyy", Locale.US);
   private static final String IPSERVER = "http://58.181.168.159:8082/files/downloadFileByCaseIdAndFileType";
+  private static final String PATH_FILE = "/home/me/devNew/img/";
 
+  
     JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
         public Date deserialize(JsonElement json, Type typeOfT,
                                 JsonDeserializationContext context) throws JsonParseException {
@@ -290,7 +292,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
-            String path="/home/me/devNew/img/";
+            String path=PATH_FILE;
             Set<FileUpload> setFile =  checkCaseManagement.getFileUploads();
             if(setFile.size()>0){
                 for(FileUpload fileData : setFile){
@@ -637,7 +639,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
-            String path="/home/me/devNew/img/";
+            String path=PATH_FILE;
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();
@@ -1108,7 +1110,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
-            String path="/home/me/devNew/img/";
+            String path=PATH_FILE;
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();
@@ -1621,7 +1623,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             MultipartFile idCardFile = multipartHttpServletRequest.getFile("copyIdCard");
             MultipartFile payslipFile = multipartHttpServletRequest.getFile("copyPayslip");
             MultipartFile contractFile = multipartHttpServletRequest.getFile("copyContract");
-            String path="/home/me/devNew/img/";
+            String path=PATH_FILE;
             if(idCardFile!=null){
                 FileUpload file = new FileUpload();
                 byte[] bytes = idCardFile.getBytes();
@@ -1664,7 +1666,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
-                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 
                 // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);

@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.*;
+
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @RestController
 @CrossOrigin
@@ -96,5 +100,32 @@ public class UserController {
             return new ResponseEntity<String>(null, headers, HttpStatus.OK);
         }
 
+    }
+
+
+
+    @RequestMapping(value ="/updateProfile", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> updateProfile(
+        MultipartHttpServletRequest multipartHttpServletRequest
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("updateProfile : {}",multipartHttpServletRequest.getParameter("json"));
+            userService.updateProfile(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            Map<String,Object> result = new HashMap<>();
+            result.put("status","success");
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",ex.getMessage());
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        }
     }
 }

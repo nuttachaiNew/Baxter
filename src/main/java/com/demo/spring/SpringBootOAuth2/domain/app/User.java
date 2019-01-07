@@ -35,6 +35,7 @@ public class User extends BaseModel {
     private String address;
     private String image;
     private String status;
+    private String telephoneNumber;
 
     private Boolean accountNonExpired;
     private Boolean credentialsNonExpired;
@@ -139,6 +140,14 @@ public class User extends BaseModel {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+   public String getTelephoneNumber() {
+        return telephoneNumber;
+    }
+
+    public void setTelephoneNumber(String telephoneNumber) {
+        this.telephoneNumber = telephoneNumber;
     }
 
     public String getImage() {

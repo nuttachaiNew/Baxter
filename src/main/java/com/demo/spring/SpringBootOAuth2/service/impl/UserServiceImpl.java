@@ -22,13 +22,38 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.codec.binary.Base64;
 import java.security.MessageDigest;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import java.lang.reflect.Type;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+import java.lang.StringBuilder;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.*;
+import org.apache.commons.io.IOUtils;
+import org.springframework.security.crypto.codec.Base64;
 
 @Service
 public class UserServiceImpl implements UserService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private static final String PATH_FILE = "/home/me/devNew/img/user/";
+    private static final String IPSERVER = "http://58.181.168.159:8082/files/downloadFileUser?username=";
+
 
     @Autowired
     UserRepository userRepository;
@@ -57,6 +82,42 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException(e);
         }
     } 
+
+    @Override
+    public InputStream downloadFileUser(String username){
+        InputStream inputStream =null;
+        try {
+            String fileName = "IMG_"+username;
+            String pathFile =PATH_FILE;
+            inputStream = new FileInputStream(pathFile+fileName);
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+        return inputStream;
+    }
+
+    @Override
+    public String getImageUser(String username){
+        InputStream inputStream=null;
+        try{
+
+            String encodeImage = "";
+            String fileName = "IMG_"+username;
+            String pathFile =PATH_FILE;
+            inputStream = new FileInputStream(pathFile+fileName);
+            byte[] bytes= IOUtils.toByteArray(inputStream);
+            byte[] encoded= Base64.encode(bytes);
+            encodeImage = new String(encoded);
+            return encodeImage;
+        }catch(Exception e){
+             e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            return null;
+        }
+    }
+
 
     public static String bytesToHex(byte[] bytes) {
         StringBuffer result = new StringBuffer();
@@ -163,5 +224,45 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findUserByUsername(String userName) {
         return userRepository.findByUsername(userName);
+    }
+
+    @Override
+    public  void updateProfile(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+        try{
+            LOGGER.info("updateProfile :{}",json);
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            User updateUser = new JSONDeserializer<User>().use(null, User.class).deserialize(jsonObject.toString());
+            User user = findUserByUsername(updateUser.getUsername());
+            user.setUpdatedBy(updateUser.getUpdatedBy());
+            user.setBranch(updateUser.getBranch());
+            user.setEmail(updateUser.getEmail());
+            user.setTelephoneNumber(updateUser.getTelephoneNumber());
+            user.setFirstName(updateUser.getFirstName());
+            user.setLastName(updateUser.getLastName());
+            if(jsonObject.get("newPassword")!=null ){
+              String oldPassword = user.getAccessToken();
+              if( !oldPassword.equalsIgnoreCase(updateUser.getAccessToken()) ){
+                throw new RuntimeException("Password incorrect");
+              }
+              String newPassword = jsonObject.get("newPassword").toString();
+              String newPasswordMD5 = encodeSha256(newPassword);
+              user.setAccessToken(newPasswordMD5);
+            }
+            MultipartFile images = multipartHttpServletRequest.getFile("images");
+            if(images!=null){
+                byte[] bytes = images.getBytes();
+                String FileName = "IMG_"+user.getUsername();
+                FileCopyUtils.copy(bytes, new FileOutputStream(PATH_FILE+FileName));
+                user.setImage(IPSERVER+user.getUsername());
+            }
+
+            userRepository.saveAndFlush(user);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("Exception : {}",e);
+            throw new RuntimeException(e);
+        }
     }
 }
