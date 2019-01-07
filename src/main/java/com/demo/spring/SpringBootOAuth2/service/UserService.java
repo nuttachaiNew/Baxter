@@ -16,6 +16,8 @@ public interface UserService {
     Map<String,String> deleteUser(String json);
     User findUserByUsername(String userName);
     void updateProfile(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    void updateProfileWeb(String json,MultipartFile multipartHttpServletRequest);
+    
     InputStream downloadFileUser(String username);
     String getImageUser(String username);
 }

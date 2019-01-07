@@ -265,4 +265,44 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException(e);
         }
     }
+
+     @Override
+    public  void updateProfileWeb(String json,MultipartFile images){
+        try{
+            LOGGER.info("updateProfileWeb :{}",json);
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            User updateUser = new JSONDeserializer<User>().use(null, User.class).deserialize(jsonObject.toString());
+            User user = findUserByUsername(updateUser.getUsername());
+            user.setUpdatedBy(updateUser.getUpdatedBy());
+            user.setBranch(updateUser.getBranch());
+            user.setEmail(updateUser.getEmail());
+            user.setTelephoneNumber(updateUser.getTelephoneNumber());
+            user.setFirstName(updateUser.getFirstName());
+            user.setLastName(updateUser.getLastName());
+            if(jsonObject.get("newPassword")!=null ){
+              String oldPassword = user.getAccessToken();
+              if( !oldPassword.equalsIgnoreCase(updateUser.getAccessToken()) ){
+                throw new RuntimeException("Password incorrect");
+              }
+              String newPassword = jsonObject.get("newPassword").toString();
+              String newPasswordMD5 = encodeSha256(newPassword);
+              user.setAccessToken(newPasswordMD5);
+            }
+            // MultipartFile images = multipartHttpServletRequest.getFile("images");
+            if(images!=null){
+                byte[] bytes = images.getBytes();
+                String FileName = "IMG_"+user.getUsername();
+                FileCopyUtils.copy(bytes, new FileOutputStream(PATH_FILE+FileName));
+                user.setImage(IPSERVER+user.getUsername());
+            }
+
+            userRepository.saveAndFlush(user);
+
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("Exception : {}",e);
+            throw new RuntimeException(e);
+        }
+    }
 }
