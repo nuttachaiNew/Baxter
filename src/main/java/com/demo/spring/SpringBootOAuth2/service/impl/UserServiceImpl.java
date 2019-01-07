@@ -239,7 +239,7 @@ public class UserServiceImpl implements UserService{
             user.setTelephoneNumber(updateUser.getTelephoneNumber());
             user.setFirstName(updateUser.getFirstName());
             user.setLastName(updateUser.getLastName());
-            if(jsonObject.get("newPassword")!=null ){
+           if(jsonObject.get("newPassword")!=null  && !"".equalsIgnoreCase(jsonObject.get("newPassword"))  ){
               String oldPassword = user.getAccessToken();
               if( !oldPassword.equalsIgnoreCase(updateUser.getAccessToken()) ){
                 throw new RuntimeException("Password incorrect");
@@ -278,8 +278,7 @@ public class UserServiceImpl implements UserService{
             user.setTelephoneNumber(updateUser.getTelephoneNumber());
             user.setFirstName(updateUser.getFirstName());
             user.setLastName(updateUser.getLastName());
-            LOGGER.debug(":jsonObject.get(newPassword) :{}",jsonObject.get("newPassword"));
-            if(jsonObject.get("newPassword")!=null  ){
+            if(jsonObject.get("newPassword")!=null  && !"".equalsIgnoreCase(jsonObject.get("newPassword"))  ){
               String oldPassword = user.getAccessToken();
               if( !oldPassword.equalsIgnoreCase(updateUser.getAccessToken()) ){
                 throw new RuntimeException("Password incorrect");
