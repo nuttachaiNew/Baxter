@@ -235,7 +235,6 @@ public class UserServiceImpl implements UserService{
             User updateUser = new JSONDeserializer<User>().use(null, User.class).deserialize(jsonObject.toString());
             User user = findUserByUsername(updateUser.getUsername());
             user.setUpdatedBy(updateUser.getUpdatedBy());
-            user.setBranch(updateUser.getBranch());
             user.setEmail(updateUser.getEmail());
             user.setTelephoneNumber(updateUser.getTelephoneNumber());
             user.setFirstName(updateUser.getFirstName());
@@ -275,12 +274,12 @@ public class UserServiceImpl implements UserService{
             User updateUser = new JSONDeserializer<User>().use(null, User.class).deserialize(jsonObject.toString());
             User user = findUserByUsername(updateUser.getUsername());
             user.setUpdatedBy(updateUser.getUpdatedBy());
-            user.setBranch(updateUser.getBranch());
             user.setEmail(updateUser.getEmail());
             user.setTelephoneNumber(updateUser.getTelephoneNumber());
             user.setFirstName(updateUser.getFirstName());
             user.setLastName(updateUser.getLastName());
-            if(jsonObject.get("newPassword")!=null ){
+            LOGGER.debug(":jsonObject.get(newPassword) :{}",jsonObject.get("newPassword"));
+            if(jsonObject.get("newPassword")!=null  ){
               String oldPassword = user.getAccessToken();
               if( !oldPassword.equalsIgnoreCase(updateUser.getAccessToken()) ){
                 throw new RuntimeException("Password incorrect");
