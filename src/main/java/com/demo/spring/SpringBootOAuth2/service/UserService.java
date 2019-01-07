@@ -20,4 +20,5 @@ public interface UserService {
     
     InputStream downloadFileUser(String username);
     String getImageUser(String username);
+    List<User> findAllUser();
 }

@@ -303,4 +303,15 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<User> findAllUser(){
+        try{
+            return userRepository.findAll();
+        }catch(Exception  e){
+             e.printStackTrace();
+            LOGGER.error("Exception : {}",e);
+            throw new RuntimeException(e);
+        }
+    }
 }
