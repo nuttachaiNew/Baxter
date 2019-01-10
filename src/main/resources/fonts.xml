@@ -3,7 +3,7 @@
 
 	<fontFamily name="TH Sarabun New">
 		<normal>reportFonts/THSarabunNew.ttf</normal>
-		<bold>reportFonts/THSarabunNew.ttf</bold>
+		<bold>reportFonts/THSarabunNew Bold.ttf</bold>
 <!-- 		<italic>reportFonts/TAHOMA.TTF</italic> -->
 <!-- 		<boldItalic>reportFonts/TAHOMABD.TTF</boldItalic> -->
 		<pdfEmbedded>true</pdfEmbedded>
