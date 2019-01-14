@@ -410,14 +410,14 @@ public class CaseManagementController {
 
     @RequestMapping(value ="/confirmByTS", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
     public ResponseEntity<String> confirmByTS(
-        MultipartHttpServletRequest multipartHttpServletRequest
+            @RequestBody String json
         ){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            LOGGER.debug("multipartHttpServletRequest : {}",json);
             Map<String,Object> result =  new HashMap<>();
-            caseManagementService.confirmByTS(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            caseManagementService.confirmByTS(json);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
@@ -436,14 +436,12 @@ public class CaseManagementController {
 
     @RequestMapping(value ="/confirmByFN", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
     public ResponseEntity<String> confirmByFN(
-        MultipartHttpServletRequest multipartHttpServletRequest
-        ){
+        @RequestBody String json){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
             Map<String,Object> result =  new HashMap<>();
-            // caseManagementService.confirmByFN(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            result=caseManagementService.confirmByFN(json);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
@@ -481,6 +479,31 @@ public class CaseManagementController {
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
         }
     }
+
+    @RequestMapping(value ="/confirmByBU", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
+    public ResponseEntity<String> confirmByBU(
+            @RequestBody String json
+
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            Map<String,Object> result =  new HashMap<>();
+            result = caseManagementService.confirmByBU(json);
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",ex.getMessage());
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        }
+    }
+
 
 
 

@@ -42,7 +42,7 @@ public class Receipt {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp receiptDate;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "receipt" , orphanRemoval = true)
-    private Set<ReceiptDtl> receiptDtls;
+    // @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "receipt" , orphanRemoval = true)
+    // private Set<ReceiptDtl> receiptDtls;
 
 }

@@ -1267,7 +1267,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
    @Override
    @Transactional
-   public  Map<String,Object> confirmByTS(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+   public  Map<String,Object> confirmByTS(String json){
     LOGGER.info("confirmByTs ");
     try{
         JSONObject jsonObject = new JSONObject(json);
@@ -1277,7 +1277,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         //Old case
         LOGGER.debug("updateCase  :{} ",id);
         CaseManagement caseManagement = caseManagementRepository.findOne(id);
-        caseManagement.setAssignTs("TS");
+        caseManagement.setAssignTs(updateCase.getUpdatedBy());
         caseManagement.setFlagCheckMachine1(updateCase.getFlagCheckMachine1());
         caseManagement.setFlagCheckMachine2(updateCase.getFlagCheckMachine2());
         caseManagement.setFlagCheckMachine3(updateCase.getFlagCheckMachine3());
@@ -1289,42 +1289,42 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setFlagCheckMachine9(updateCase.getFlagCheckMachine9());
         caseManagement.setFlagCheckMachine10(updateCase.getFlagCheckMachine10());
         caseManagement.setUpdatedDate( StandardUtil.getCurrentDate() );
-        caseManagement.setUpdatedBy("TS");
+        caseManagement.setUpdatedBy(updateCase.getUpdatedBy());
 
     
        
             // old
-            Prescription prescription = caseManagement.getPrescription();
-            NurseMenu nurseMenu = prescription.getNurseMenu();
-            MakeAdjustment makeAdjustment = prescription.getMakeAdjustment();
-            ChangePrograme changePrograme = prescription.getChangePrograme();
-            //new  
-            Prescription updatePrescription = updateCase.getPrescription();
-            if(updatePrescription != null){
-                updatePrescription.setId(prescription.getId());
-                prescription = updatePrescription;
-                NurseMenu nurseMenuUpdate = prescription.getNurseMenu();
-                MakeAdjustment makeAdjustmentUpdate = prescription.getMakeAdjustment();
-                ChangePrograme changeProgrameUpdate = prescription.getChangePrograme();
-                nurseMenuUpdate.setId(nurseMenu.getId());            
-                makeAdjustmentUpdate.setId(makeAdjustment.getId());
-                changeProgrameUpdate.setId(changePrograme.getId());
+            // Prescription prescription = caseManagement.getPrescription();
+            // NurseMenu nurseMenu = prescription.getNurseMenu();
+            // MakeAdjustment makeAdjustment = prescription.getMakeAdjustment();
+            // ChangePrograme changePrograme = prescription.getChangePrograme();
+            // //new  
+            // Prescription updatePrescription = updateCase.getPrescription();
+            // if(updatePrescription != null){
+            //     updatePrescription.setId(prescription.getId());
+            //     prescription = updatePrescription;
+            //     NurseMenu nurseMenuUpdate = prescription.getNurseMenu();
+            //     MakeAdjustment makeAdjustmentUpdate = prescription.getMakeAdjustment();
+            //     ChangePrograme changeProgrameUpdate = prescription.getChangePrograme();
+            //     nurseMenuUpdate.setId(nurseMenu.getId());            
+            //     makeAdjustmentUpdate.setId(makeAdjustment.getId());
+            //     changeProgrameUpdate.setId(changePrograme.getId());
 
-                nurseMenu = nurseMenuUpdate;
-                makeAdjustment = makeAdjustmentUpdate;
-                changePrograme = changeProgrameUpdate;
-                prescription.setNurseMenu(nurseMenu);
-                prescription.setMakeAdjustment(makeAdjustment);
-                prescription.setChangePrograme(changePrograme);
+            //     nurseMenu = nurseMenuUpdate;
+            //     makeAdjustment = makeAdjustmentUpdate;
+            //     changePrograme = changeProgrameUpdate;
+            //     prescription.setNurseMenu(nurseMenu);
+            //     prescription.setMakeAdjustment(makeAdjustment);
+            //     prescription.setChangePrograme(changePrograme);
                 
-                caseManagement.setPrescription(prescription);
-            }
+            //     caseManagement.setPrescription(prescription);
+            // }
             
         caseManagementRepository.save(caseManagement);
 
         // LOGGER.debug("caseActivity :{}",caseActivitys.size());
         CaseActivity caseAct = new CaseActivity();
-        User user = userRepository.findByUsername( "ts" );
+        User user = userRepository.findByUsername( updateCase.getUpdatedBy() );
         caseAct.setUser(user);
         caseAct.setActionStatus("Send from TS ");
         caseAct.setActionDate(StandardUtil.getCurrentDate());
@@ -1347,14 +1347,47 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
    @Override
    @Transactional
-   public  Map<String,Object> confirmByFN(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+   public  Map<String,Object> confirmByFN(String json){
     LOGGER.info("confirmByFN ");
     try{
         JSONObject jsonObject = new JSONObject(json);
-        CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
-        Long id = caseManagement.getId();
-        
-        return null;
+        CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
+        Long id = updateCase.getId();
+        CaseManagement caseMng = caseManagementRepository.findOne(id);
+        caseMng.setPayDate(updateCase.getPayDate());
+        caseMng.setPaymentType(updateCase.getPaymentType());
+        caseMng.setBank(updateCase.getBank());
+        caseMng.setAmount(updateCase.getAmount());
+        caseMng.setReceiptNo(updateCase.getReceiptNo());
+        caseMng.setReceiptDate(updateCase.getReceiptDate());
+        caseMng.setReceipientName(updateCase.getReceipientName());
+        caseMng.setReceiptAddress1(updateCase.getReceiptAddress1());
+        caseMng.setReceiptAddress2(updateCase.getReceiptAddress2());
+        caseMng.setReceiptAddress3(updateCase.getReceiptAddress3());
+        caseMng.setReceiptAddress4(updateCase.getReceiptAddress4());
+        caseMng.setReceiptAddress5(updateCase.getReceiptAddress5());
+        caseMng.setReceiptAddress6(updateCase.getReceiptAddress6());
+        caseMng.setUpdatedDate( StandardUtil.getCurrentDate() );
+        caseMng.setUpdatedBy(updateCase.getUpdatedBy());
+        caseMng.setAssignFn(updateCase.getUpdatedBy());
+
+        caseManagementRepository.save(caseMng);
+
+        CaseActivity caseAct = new CaseActivity();
+        User user = userRepository.findByUsername( updateCase.getUpdatedBy() );
+        caseAct.setUser(user);
+        caseAct.setActionStatus("Send from FN ");
+        caseAct.setActionDate(StandardUtil.getCurrentDate());
+        caseAct.setCaseManagement(caseMng);    
+        caseActivityRepository.save(caseAct);
+
+        Map<String,Object> returnResult = new HashMap();
+        returnResult.put("caseType",caseMng.getCaseType());
+        returnResult.put("status","success");
+        returnResult.put("message","FN send success");
+        returnResult.put("caseNumber",caseMng.getCaseNumber());
+
+        return returnResult;
     }catch(Exception e){
           e.printStackTrace();
          LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1391,8 +1424,13 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseAct.setCaseManagement(caseMng);    
         caseActivityRepository.save(caseAct);
 
+        Map<String,Object> returnResult = new HashMap();
+        returnResult.put("caseType",caseMng.getCaseType());
+        returnResult.put("status","success");
+        returnResult.put("message","Cs send success");
+        returnResult.put("caseNumber",caseMng.getCaseNumber());
 
-        return null;
+        return returnResult;
     }catch(Exception e){
           e.printStackTrace();
          LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1854,6 +1892,51 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e);
         }
+   }
+
+
+   @Override
+   @Transactional
+   public Map<String,Object> confirmByBU(String json){
+     LOGGER.info("confirmByBU");
+    try{
+        JSONObject jsonObject = new JSONObject(json);
+        Map updateCase = new JSONDeserializer<Map>().use(null, Map.class).deserialize(json);
+        Long id = Long.valueOf( updateCase.get("id").toString());
+        CaseManagement caseMng = caseManagementRepository.findOne(id);
+        caseMng.setUpdatedBy(updateCase.get("updatedBy").toString());
+        caseMng.setAssignBu(updateCase.get("updatedBy").toString());
+        caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
+        caseMng.setBuNote(updateCase.get("buNote").toString());
+
+        if( "A".equalsIgnoreCase(  updateCase.get("status").toString() ) ){
+            caseMng.setCaseStatus("F");
+        }else{
+            caseMng.setCaseStatus("W");
+        }
+        caseManagementRepository.save(caseMng);
+
+        CaseActivity caseAct = new CaseActivity();
+        User user = userRepository.findByUsername( updateCase.get("updatedBy").toString() );
+        String action = "A".equalsIgnoreCase(updateCase.get("status").toString() ) ? "Approve by BU : "+caseMng.getBuNote() : "Reject by Bu : "+caseMng.getBuNote(); 
+        caseAct.setUser(user);
+        caseAct.setActionStatus(action);
+        caseAct.setActionDate(StandardUtil.getCurrentDate());
+        caseAct.setCaseManagement(caseMng);    
+        caseActivityRepository.save(caseAct);
+
+        Map<String,Object> returnResult = new HashMap();
+        returnResult.put("caseType",caseMng.getCaseType());
+        returnResult.put("status","success");
+        returnResult.put("message","BU action success");
+        returnResult.put("caseNumber",caseMng.getCaseNumber());
+
+        return returnResult;
+    }catch(Exception e){
+         e.printStackTrace();
+        LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
    }
 
 }

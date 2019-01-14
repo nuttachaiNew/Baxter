@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "case_management")
@@ -35,6 +36,7 @@ public class CaseManagement extends BaseModel {
     private String assignFn;
     private String assignCs;
     private String assignAsm;
+    private String assignBu;
     private Long areaId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -134,7 +136,7 @@ public class CaseManagement extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement" , orphanRemoval = true)
     private Set<LineApprove> lineApproves;
 
-
+    private String buNote;
     private String deliveryProvider ;
     private String deliveryName ;
     private String deliveryNote ;
@@ -142,5 +144,26 @@ public class CaseManagement extends BaseModel {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp deliveryDate;
+
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Timestamp payDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Timestamp receiptDate;
+    
+    private String paymentType ;
+    private String bank ;
+    private BigDecimal amount;
+    private String receiptNo;
+
+    private String receipientName;
+    private String receiptAddress1;
+    private String receiptAddress2;
+    private String receiptAddress3;
+    private String receiptAddress4;
+    private String receiptAddress5;
+    private String receiptAddress6;
+
 
 }

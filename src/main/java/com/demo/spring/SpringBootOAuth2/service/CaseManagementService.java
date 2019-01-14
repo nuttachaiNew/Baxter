@@ -40,9 +40,9 @@ public interface CaseManagementService {
     Map<String,Object> saveChangeCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     List<Map<String,Object>> findCaseManagementforChangeMachineByCriteria(String keyword, String customerType,String hospitalName);
 
-
-    Map<String,Object> confirmByTS(String json,MultipartHttpServletRequest multipartHttpServletRequest);
-    Map<String,Object> confirmByFN(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> confirmByBU(String json);
+    Map<String,Object> confirmByTS(String json);
+    Map<String,Object> confirmByFN(String json);
     Map<String,Object> confirmByCS(String json);
     Map<String,Object> mockSaveChangeCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     void changeCaseToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest);
