@@ -29,7 +29,7 @@ public class AbstractReportJasperPDF {
 
             Class cls = Class.forName("com.demo.spring.SpringBootOAuth2.util.AbstractReportJasperPDF");
             ClassLoader cLoader = cls.getClassLoader();
-            jasperStream = cLoader.getResourceAsStream("jasperreports/"+jasperFileName);
+            jasperStream = cLoader.getResourceAsStream("jasperReport/"+jasperFileName);
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
 
             JRDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(list);
