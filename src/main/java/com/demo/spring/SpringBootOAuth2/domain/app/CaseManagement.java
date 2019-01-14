@@ -134,4 +134,13 @@ public class CaseManagement extends BaseModel {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "caseManagement" , orphanRemoval = true)
     private Set<LineApprove> lineApproves;
 
+
+    private String deliveryProvider ;
+    private String deliveryName ;
+    private String deliveryNote ;
+    private String deliveryTelNo ;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Timestamp deliveryDate;
+
 }

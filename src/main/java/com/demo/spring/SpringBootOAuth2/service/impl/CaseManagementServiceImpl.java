@@ -110,6 +110,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static DecimalFormat FORMAT_YEAR = new DecimalFormat("0000");
   private static DecimalFormat FORMAT_MONTH = new DecimalFormat("00");
   private static final SimpleDateFormat GEN_CASE_DATEFORMAT = new SimpleDateFormat("MM-yyyy", Locale.US);
+  private static final SimpleDateFormat FULL_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+
   private static final String IPSERVER = "http://58.181.168.159:8082/files/downloadFileByCaseIdAndFileType";
   private static final String PATH_FILE = "/home/me/devNew/img/";
 
@@ -973,7 +975,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         Map<String,Object> caseManagerData = new JSONDeserializer<Map<String,Object>>().deserialize(jsonObject.toString());
         saveFromASM(multipartHttpServletRequest);
         CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("id").toString() ) );
-        caseManagement.setCaseStatus("F");
+        caseManagement.setCaseStatus("A");
         caseManagement.setAssignAsm("asm");
         caseManagementRepository.save(caseManagement);
         Set<CaseActivity> caseActivitys = caseManagement.getCaseActivitys();
@@ -1362,13 +1364,33 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
    @Override
    @Transactional
-   public  Map<String,Object> confirmByCS(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+   public  Map<String,Object> confirmByCS(String json){
     LOGGER.info("confirmByCS ");
     try{
         JSONObject jsonObject = new JSONObject(json);
-        CaseManagement caseManagement = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
-        Long id = caseManagement.getId();
+        Map caseManagement = new JSONDeserializer<Map>().use(null, Map.class).deserialize(json);
+        Long id  = Long.valueOf( caseManagement.get("id").toString());
+        CaseManagement caseMng = caseManagementRepository.findOne(id);
+        caseMng.setUpdatedDate( StandardUtil.getCurrentDate() );
+        caseMng.setUpdatedBy( caseManagement.get("updatedBy").toString()  );
+        caseMng.setAssignCs( caseManagement.get("updatedBy").toString() );
+        caseMng.setDeliveryProvider(caseManagement.get("deliveryProvider").toString());
+        caseMng.setDeliveryName(caseManagement.get("deliveryName").toString());
+        caseMng.setDeliveryNote(caseManagement.get("deliveryNote").toString());
+        Date deliverDate =new SimpleDateFormat("dd-MM-yyyy").parse(caseManagement.get("deliveryDate").toString());
+        caseMng.setDeliveryDate(  new java.sql.Timestamp(deliverDate.getTime()));
+        caseManagementRepository.save(caseMng);
+        Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
+        LOGGER.debug("caseActivity :{}",caseActivitys.size());
         
+        CaseActivity caseAct = new CaseActivity();
+        User user = userRepository.findByUsername(caseMng.getUpdatedBy() );
+        caseAct.setUser(user);
+        caseAct.setActionStatus("send from Cs");
+        caseAct.setActionDate(StandardUtil.getCurrentDate());
+        caseAct.setCaseManagement(caseMng);    
+        caseActivityRepository.save(caseAct);
+
 
         return null;
     }catch(Exception e){
@@ -1774,6 +1796,20 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             throw new RuntimeException(e);
         }
    } 
+
+
+   @Override
+   public  List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+     try{
+        LOGGER.info("findCaseforOtherRole : {}",date);
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"A",firstResult,maxResult,null,"BU");
+     }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   } 
+
 
    @Override
    public List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate,String areaId){

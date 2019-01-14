@@ -460,14 +460,14 @@ public class CaseManagementController {
 
     @RequestMapping(value ="/confirmByCS", method = RequestMethod.POST ,produces = "text/html", headers = "Accept=application/json")
     public ResponseEntity<String> confirmByCS(
-        MultipartHttpServletRequest multipartHttpServletRequest
+            @RequestBody String json
+
         ){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
             Map<String,Object> result =  new HashMap<>();
-            // caseManagementService.confirmByFN(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            result = caseManagementService.confirmByCS(json);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
@@ -584,6 +584,30 @@ public class CaseManagementController {
         }
     }
 
+    @RequestMapping(value ="/findCaseByCriteriaforBU", method = RequestMethod.GET)
+    ResponseEntity<String> findCaseByCriteriaforBU(                           @RequestParam(value = "date",required = false)String date
+                                                                        , @RequestParam(value = "caseNumber",required = false)String caseNumber
+                                                                        , @RequestParam(value = "areaId",required = false)String areaId
+                                                                        , @RequestParam(value = "caseStatus",required = false)String documentStatus
+                                                                        , @RequestParam(value = "firstResult",required = false)Integer firstResult
+                                                                        , @RequestParam(value = "maxResult",required = false)Integer maxResult
+                                                                        ){
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteriaforBU(date,caseNumber,areaId,documentStatus,firstResult,maxResult);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
 
 
     @RequestMapping(value ="/findCaseByCriteriaforTS", method = RequestMethod.GET)

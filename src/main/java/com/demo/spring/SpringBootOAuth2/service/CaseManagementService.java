@@ -43,7 +43,7 @@ public interface CaseManagementService {
 
     Map<String,Object> confirmByTS(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     Map<String,Object> confirmByFN(String json,MultipartHttpServletRequest multipartHttpServletRequest);
-    Map<String,Object> confirmByCS(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Map<String,Object> confirmByCS(String json);
     Map<String,Object> mockSaveChangeCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     void changeCaseToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     
@@ -53,11 +53,15 @@ public interface CaseManagementService {
     List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
     List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
     List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
+    List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult);
+   
+
     Map<String,Object>  countCaseShowInDashboard(String startDate, String endDate,String createdBy,String areaId);
    
     List<Map<String,Object>>  countCaseOverAll(String caseStatus,String startDate, String endDate,String areaId);
 
     // List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String createdBy,String areaId,String caseType);
     List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String areaId,String caseType);
+
 }   
 
