@@ -24,6 +24,7 @@ public class AbstractReportJasperPDF {
         InputStream jasperStream = null;
 
         try{
+            LOGGER.info("AbstractReportJasperPDF");
             //JasperReport jasperReport = JasperCompileManager.compileReport("/home/aphirat_n/Documents/SCG/"+jasperFileName);
             //JasperReport jasperReport = (JasperReport) JRLoader.loadObject("src/main/resourczes/jasperreports/"+jasperFileName);
 

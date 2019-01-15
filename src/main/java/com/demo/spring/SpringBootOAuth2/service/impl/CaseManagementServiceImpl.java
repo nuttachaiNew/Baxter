@@ -1400,8 +1400,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
    public  Map<String,Object> confirmByCS(String json){
     LOGGER.info("confirmByCS ");
     try{
-        JSONObject jsonObject = new JSONObject(json);
-        Map caseManagement = new JSONDeserializer<Map>().use(null, Map.class).deserialize(json);
+        JSONObject caseManagement = new JSONObject(json);
+        // Map caseManagement = new JSONDeserializer<Map>().use(null, Map.class).deserialize(json);
         Long id  = Long.valueOf( caseManagement.get("id").toString());
         CaseManagement caseMng = caseManagementRepository.findOne(id);
         caseMng.setUpdatedDate( StandardUtil.getCurrentDate() );
@@ -1900,8 +1900,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
    public Map<String,Object> confirmByBU(String json){
      LOGGER.info("confirmByBU");
     try{
-        JSONObject jsonObject = new JSONObject(json);
-        Map updateCase = new JSONDeserializer<Map>().use(null, Map.class).deserialize(json);
+        JSONObject updateCase = new JSONObject(json);
+        // Map updateCase = new JSONDeserializer<Map>().use(null, Map.class).deserialize(json);
         Long id = Long.valueOf( updateCase.get("id").toString());
         CaseManagement caseMng = caseManagementRepository.findOne(id);
         caseMng.setUpdatedBy(updateCase.get("updatedBy").toString());

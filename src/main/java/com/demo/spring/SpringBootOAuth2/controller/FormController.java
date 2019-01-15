@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.io.OutputStream;
 
 @RestController
 @CrossOrigin
@@ -29,8 +30,8 @@ public class FormController {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @RequestMapping(value = "/downloadFormHC",method = RequestMethod.GET,headers = "Accept=application/json")
-    ResponseEntity<String> downloadFormHC(@RequestParam(value = "name",required = false)String name,
+    @RequestMapping(value = "/downloadFormHC" , produces = "text/html",method = RequestMethod.GET,headers = "Accept=application/json")
+   void downloadFormHC(@RequestParam(value = "name",required = false)String name,
                                                            @RequestParam(value = "nationalId",required = false)String nationalId,
                                                            @RequestParam(value = "no",required = false)String no,
                                                            @RequestParam(value = "subDistrict",required = false)String subDistrict,
@@ -43,6 +44,8 @@ public class FormController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         InputStream in = null;
+        OutputStream outputStream=null;
+
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         try {
             Map<String,Object> map = new HashMap<String,Object>();
@@ -57,7 +60,7 @@ public class FormController {
             map.put("tel_no",telNo);
             map.put("active_date",format.format(new Date()));
             map.put("age",age);
-
+            LOGGER.debug("map : {}",map);
             String jasperFileName1 = "HC1.jasper";
             String jasperFileName2 = "HC2.jasper";
 
@@ -69,24 +72,31 @@ public class FormController {
 
             byte[] b = generateReportForm(jasperPrintList);
             in = new ByteArrayInputStream(b);
-
-            IOUtils.copy(in, response.getOutputStream());
-            return new ResponseEntity<String>(headers, HttpStatus.OK);
+            LOGGER.debug("in : {}",in);
+            outputStream = response.getOutputStream();
+            IOUtils.copy(in, outputStream);
+            // return new ResponseEntity<String>(headers, HttpStatus.OK);
         }catch (Exception e) {
             LOGGER.error("ERROR : {}",e);
-            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
+            // return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
         }finally{
+            IOUtils.closeQuietly(outputStream);
             IOUtils.closeQuietly(in);
         }
     }
 
     public byte[] generateReportForm(List<JasperPrint> jasperPrintList) throws JRException {
-        LOGGER.info("######### -= generateReportForm =- ########");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        JRPdfExporter exporter = new JRPdfExporter();
-        exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, jasperPrintList);
-        exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);
-        exporter.exportReport();
-        return baos.toByteArray();
+        try{
+            LOGGER.info("######### -= generateReportForm =- ########");
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    JRPdfExporter exporter = new JRPdfExporter();
+                    exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, jasperPrintList);
+                    exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, baos);
+                    exporter.exportReport();
+                    return baos.toByteArray();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+        
     }
 }
