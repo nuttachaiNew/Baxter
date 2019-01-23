@@ -1,5 +1,7 @@
 package com.demo.spring.SpringBootOAuth2.controller;
 
+import com.demo.spring.SpringBootOAuth2.domain.app.User;
+import com.demo.spring.SpringBootOAuth2.service.UserService;
 import com.demo.spring.SpringBootOAuth2.util.AbstractReportJasperPDF;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -8,6 +10,7 @@ import net.sf.jasperreports.engine.export.JRPdfExporter;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +33,11 @@ public class FormController {
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @RequestMapping(value = "/downloadFormHC" , produces = "text/html",method = RequestMethod.GET,headers = "Accept=application/json")
-   void downloadFormHC(@RequestParam(value = "name",required = false)String name,
+    @Autowired
+    UserService userService;
+
+    @RequestMapping(value = "/downloadFormHC",method = RequestMethod.GET,headers = "Accept=application/json")
+    void downloadFormHC(@RequestParam(value = "name",required = false)String name,
                                                            @RequestParam(value = "nationalId",required = false)String nationalId,
                                                            @RequestParam(value = "no",required = false)String no,
                                                            @RequestParam(value = "subDistrict",required = false)String subDistrict,
@@ -48,6 +54,8 @@ public class FormController {
 
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         try {
+            response.setContentType("application/x-pdf");
+            response.addHeader("Content-Disposition", "attachment; filename=HC.pdf");
             Map<String,Object> map = new HashMap<String,Object>();
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
             map.put("name",name);
@@ -60,25 +68,26 @@ public class FormController {
             map.put("tel_no",telNo);
             map.put("active_date",format.format(new Date()));
             map.put("age",age);
-            LOGGER.debug("map : {}",map);
+
+            User user = userService.findUserByUsername("temp");
+
             String jasperFileName1 = "HC1.jasper";
             String jasperFileName2 = "HC2.jasper";
 
-            JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,new ArrayList(),map);
-            JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,new ArrayList(),map);
+            JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+            JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
 
             jasperPrintList.add(jasperPrint1);
             jasperPrintList.add(jasperPrint2);
 
             byte[] b = generateReportForm(jasperPrintList);
             in = new ByteArrayInputStream(b);
-            LOGGER.debug("in : {}",in);
             outputStream = response.getOutputStream();
             IOUtils.copy(in, outputStream);
-            // return new ResponseEntity<String>(headers, HttpStatus.OK);
+//            return new ResponseEntity<String>(headers, HttpStatus.OK);
         }catch (Exception e) {
             LOGGER.error("ERROR : {}",e);
-            // return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
+//            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
         }finally{
             IOUtils.closeQuietly(outputStream);
             IOUtils.closeQuietly(in);
