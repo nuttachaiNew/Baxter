@@ -68,15 +68,16 @@ public class FileController {
     }
 
       @RequestMapping(value = "/downloadFile",method = RequestMethod.GET,headers = "Accept=application/json")
-    ResponseEntity<String> downloadFileByCaseIdAndFileType(@RequestParam(value = "caseId",required = false)String id,
+    ResponseEntity<String> downloadFile(@RequestParam(value = "caseId",required = false)String id,
                                                            @RequestParam(value = "fileType",required = false)String fileType,
                                                            HttpServletResponse response)throws ServletException, IOException {
         HttpHeaders headers = new HttpHeaders();
-        // headers.add("Content-Type", "application/json; charset=utf-8");
-        headers.add("Content-Type","image/*");
-        
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        // headers.add("Content-Type","image/*");
+
         InputStream in = null;
         try {
+            response.setContentType("image/*");
             in = caseManagementService.downloadFileByCaseIdAndFileType(Long.valueOf(id),fileType);
             IOUtils.copy(in, response.getOutputStream());
             return new ResponseEntity<String>(headers, HttpStatus.OK);
