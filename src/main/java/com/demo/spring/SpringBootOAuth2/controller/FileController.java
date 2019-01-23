@@ -6,7 +6,6 @@ import com.demo.spring.SpringBootOAuth2.service.CaseManagementService;
 import com.demo.spring.SpringBootOAuth2.service.UserService;
 
 import flexjson.JSONSerializer;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,9 @@ import java.util.Map;
 import java.util.HashMap;
 
 import java.util.List;
-
+import java.util.*;
+import org.apache.commons.io.IOUtils;
+import org.springframework.security.crypto.codec.Base64;
 
 @RestController
 @CrossOrigin
@@ -67,7 +68,7 @@ public class FileController {
         }
     }
 
-      @RequestMapping(value = "/downloadFile",method = RequestMethod.GET,headers = "Accept=application/json")
+    @RequestMapping(value = "/downloadFile",method = RequestMethod.GET,headers = "Accept=application/json")
     ResponseEntity<String> downloadFile(@RequestParam(value = "caseId",required = false)String id,
                                                            @RequestParam(value = "fileType",required = false)String fileType,
                                                            HttpServletResponse response)throws ServletException, IOException {
@@ -79,8 +80,12 @@ public class FileController {
         try {
             response.setContentType("image/*");
             in = caseManagementService.downloadFileByCaseIdAndFileType(Long.valueOf(id),fileType);
-            IOUtils.copy(in, response.getOutputStream());
-            return new ResponseEntity<String>(headers, HttpStatus.OK);
+            // IOUtils.copy(in, response.getOutputStream());
+
+            byte[] bytes= IOUtils.toByteArray(in);
+            byte[] encoded= Base64.encode(bytes);
+            String encodedString = new String(encoded);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(encodedString),headers,HttpStatus.OK);
         }catch (Exception e) {
             LOGGER.error("ERROR : {}",e);
             return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
