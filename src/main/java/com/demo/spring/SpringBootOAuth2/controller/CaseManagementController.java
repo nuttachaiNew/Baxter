@@ -784,7 +784,7 @@ public class CaseManagementController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            userService.uploadDigitalSignature(json,file);
+            caseManagementService.uploadDigitalSignature(json,file);
             Map<String,Object> result = new HashMap<>();
             result.put("status","success");
             headers.add("errorStatus", "N");
