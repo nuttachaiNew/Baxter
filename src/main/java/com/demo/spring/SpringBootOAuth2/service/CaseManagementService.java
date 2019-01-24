@@ -62,6 +62,6 @@ public interface CaseManagementService {
 
     // List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String createdBy,String areaId,String caseType);
     List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String areaId,String caseType);
-
+    void uploadDigitalSignature(String json,MultipartFile file);
 }   
 

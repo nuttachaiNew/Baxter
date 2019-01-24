@@ -1939,4 +1939,33 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
    }
 
+   @Override
+   public void uploadDigitalSignature(String json,MultipartFile file){
+        try{
+            LOGGER.debug("uploadDigitalSignature :{}",json);
+            ObjectMapper mapper = new ObjectMapper();
+            JSONObject jsonObject = new JSONObject(json);
+            Long id = Long.valueOf( jsonObject.get("id").toString() );
+            CaseManagement caseMng = caseManagementRepository.findOne(id);
+            
+             if(file!=null){
+                byte[] bytes = file.getBytes();
+                String FileName = id+"_DS";
+                FileCopyUtils.copy(bytes, new FileOutputStream(PATH_FILE+FileName));
+                FileUpload fileUpload = new FileUpload;
+                fileUpload.setFileName(idCardFile.getOriginalFilename());
+                fileUpload.setFileType( fileData.getFileType());
+                fileUpload.setUpdatdDate(StandardUtil.getCurrentDate());
+                fileUpload.setCaseManagement(caseMng);
+                fileUpload.setFileUrl(IPSERVER+"?caseId="+caseMng.getId()+"&fileType="+fileUpload.getFileType());
+                fileUploadRepository.save(fileUpload);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   }
+
 }
