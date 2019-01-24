@@ -1953,8 +1953,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 String FileName = id+"_DS";
                 FileCopyUtils.copy(bytes, new FileOutputStream(PATH_FILE+FileName));
                 FileUpload fileUpload = new FileUpload();
-                fileUpload.setFileName(idCardFile.getOriginalFilename());
-                fileUpload.setFileType( fileData.getFileType());
+                fileUpload.setFileName(fileUpload.getOriginalFilename());
+                fileUpload.setFileType( "DS");
                 fileUpload.setUpdatdDate(StandardUtil.getCurrentDate());
                 fileUpload.setCaseManagement(caseMng);
                 fileUpload.setFileUrl(IPSERVER+"?caseId="+caseMng.getId()+"&fileType="+fileUpload.getFileType());
