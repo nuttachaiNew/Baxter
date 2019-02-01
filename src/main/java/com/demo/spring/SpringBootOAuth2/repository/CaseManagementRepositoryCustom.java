@@ -140,7 +140,7 @@ public class CaseManagementRepositoryCustom {
             if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus  ");
             if(caseType!=null) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
-            criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
+            criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             if(date!=null)query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
@@ -182,7 +182,7 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" AND (CUST.patient_Name = :customer) OR  (CUST.Hospital_Name = :customer) ");
             criteriaSqlData.append(" AND CM.CASE_TYPE = :caseType  ");
             criteriaSqlData.append(" AND CM.CASE_NUMBER = :caseNumber  ");
-            criteriaSqlData.append(" ORDER BY CM.CASE_NUMBER ");
+            criteriaSqlData.append(" ORDER BY   CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC");
 
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("caseType",caseType );
@@ -221,7 +221,7 @@ public class CaseManagementRepositoryCustom {
             if(hospitalName!=null)criteriaSqlData.append(" AND  (CUST.Hospital_Name like :hospitalName) ");
             criteriaSqlData.append(" AND CUST.CUSTOMER_TYPE = :customerType  ");
             // criteriaSqlData.append(" AND CM.CASE_NUMBER = :caseNumber  ");
-            criteriaSqlData.append(" ORDER BY CM.CASE_NUMBER ");
+            criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC");
 
             LOGGER.debug("statement :{} ",criteriaSqlData);
             Query query = em.createNativeQuery(criteriaSqlData.toString());
@@ -270,7 +270,7 @@ public class CaseManagementRepositoryCustom {
             if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_FN  IS NULL  ");
             if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_CS  IS NULL  ");
 
-            criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE ,  CM.CASE_NUMBER   ");
+            criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             if(date!=null)query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
