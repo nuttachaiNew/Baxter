@@ -799,12 +799,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             // CaseManagement caseMng = caseManagementRepository.findOne(id);
             if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
                 caseMng.setCaseStatus("W");
-                caseMng.setUpdatedBy("temp");
+                caseMng.setUpdatedBy(updateCase.getUpdatedBy());
                 caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
                 Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
                 LOGGER.debug("caseActivity :{}",caseActivitys.size());
                 CaseActivity caseAct = new CaseActivity();
-                User user = userRepository.findByUsername( "temp" );
+                User user = userRepository.findByUsername( updateCase.getUpdatedBy());
                 caseAct.setUser(user);
                 caseAct.setActionStatus("submit to ASM");
                 caseAct.setActionDate(StandardUtil.getCurrentDate());
@@ -837,10 +837,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
 
     @Override
-    public  List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy){
+    public  List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy,String actionUser , String actionDate){
         try{
             LOGGER.debug("findHistoryDocByAreaAndDocStatusAndRoleAndCase :{} : {} :{} :{}",createdBy,areaId,documentStatus,roleBy);
-            return caseManagementRepositoryCustom.findHistoryDocByAreaAndDocStatusAndRoleAndCase(createdBy,areaId,documentStatus,roleBy);
+            return caseManagementRepositoryCustom.findHistoryDocByAreaAndDocStatusAndRoleAndCase(createdBy,areaId,documentStatus,roleBy,actionUser,actionDate);
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -861,10 +861,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String caseType){
+   public  List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String name){
      try{
         LOGGER.info("findCaseByCriteria : {}",date);
-        return caseManagementRepositoryCustom.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult,caseType);
+        return caseManagementRepositoryCustom.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult,caseType,name);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1558,12 +1558,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             // CaseManagement caseMng = caseManagementRepository.findOne(id);
             if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
                 caseMng.setCaseStatus("W");
-                caseMng.setUpdatedBy("temp");
+                caseMng.setUpdatedBy(updateCase.getUpdatedBy());
                 caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
                 Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
                 LOGGER.debug("caseActivity :{}",caseActivitys.size());
                 CaseActivity caseAct = new CaseActivity();
-                User user = userRepository.findByUsername( "temp" );
+                User user = userRepository.findByUsername( updateCase.getUpdatedBy());
                 caseAct.setUser(user);
                 caseAct.setActionStatus("submit to ASM");
                 caseAct.setActionDate(StandardUtil.getCurrentDate());
@@ -1769,12 +1769,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             Map resultResult = new HashMap<>();
              if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
                 caseMng.setCaseStatus("F");
-                caseMng.setUpdatedBy("temp");
+                caseMng.setUpdatedBy(updateCase.getUpdatedBy());
                 caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
                 Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
                 LOGGER.debug("caseActivity :{}",caseActivitys.size());
                 CaseActivity caseAct = new CaseActivity();
-                User user = userRepository.findByUsername( "temp" );
+                User user = userRepository.findByUsername( updateCase.getUpdatedBy() );
                 caseAct.setUser(user);
                 caseAct.setActionStatus("submit return machine to Other role");
                 caseAct.setActionDate(StandardUtil.getCurrentDate());

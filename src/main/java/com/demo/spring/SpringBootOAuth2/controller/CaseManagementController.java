@@ -241,13 +241,15 @@ public class CaseManagementController {
                                                                         , @RequestParam(value = "areaId",required = false)Long areaId
                                                                         , @RequestParam(value = "caseStatus",required = false)String documentStatus
                                                                         , @RequestParam(value = "roleBy",required = false)String roleBy
+                                                                        , @RequestParam(value = "actionUser",required = false)String actionUser
+                                                                        , @RequestParam(value = "actionDate",required = false)String actionDate
                                                                         ){
 
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            List<Map<String,Object>> caseManagement = caseManagementService.findHistoryDocByAreaAndDocStatusAndRoleAndCase(createdBy,areaId,documentStatus,roleBy);
+            List<Map<String,Object>> caseManagement = caseManagementService.findHistoryDocByAreaAndDocStatusAndRoleAndCase(createdBy,areaId,documentStatus,roleBy, actionUser ,  actionDate);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
@@ -267,6 +269,7 @@ public class CaseManagementController {
                                                                         , @RequestParam(value = "firstResult",required = false)Integer firstResult
                                                                         , @RequestParam(value = "maxResult",required = false)Integer maxResult
                                                                         , @RequestParam(value = "caseType",required = false)String caseType
+                                                                        , @RequestParam(value = "name",required = false)String name
                                                                         
                                                                         ){
 
@@ -274,7 +277,7 @@ public class CaseManagementController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult,caseType);
+            List<Map<String,Object>> caseManagement = caseManagementService.findCaseByCriteria(date,caseNumber,areaId,documentStatus,firstResult,maxResult,caseType,name);
             headers.add("errorStatus", "N");
             headers.add("errsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);

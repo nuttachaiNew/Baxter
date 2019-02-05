@@ -114,6 +114,10 @@ public class CaseManagement extends BaseModel {
    private String flagCheckMachine10;
    private String note;
 
+   private String noteChange;
+   private String noteReturn;
+
+
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval=true)
     private Installation installation;
 

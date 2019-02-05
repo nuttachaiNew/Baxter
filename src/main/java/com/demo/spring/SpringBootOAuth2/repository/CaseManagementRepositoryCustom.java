@@ -81,7 +81,7 @@ public class CaseManagementRepositoryCustom {
         }
       }
 
-    public List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy){
+    public List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy,String actionUser , String actionDate){
         try{
             LOGGER.debug("findHistoryDocByAreaAndDocStatusAndRoleAndCase :{}:{}:{}",createdBy,areaId,documentStatus);
             List<Object[] > listfromQuery = new ArrayList<>();
@@ -99,11 +99,20 @@ public class CaseManagementRepositoryCustom {
             if(createdBy !=null ){
                 criteriaSqlData.append("\n AND CM.CREATED_BY = :createdBy ");
             }
+            if(actionUser!= null){
+               criteriaSqlData.append("\n AND ( AU.USERNAME like :actionUser OR  AU.FIRST_NAME like :actionUser  OR AU.LAST_NAME like :actionUser ) ");   
+            }
+            if(actionDate!=null){
+                criteriaSqlData.append("\n AND TRUNC(CM.action_Date) = (:actionDate,'DD-MM-YYYY') ");
+            }
+
             criteriaSqlData.append("\n ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId);
             if(createdBy!=null) query.setParameter("createdBy",createdBy);
+            if(actionUser!=null) query.setParameter("actionUser","%"+actionUser+"%");
+            if(actionDate!=null) query.setParameter("actionDate",actionDate);
             LOGGER.debug("statement : {}",criteriaSqlData);
              listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){
@@ -124,7 +133,7 @@ public class CaseManagementRepositoryCustom {
         }
     }
 
-    public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType){
+    public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String name){
         try{
             caseNumber = caseNumber == null?"":caseNumber;
             LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
@@ -135,15 +144,20 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
-            if(date!=null) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
+            if(date!=null) criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) = TO_DATE(:date,'DD-MM-YYYY') ");
+            // if(date!=null) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
             criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
             if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus  ");
             if(caseType!=null) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
+            if(name!=null)  criteriaSqlData.append(" AND  (CUST.PATIENT_NAME LIKE :name OR CUST.HOSPITAL_NAME  LIKE :name  ) ");
             criteriaSqlData.append(" ORDER BY  CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             if(date!=null)query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
+            query.setParameter("name","%"+name+"%" );
+
+
             // SALE send I  , R 
             // ASM send W 
             // Other F
