@@ -155,7 +155,7 @@ public class CaseManagementRepositoryCustom {
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             if(date!=null)query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
-            query.setParameter("name","%"+name+"%" );
+           if(name!=null) query.setParameter("name","%"+name+"%" );
 
 
             // SALE send I  , R 
