@@ -107,7 +107,7 @@ public class CaseManagementRepositoryCustom {
                criteriaSqlData.append("\n AND ( AU.USERNAME like :actionUser OR  AU.FIRST_NAME like :actionUser  OR AU.LAST_NAME like :actionUser ) ");   
             }
             if(actionDate!=null){
-                criteriaSqlData.append("\n AND TRUNC(CM.action_Date) = TO_DATE(:actionDate,'DD-MM-YYYY') ");
+                criteriaSqlData.append("\n AND TRUNC(CA.action_Date) = TO_DATE(:actionDate,'DD-MM-YYYY') ");
             }
 
             criteriaSqlData.append("\n ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
