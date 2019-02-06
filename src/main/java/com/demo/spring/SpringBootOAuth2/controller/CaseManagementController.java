@@ -323,7 +323,7 @@ public class CaseManagementController {
            caseManagementService.saveFromASM(multipartHttpServletRequest);
              Map<String,Object> result = new HashMap<>();
             result.put("json",multipartHttpServletRequest.getParameter("json"));
-            result.put("status","save Success");
+            result.put("status","success");
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);

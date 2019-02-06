@@ -951,6 +951,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseAct.setCaseManagement(caseManagement);    
         caseActivityRepository.save(caseAct);
         Map<String,Object> resultResult = new HashMap<>();
+        resultResult.put("status","success");
         resultResult.put("caseNumber",caseManagement.getCaseNumber());
         resultResult.put("caseStatus",caseManagement.getCaseStatus());
         resultResult.put("actionRole","ASM");
@@ -989,6 +990,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseActivityRepository.save(caseAct);
 
         Map<String,Object> resultResult = new HashMap<>();
+        // resultResult.put("caseNumber",caseManagement.getCaseNumber());
+        resultResult.put("status","success");
         resultResult.put("caseNumber",caseManagement.getCaseNumber());
         resultResult.put("caseStatus",caseManagement.getCaseStatus());
         resultResult.put("actionRole","ASM");
