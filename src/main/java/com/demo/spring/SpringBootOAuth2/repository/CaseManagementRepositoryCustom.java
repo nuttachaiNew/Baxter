@@ -136,6 +136,7 @@ public class CaseManagementRepositoryCustom {
     public List<Map<String,Object>> findCaseByCriteria(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String name){
         try{
             caseNumber = caseNumber == null?"":caseNumber;
+            date = "".equalsIgnoreCase(date) ? null : date;
             LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
