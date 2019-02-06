@@ -85,6 +85,9 @@ public class CaseManagementRepositoryCustom {
         try{
             LOGGER.debug("findHistoryDocByAreaAndDocStatusAndRoleAndCase :{}:{}:{}",createdBy,areaId,documentStatus);
             actionDate = "".equalsIgnoreCase(actionDate) ? null :actionDate;
+            createdBy = "".equalsIgnoreCase(createdBy) ? null :createdBy;
+            actionUser = "".equalsIgnoreCase(actionUser) ? null :actionUser;
+            
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
