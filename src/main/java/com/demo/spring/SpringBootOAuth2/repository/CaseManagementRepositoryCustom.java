@@ -280,11 +280,11 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
-            if(date!=null || !"".equalsIgnoreCase(date)  ) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
+            if(date!=null && !"".equalsIgnoreCase(date)  ) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
             criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
-            if(areaId!=null || !"".equalsIgnoreCase(areaId))   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
-            if(documentStatus!=null || !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus   AND CM.CLOSE_FLAG IS NULL  ");
-            if(caseType!=null || !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
+            if(areaId!=null && !"".equalsIgnoreCase(areaId))   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
+            if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus   AND CM.CLOSE_FLAG IS NULL  ");
+            if(caseType!=null && !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
             if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND CM.CASE_TYPE IN ('CR','AR') ");
             if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_TS  IS NULL  ");
             if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_FN  IS NULL  ");
@@ -292,14 +292,14 @@ public class CaseManagementRepositoryCustom {
 
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
-            if(date!=null || !"".equalsIgnoreCase(date))query.setParameter("date",date );
+            if(date!=null && !"".equalsIgnoreCase(date))query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
             // SALE send I  , R 
             // ASM send W 
             // Other F
-            if(documentStatus!=null || !"".equalsIgnoreCase(documentStatus) ) query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
-            if(areaId!=null || !"".equalsIgnoreCase(areaId)) query.setParameter("areaId",areaId );
-            if(caseType!=null || !"".equalsIgnoreCase(caseType))query.setParameter("caseType",caseType);
+            if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) ) query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
+            if(areaId!=null && !"".equalsIgnoreCase(areaId)) query.setParameter("areaId",areaId );
+            if(caseType!=null && !"".equalsIgnoreCase(caseType))query.setParameter("caseType",caseType);
             listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){
                 Map<String,Object> activity = new HashMap<>();
