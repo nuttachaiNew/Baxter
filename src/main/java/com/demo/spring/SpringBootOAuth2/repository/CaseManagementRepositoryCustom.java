@@ -286,9 +286,9 @@ public class CaseManagementRepositoryCustom {
             if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus   AND CM.CLOSE_FLAG IS NULL  ");
             if(caseType!=null && !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
             if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND CM.CASE_TYPE IN ('CR','AR') ");
-            if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_TS  IS NULL  ");
-            if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_FN  IS NULL  ");
-            if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_CS  IS NULL  ");
+            if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_TS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ");
+            if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_FN  IS NULL AND CM.ASSIGN_BU IS NOT NULL ");
+            if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_CS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ");
 
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
