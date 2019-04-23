@@ -272,7 +272,7 @@ public class CaseManagementRepositoryCustom {
     public List<Map<String,Object>> findCaseforOtherRole(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String role,String username){
         try{
             caseNumber = caseNumber == null?"":caseNumber;
-            LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
+            LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult,username);
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
@@ -296,7 +296,7 @@ public class CaseManagementRepositoryCustom {
             query.setParameter("caseNumber","%"+caseNumber+"%" );
             query.setParameter("username",username );
 
-
+            LOGGER.debug("sql : {}",criteriaSqlData);
             // SALE send I  , R 
             // ASM send W 
             // Other F
