@@ -285,7 +285,7 @@ public class CaseManagementRepositoryCustom {
             if(areaId!=null && !"".equalsIgnoreCase(areaId))   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND (CM.CASE_STATUS  = :documentStatus OR CM.assign_BU = :username )   AND CM.CLOSE_FLAG IS NULL  ");
             if(caseType!=null && !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
-            if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND ( CM.CASE_TYPE IN ('CR','AR') ) ");
+            if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND ( CM.CASE_TYPE IN ('CR','AR')  OR CM.assign_BU = :username ) ");
             if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND ((CM.assign_TS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_TS =:username ) ");
             if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND ((CM.assign_FN  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_FN =:username ) ");
             if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND ((CM.assign_CS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_CS =:username ) ");
