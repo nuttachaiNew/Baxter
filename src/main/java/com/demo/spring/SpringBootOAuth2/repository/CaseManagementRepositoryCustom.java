@@ -269,31 +269,34 @@ public class CaseManagementRepositoryCustom {
 
 
 
-    public List<Map<String,Object>> findCaseforOtherRole(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String role){
+    public List<Map<String,Object>> findCaseforOtherRole(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String role,String username){
         try{
             caseNumber = caseNumber == null?"":caseNumber;
             LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult);
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
-            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ");
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
             if(date!=null && !"".equalsIgnoreCase(date)  ) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
             criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
             if(areaId!=null && !"".equalsIgnoreCase(areaId))   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
-            if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus   AND CM.CLOSE_FLAG IS NULL  ");
+            if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND (CM.CASE_STATUS  = :documentStatus OR CM.assign_BU = :username )   AND CM.CLOSE_FLAG IS NULL  ");
             if(caseType!=null && !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
-            if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND CM.CASE_TYPE IN ('CR','AR') ");
-            if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_TS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ");
-            if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_FN  IS NULL AND CM.ASSIGN_BU IS NOT NULL ");
-            if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND CM.assign_CS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ");
+            if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND ( CM.CASE_TYPE IN ('CR','AR') ) ");
+            if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND ((CM.assign_TS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_TS =:username ) ");
+            if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND ((CM.assign_FN  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_FN =:username ) ");
+            if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append(" AND ((CM.assign_CS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_CS =:username ) ");
 
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             if(date!=null && !"".equalsIgnoreCase(date))query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
+            query.setParameter("username",username );
+
+
             // SALE send I  , R 
             // ASM send W 
             // Other F
@@ -310,6 +313,10 @@ public class CaseManagementRepositoryCustom {
                 activity.put("cutsomerName",col[4]);
                 activity.put("cutsomerType",col[5]);
                 activity.put("caseStatus",col[6]);
+                activity.put("assignBu",col[7]);
+                activity.put("assignTs",col[8]);
+                activity.put("assignFn",col[9]);
+                activity.put("assignCs",col[10]);
                 results.add(activity);
              }
              return results;

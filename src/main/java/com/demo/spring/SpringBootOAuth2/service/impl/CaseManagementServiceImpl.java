@@ -1805,10 +1805,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
 
     @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+   public  List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"TS");
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"TS",username);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1816,10 +1816,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         }
    } 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+   public  List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"FN");
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"FN",username);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1827,10 +1827,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         }
    } 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+   public  List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"CS");
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"CS",username);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1840,10 +1840,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult){
+   public  List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"A",firstResult,maxResult,null,"BU");
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"A",firstResult,maxResult,null,"BU",username);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
