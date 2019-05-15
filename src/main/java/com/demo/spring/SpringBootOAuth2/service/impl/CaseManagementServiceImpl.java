@@ -1867,10 +1867,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
    public Map<String,Object> countCaseShowInDashboard(String startDate, String endDate,String createdBy,String areaId ){
     try{
         Map<String,Object> result = new HashMap<>();
-        List<Map<String,Object>> listCR = caseManagementRepositoryCustom.countCaseShowInDashboard("CR",startDate,endDate,createdBy,areaId);
-        List<Map<String,Object>> listAR = caseManagementRepositoryCustom.countCaseShowInDashboard("AR",startDate,endDate,createdBy,areaId);
-        List<Map<String,Object>> listCH = caseManagementRepositoryCustom.countCaseShowInDashboard("CH",startDate,endDate,createdBy,areaId);
-        List<Map<String,Object>> listRT = caseManagementRepositoryCustom.countCaseShowInDashboard("RT",startDate,endDate,createdBy,areaId);
+
+        User user = userRepository.findByUsername( createdBy );
+        String role = user.getRole().getName();
+
+        List<Map<String,Object>> listCR = caseManagementRepositoryCustom.countCaseShowInDashboard("CR",startDate,endDate,createdBy,areaId,role);
+        List<Map<String,Object>> listAR = caseManagementRepositoryCustom.countCaseShowInDashboard("AR",startDate,endDate,createdBy,areaId,role);
+        List<Map<String,Object>> listCH = caseManagementRepositoryCustom.countCaseShowInDashboard("CH",startDate,endDate,createdBy,areaId,role);
+        List<Map<String,Object>> listRT = caseManagementRepositoryCustom.countCaseShowInDashboard("RT",startDate,endDate,createdBy,areaId,role);
         
         result.put("CR",listCR);
         result.put("AR",listAR);

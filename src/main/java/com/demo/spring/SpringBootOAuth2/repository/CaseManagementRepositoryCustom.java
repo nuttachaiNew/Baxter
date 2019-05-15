@@ -373,7 +373,7 @@ public class CaseManagementRepositoryCustom {
 
 
 
-    public List<Map<String,Object>>  countCaseShowInDashboard(String caseType,String startDate, String endDate ,String createdBy,String areaId ){
+    public List<Map<String,Object>>  countCaseShowInDashboard(String caseType,String startDate, String endDate ,String createdBy,String areaId,String role ){
         try{
             LOGGER.debug("countCaseShowInDashboard : {} :{} :{}",caseType,startDate,endDate);
             List<Object[]> listfromQuery = new ArrayList<>();
@@ -391,7 +391,14 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" WHERE    ");
             criteriaSqlData.append(" CM.CASE_TYPE = :caseType  ");
             criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  ");
-            if(createdBy!=null)criteriaSqlData.append(" AND CM.CREATED_BY= :createdBy ");
+            if(createdBy!=null && "SALE".equalsIgnoreCase(role)  )criteriaSqlData.append(" AND CM.CREATED_BY= :createdBy ");
+            if(createdBy!=null && "ASM".equalsIgnoreCase(role)  )criteriaSqlData.append("  AND ( CM.UPDATED_BY= :createdBy OR CASE_STATUS ='A' ) ");
+            if(createdBy!=null && "BU".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND ( CM.ASSIGN_BU= :createdBy OR CASE_STATUS ='F' ) ");
+            if(createdBy!=null && "TS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_TS ISNULL )  OR ( CM.ASSIGN_TS= :createdBy OR  ) )");
+            if(createdBy!=null && "FN".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_FN ISNULL )  OR ( CM.ASSIGN_FN= :createdBy OR  ) )");
+            if(createdBy!=null && "CS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_CS ISNULL )  OR ( CM.ASSIGN_CS= :createdBy OR  ) )");
+
+
             if(areaId !=null) criteriaSqlData.append(" AND CM.AREA_ID = :areaId   \n"); 
            
             criteriaSqlData.append(" GROUP BY CM.CASE_STATUS  ");
