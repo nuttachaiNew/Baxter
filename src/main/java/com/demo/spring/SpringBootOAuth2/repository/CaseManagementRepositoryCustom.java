@@ -392,8 +392,8 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" CM.CASE_TYPE = :caseType  ");
             criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) BETWEEN TO_DATE(:startDate,'DD-MM-YYYY') AND TO_DATE(:endDate,'DD-MM-YYYY')  ");
             if(createdBy!=null && "SALE".equalsIgnoreCase(role)  )criteriaSqlData.append(" AND CM.CREATED_BY= :createdBy ");
-            if(createdBy!=null && "ASM".equalsIgnoreCase(role)  )criteriaSqlData.append("  AND ( CM.UPDATED_BY= :createdBy OR CASE_STATUS ='A' ) ");
-            if(createdBy!=null && "BU".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND ( CM.ASSIGN_BU= :createdBy OR CASE_STATUS ='F' ) ");
+            if(createdBy!=null && "ASM".equalsIgnoreCase(role)  )criteriaSqlData.append("  AND ( CM.UPDATED_BY= :createdBy OR CASE_STATUS ='W' ) ");
+            if(createdBy!=null && "BU".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND ( CM.ASSIGN_BU= :createdBy OR CASE_STATUS ='A' ) ");
             if(createdBy!=null && "TS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_TS ISNULL )  OR ( CM.ASSIGN_TS= :createdBy OR  ) )");
             if(createdBy!=null && "FN".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_FN ISNULL )  OR ( CM.ASSIGN_FN= :createdBy OR  ) )");
             if(createdBy!=null && "CS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_CS ISNULL )  OR ( CM.ASSIGN_CS= :createdBy OR  ) )");
