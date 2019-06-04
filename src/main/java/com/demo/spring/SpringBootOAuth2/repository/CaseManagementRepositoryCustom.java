@@ -81,7 +81,7 @@ public class CaseManagementRepositoryCustom {
         }
       }
 
-    public List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy,String actionUser , String actionDate){
+    public List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy,String actionUser , String actionDate,String role){
         try{
             LOGGER.debug("findHistoryDocByAreaAndDocStatusAndRoleAndCase :{}:{}:{}",createdBy,areaId,documentStatus);
             actionDate = "".equalsIgnoreCase(actionDate) ? null :actionDate;
@@ -97,12 +97,18 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append("\n JOIN APP_USER AU ON AU.ID = CA.USER_ID ");
             criteriaSqlData.append("\n JOIN APP_ROLE AR ON AR.ID = AU.ROLE_ID ");
             criteriaSqlData.append("\n WHERE CM.CASE_STATUS IN (:documentStatus) ");
+            criteriaSqlData.append("\n AND AU.username = :createdBy ");
             if(areaId != null){
                criteriaSqlData.append("\n AND CM.AREA_ID = :areaId ");   
             }
-            if(createdBy !=null ){
-                criteriaSqlData.append("\n AND CM.CREATED_BY = :createdBy ");
-            }
+                // criteriaSqlData.append("\n AND CM.CREATED_BY = :createdBy ");
+            if(createdBy!=null && "SALE".equalsIgnoreCase(role)  )criteriaSqlData.append(" AND CM.CREATED_BY= :createdBy ");
+            if(createdBy!=null && "ASM".equalsIgnoreCase(role)  )criteriaSqlData.append("  AND ( CM.UPDATED_BY= :createdBy OR CASE_STATUS ='W' ) ");
+            if(createdBy!=null && "BU".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND ( CM.ASSIGN_BU= :createdBy OR CASE_STATUS ='A' ) ");
+            if(createdBy!=null && "TS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_TS ISNULL )  OR ( CM.ASSIGN_TS= :createdBy OR  ) )");
+            if(createdBy!=null && "FN".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_FN ISNULL )  OR ( CM.ASSIGN_FN= :createdBy OR  ) )");
+            if(createdBy!=null && "CS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_CS ISNULL )  OR ( CM.ASSIGN_CS= :createdBy OR  ) )");
+
             if(actionUser!= null){
                criteriaSqlData.append("\n AND ( AU.USERNAME like :actionUser OR  AU.FIRST_NAME like :actionUser  OR AU.LAST_NAME like :actionUser ) ");   
             }
