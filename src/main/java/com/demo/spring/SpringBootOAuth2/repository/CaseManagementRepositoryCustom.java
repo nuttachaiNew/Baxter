@@ -97,7 +97,7 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append("\n JOIN APP_USER AU ON AU.ID = CA.USER_ID ");
             criteriaSqlData.append("\n JOIN APP_ROLE AR ON AR.ID = AU.ROLE_ID ");
             criteriaSqlData.append("\n WHERE CM.CASE_STATUS IN (:documentStatus) ");
-            criteriaSqlData.append("\n AND AU.username = :createdBy ");
+        //    criteriaSqlData.append("\n AND AU.username = :createdBy ");
             if(areaId != null){
                criteriaSqlData.append("\n AND CM.AREA_ID = :areaId ");   
             }
@@ -105,9 +105,9 @@ public class CaseManagementRepositoryCustom {
             if(createdBy!=null && "SALE".equalsIgnoreCase(role)  )criteriaSqlData.append(" AND CM.CREATED_BY= :createdBy ");
             if(createdBy!=null && "ASM".equalsIgnoreCase(role)  )criteriaSqlData.append("  AND ( CM.UPDATED_BY= :createdBy OR CASE_STATUS ='W' ) ");
             if(createdBy!=null && "BU".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND ( CM.ASSIGN_BU= :createdBy OR CASE_STATUS ='A' ) ");
-            if(createdBy!=null && "TS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_TS ISNULL )  OR ( CM.ASSIGN_TS= :createdBy OR  ) )");
-            if(createdBy!=null && "FN".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_FN ISNULL )  OR ( CM.ASSIGN_FN= :createdBy OR  ) )");
-            if(createdBy!=null && "CS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_CS ISNULL )  OR ( CM.ASSIGN_CS= :createdBy OR  ) )");
+            if(createdBy!=null && "TS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_TS ISNULL )  OR ( CM.ASSIGN_TS= :createdBy  ) )");
+            if(createdBy!=null && "FN".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_FN ISNULL )  OR ( CM.ASSIGN_FN= :createdBy   ) )");
+            if(createdBy!=null && "CS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_CS ISNULL )  OR ( CM.ASSIGN_CS= :createdBy  ) )");
 
             if(actionUser!= null){
                criteriaSqlData.append("\n AND ( AU.USERNAME like :actionUser OR  AU.FIRST_NAME like :actionUser  OR AU.LAST_NAME like :actionUser ) ");   
@@ -168,7 +168,7 @@ public class CaseManagementRepositoryCustom {
             query.setParameter("caseNumber","%"+caseNumber+"%" );
            if(name!=null) query.setParameter("name","%"+name+"%" );
 
-
+LOGGER.debug("sql : {}",criteriaSqlData);
             // SALE send I  , R 
             // ASM send W 
             // Other F
@@ -283,7 +283,7 @@ public class CaseManagementRepositoryCustom {
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
-            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ");
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
@@ -324,6 +324,7 @@ public class CaseManagementRepositoryCustom {
                 activity.put("assignTs",col[8]);
                 activity.put("assignFn",col[9]);
                 activity.put("assignCs",col[10]);
+		activity.put("hospitalName",col[11]);
                 results.add(activity);
              }
              return results;
