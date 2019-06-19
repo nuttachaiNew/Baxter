@@ -1417,7 +1417,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseMng.setAssignCs( caseManagement.get("updatedBy").toString() );
         caseMng.setDeliveryProvider(caseManagement.get("deliveryProvider").toString());
         caseMng.setDeliveryName(caseManagement.get("deliveryName").toString());
-        caseMng.setDeliveryNote(caseManagement.get("deliveryNote").toString());
+        caseMng.setDeliveryTelNo(caseManagement.get("deliveryTelNo").toString());
+
+	caseMng.setDeliveryNote(caseManagement.get("deliveryNote").toString());
         Date deliverDate =new SimpleDateFormat("dd-MM-yyyy").parse(caseManagement.get("deliveryDate").toString());
         caseMng.setDeliveryDate(  new java.sql.Timestamp(deliverDate.getTime()));
         caseManagementRepository.save(caseMng);
@@ -1430,7 +1432,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseAct.setActionStatus("send from Cs");
         caseAct.setActionDate(StandardUtil.getCurrentDate());
         caseAct.setCaseManagement(caseMng);    
-        caseActivityRepository.save(caseAct);
+        
+	caseActivityRepository.save(caseAct);
 
         Map<String,Object> returnResult = new HashMap();
         returnResult.put("caseType",caseMng.getCaseType());

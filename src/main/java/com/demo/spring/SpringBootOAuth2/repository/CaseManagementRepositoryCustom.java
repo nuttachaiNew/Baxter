@@ -92,10 +92,10 @@ public class CaseManagementRepositoryCustom {
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
             criteriaSqlData.append(" SELECT  CM.CASE_NUMBER , CA.ACTION_STATUS , CA.ACTION_DATE , AU.USERNAME  , CM.CASE_TYPE ,CM.ID ,AR.ROLE_NAME");
-            criteriaSqlData.append("\n FROM CASE_ACTIVITY CA ");
-            criteriaSqlData.append("\n JOIN CASE_MANAGEMENT CM ON CM.ID = CA.CASE_MANAGEMENT ");
-            criteriaSqlData.append("\n JOIN APP_USER AU ON AU.ID = CA.USER_ID ");
-            criteriaSqlData.append("\n JOIN APP_ROLE AR ON AR.ID = AU.ROLE_ID ");
+            criteriaSqlData.append("\n FROM CASE_MANAGEMENT CM ");
+            criteriaSqlData.append("\n LEFT JOIN CASE_ACTIVITY CA ON  CA.CASE_MANAGEMENT = CM.ID ");
+            criteriaSqlData.append("\n LEFT JOIN APP_USER AU ON AU.ID = CA.USER_ID ");
+            criteriaSqlData.append("\n LEFT JOIN APP_ROLE AR ON AR.ID = AU.ROLE_ID ");
             criteriaSqlData.append("\n WHERE CM.CASE_STATUS IN (:documentStatus) ");
         //    criteriaSqlData.append("\n AND AU.username = :createdBy ");
             if(areaId != null){
@@ -105,9 +105,9 @@ public class CaseManagementRepositoryCustom {
             if(createdBy!=null && "SALE".equalsIgnoreCase(role)  )criteriaSqlData.append(" AND CM.CREATED_BY= :createdBy ");
             if(createdBy!=null && "ASM".equalsIgnoreCase(role)  )criteriaSqlData.append("  AND ( CM.UPDATED_BY= :createdBy OR CASE_STATUS ='W' ) ");
             if(createdBy!=null && "BU".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND ( CM.ASSIGN_BU= :createdBy OR CASE_STATUS ='A' ) ");
-            if(createdBy!=null && "TS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_TS ISNULL )  OR ( CM.ASSIGN_TS= :createdBy  ) )");
-            if(createdBy!=null && "FN".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_FN ISNULL )  OR ( CM.ASSIGN_FN= :createdBy   ) )");
-            if(createdBy!=null && "CS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGS_CS ISNULL )  OR ( CM.ASSIGN_CS= :createdBy  ) )");
+            if(createdBy!=null && "TS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGN_TS IS NULL )  OR ( CM.ASSIGN_TS= :createdBy  ) )");
+            if(createdBy!=null && "FN".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGN_FN IS NULL )  OR ( CM.ASSIGN_FN= :createdBy   ) )");
+            if(createdBy!=null && "CS".equalsIgnoreCase(role)  )criteriaSqlData.append("   AND (( CASE_STATUS ='F' AND  ASSIGN_CS IS NULL )  OR ( CM.ASSIGN_CS= :createdBy  ) )");
 
             if(actionUser!= null){
                criteriaSqlData.append("\n AND ( AU.USERNAME like :actionUser OR  AU.FIRST_NAME like :actionUser  OR AU.LAST_NAME like :actionUser ) ");   
@@ -116,7 +116,7 @@ public class CaseManagementRepositoryCustom {
                 criteriaSqlData.append("\n AND TRUNC(CA.action_Date) = TO_DATE(:actionDate,'DD-MM-YYYY') ");
             }
 
-            criteriaSqlData.append("\n ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
+            criteriaSqlData.append("\n and ROWNUM <= 20 ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
             if(areaId!=null) query.setParameter("areaId",areaId);
@@ -283,7 +283,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
-            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME ");
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME , CUST.current_Address1||' '|| CUST.current_Address2 || ' '||CUST.current_Sub_District||'#'||CUST.current_District||''||current_Province||' '||CUST.current_Zip_Code");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
@@ -325,6 +325,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
                 activity.put("assignFn",col[9]);
                 activity.put("assignCs",col[10]);
 		activity.put("hospitalName",col[11]);
+		activity.put("address",col[12]);
                 results.add(activity);
              }
              return results;
