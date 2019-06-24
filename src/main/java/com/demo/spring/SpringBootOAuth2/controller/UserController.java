@@ -153,13 +153,16 @@ public class UserController {
 
     @PostMapping("/updateProfileWeb")
     public ResponseEntity<String> updateProfileWeb(
-              @RequestParam("file")MultipartFile file,
-              @RequestParam("json")String json
+//              @RequestParam("file")MultipartFile file,
+                @RequestParam(value = "file",required = false)MultipartFile file,
+
+		    @RequestParam("json")String json
         ){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            userService.updateProfileWeb(json,file);
+            LOGGER.debug("=================== update profile web========================");
+	    userService.updateProfileWeb(json,file);
             Map<String,Object> result = new HashMap<>();
             result.put("status","success");
             headers.add("errorStatus", "N");

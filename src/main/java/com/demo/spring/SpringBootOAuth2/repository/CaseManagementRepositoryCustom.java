@@ -116,10 +116,11 @@ public class CaseManagementRepositoryCustom {
                 criteriaSqlData.append("\n AND TRUNC(CA.action_Date) = TO_DATE(:actionDate,'DD-MM-YYYY') ");
             }
 
-            criteriaSqlData.append("\n and ROWNUM <= 20 ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
+            criteriaSqlData.append("\n  ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
-            if(areaId!=null) query.setParameter("areaId",areaId);
+    	    query.setMaxResults(30);
+    	    if(areaId!=null) query.setParameter("areaId",areaId);
             if(createdBy!=null) query.setParameter("createdBy",createdBy);
             if(actionUser!=null) query.setParameter("actionUser","%"+actionUser+"%");
             if(actionDate!=null) query.setParameter("actionDate",actionDate);
