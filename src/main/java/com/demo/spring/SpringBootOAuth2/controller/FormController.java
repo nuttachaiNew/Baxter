@@ -15,8 +15,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,6 +27,10 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.io.OutputStream;
+import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepository;
+import com.demo.spring.SpringBootOAuth2.domain.app.CaseManagement;
+import com.demo.spring.SpringBootOAuth2.service.CaseManagementService;
+import javax.activation.MimetypesFileTypeMap;
 
 @RestController
 @CrossOrigin
@@ -36,17 +42,15 @@ public class FormController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/downloadFormHC",method = RequestMethod.GET,headers = "Accept=application/json")
-    void downloadFormHC(@RequestParam(value = "name",required = false)String name,
-                                                           @RequestParam(value = "nationalId",required = false)String nationalId,
-                                                           @RequestParam(value = "no",required = false)String no,
-                                                           @RequestParam(value = "subDistrict",required = false)String subDistrict,
-                                                           @RequestParam(value = "district",required = false)String district,
-                                                           @RequestParam(value = "province",required = false)String province,
-                                                           @RequestParam(value = "zipcode",required = false)String zipcode,
-                                                           @RequestParam(value = "telNo",required = false)String telNo,
-                                                           @RequestParam(value = "age",required = false)String age,
-                                                           HttpServletResponse response)throws ServletException, IOException {
+    @Autowired
+    private CaseManagementService caseManagementService;
+
+    @Autowired
+    CaseManagementRepository caseRepository;
+
+    @RequestMapping(value = "/downloadFormAccept",method = RequestMethod.GET,headers = "Accept=application/json")
+    void downloadFormHC( @RequestParam(value = "caseId",required = false)Long caseId
+                                     ,  HttpServletResponse response)throws ServletException, IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
         InputStream in = null;
@@ -55,28 +59,28 @@ public class FormController {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         try {
             response.setContentType("application/x-pdf");
-            response.addHeader("Content-Disposition", "attachment; filename=HC.pdf");
+            response.addHeader("Content-Disposition", "attachment; filename=Acceptance_DOC.pdf");
             Map<String,Object> map = new HashMap<String,Object>();
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
-            map.put("name",name);
-            map.put("national_id",nationalId);
-            map.put("no",no);
-            map.put("sub_district",subDistrict);
-            map.put("district",district);
-            map.put("province",province);
-            map.put("zipcode",zipcode);
-            map.put("tel_no",telNo);
+            CaseManagement caseManagement =  caseRepository.findOne(caseId);
+
+            map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+            map.put("national_id",caseManagement.getCustomer().getNationId());
+            map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+            map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+            map.put("district",caseManagement.getCustomer().getCurrentProvince());
+            map.put("province",caseManagement.getCustomer().getCurrentProvince());
+            map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+            map.put("tel_no",caseManagement.getCustomer().getTelNo());
             map.put("active_date",format.format(new Date()));
-            map.put("age",age);
+            map.put("age","");
 
             User user = userService.findUserByUsername("temp");
 
             String jasperFileName1 = "HC1.jasper";
             String jasperFileName2 = "HC2.jasper";
-
             JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
             JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
-
             jasperPrintList.add(jasperPrint1);
             jasperPrintList.add(jasperPrint2);
 
@@ -84,15 +88,17 @@ public class FormController {
             in = new ByteArrayInputStream(b);
             outputStream = response.getOutputStream();
             IOUtils.copy(in, outputStream);
-//            return new ResponseEntity<String>(headers, HttpStatus.OK);
         }catch (Exception e) {
             LOGGER.error("ERROR : {}",e);
-//            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
         }finally{
             IOUtils.closeQuietly(outputStream);
             IOUtils.closeQuietly(in);
         }
     }
+
+
+    // @PostMapping("/downloadFormAccept")
+    
 
     public byte[] generateReportForm(List<JasperPrint> jasperPrintList) throws JRException {
         try{
@@ -106,6 +112,90 @@ public class FormController {
         }catch(Exception e){
             throw new RuntimeException(e);
         }
-        
     }
+
+
+
+    @RequestMapping(value = "/downloadFormInstallation",method = RequestMethod.GET,headers = "Accept=application/json")
+    public ResponseEntity<String> downloadFormInstallation(@RequestParam(value = "caseId",required = false)Long caseId,
+                                                      HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        LOGGER.info("downloadFormInstallation[Controller]");
+        try {
+
+            // response.setContentType("application/x-pdf");
+            // response.addHeader("Content-Disposition", "attachment; filename=Acceptance_DOC.pdf");
+            String mimeType = new MimetypesFileTypeMap().getContentType("installation.xlsx");
+            response.setContentType(mimeType);
+            response.addHeader("Content-Disposition","attachment; filename*=UTF-8''"+"installation.xlsx");
+
+            XSSFWorkbook workbook = caseManagementService.downloadFormInstallation(caseId);
+            if(workbook != null){
+                workbook.write(response.getOutputStream());
+                response.getOutputStream().flush();
+            }
+            LOGGER.info("downloadFormInstallation[Controller]=================================");
+            headers.add("statusValidate","0");
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            LOGGER.error("downloadFormInstallation[Controller] error msg : {}",e.getMessage());
+            headers.add("statusValidate","-1");
+            headers.add("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(),headers, HttpStatus.OK);
+        }
+    }
+
+     @RequestMapping(value = "/downloadFormPrescription",method = RequestMethod.GET,headers = "Accept=application/json")
+    public ResponseEntity<String> downloadFormPrescription(@RequestParam(value = "caseId",required = false)Long caseId,
+                                                      HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        LOGGER.info("downloadFormPrescription[Controller]");
+        try {
+             String mimeType = new MimetypesFileTypeMap().getContentType("installation.xlsx");
+            response.setContentType(mimeType);
+            response.addHeader("Content-Disposition","attachment; filename*=UTF-8''"+"installation.xlsx");
+            XSSFWorkbook workbook = caseManagementService.downloadFormPrescription(caseId);
+            if(workbook != null){
+                workbook.write(response.getOutputStream());
+                response.getOutputStream().flush();
+            }
+            LOGGER.info("downloadFormPrescription[Controller]=================================");
+            headers.add("statusValidate","0");
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            LOGGER.error("downloadFormPrescription[Controller] error msg : {}",e.getMessage());
+            headers.add("statusValidate","-1");
+            headers.add("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(),headers, HttpStatus.OK);
+        }
+    }
+
+     @RequestMapping(value = "/downloadFormReceipt",method = RequestMethod.GET,headers = "Accept=application/json")
+    public ResponseEntity<String> downloadFormReceipt(@RequestParam(value = "caseId",required = false)Long caseId,
+                                                      HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        LOGGER.info("downloadFormReceipt[Controller]");
+        try {
+            // XSSFWorkbook workbook = reportService.downloadFormReceipt(json,request.getHeader("USER"));
+            // if(workbook != null){
+            //     workbook.write(response.getOutputStream());
+            //     response.getOutputStream().flush();
+            // }
+            LOGGER.info("downloadFormReceipt[Controller]=================================");
+            headers.add("statusValidate","0");
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            LOGGER.error("downloadFormInstallation[Controller] error msg : {}",e.getMessage());
+            headers.add("statusValidate","-1");
+            headers.add("errorMsg",e.getMessage());
+            return new ResponseEntity<String>(e.getMessage(),headers, HttpStatus.OK);
+        }
+    }
+
 }

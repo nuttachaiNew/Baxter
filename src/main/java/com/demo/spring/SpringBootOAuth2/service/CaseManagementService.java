@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.demo.spring.SpringBootOAuth2.domain.app.CaseManagement;
+import org.apache.poi.xssf.usermodel.*;
 
 
 public interface CaseManagementService {
@@ -63,5 +64,10 @@ public interface CaseManagementService {
     // List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String createdBy,String areaId,String caseType);
     List<Map<String,Object>>  getCaseDetailShowInDashboard(String caseStatus,String startDate, String endDate,String areaId,String caseType);
     void uploadDigitalSignature(String json,MultipartFile file);
+
+    XSSFWorkbook downloadFormInstallation(Long id);
+    XSSFWorkbook downloadFormPrescription(Long id);
+    // XSSFWorkbook downloadFormReceipt(Long id);
+
 }   
 

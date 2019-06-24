@@ -39,6 +39,7 @@ import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.lang.StringBuilder;
@@ -63,7 +64,9 @@ import com.demo.spring.SpringBootOAuth2.repository.UserRepository;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.poi.xssf.usermodel.*;
 
+import java.io.*;
 
 @Service
 public class CaseManagementServiceImpl implements CaseManagementService {
@@ -111,10 +114,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static DecimalFormat FORMAT_MONTH = new DecimalFormat("00");
   private static final SimpleDateFormat GEN_CASE_DATEFORMAT = new SimpleDateFormat("MM-yyyy", Locale.US);
   private static final SimpleDateFormat FULL_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+  private static final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
   private static final String IPSERVER = "http://58.181.168.159:8082/files/downloadFileByCaseIdAndFileType";
   private static final String PATH_FILE = "/home/me/devNew/img/";
 
+   private static final String  INSTALLATION_FILE= "/home/me/devNew/doc/installation.xlsx";
+   private static final String  PRESCRIPTION_FILE= "/home/docker/Baxter_dev/Prescription.xlsx";
+   private static final String  RECEIPT_FILE= "/home/me/devNew/doc/receipt.xlsx";
   
     JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
         public Date deserialize(JsonElement json, Type typeOfT,
@@ -1981,6 +1988,190 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e);
         }
+   }
+
+   @Override
+   public   XSSFWorkbook downloadFormInstallation(Long id){
+    LOGGER.info("downloadFormInstallation : {}",id);
+    try{
+        InputStream inp = new FileInputStream(INSTALLATION_FILE); 
+        XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        int useRow = 11;
+        if(workbook!=null){
+            CaseManagement caseMng = caseManagementRepository.findOne(id);
+            LOGGER.debug("readFile");
+            sheet.getRow(7).getCell(1).setCellValue(format.format(new Date()));
+            // sheet.getRow(7).getCell(3).setCellValue("HOME");
+            
+            sheet.getRow(7).getCell(4).setCellValue(caseMng.getInstallation().getInstallationPlace() == null ? "" :caseMng.getInstallation().getInstallationPlace() );
+            Machine machine1 =caseMng.getMachine1();
+            Machine machine2 =caseMng.getMachine2();
+            Machine machine3 =caseMng.getMachine3();
+            Machine machine4 =caseMng.getMachine4();
+            Machine machine5 =caseMng.getMachine5();
+            Machine machine6 =caseMng.getMachine6();
+            Machine machine7 =caseMng.getMachine7();
+            Machine machine8 =caseMng.getMachine8();
+            Machine machine9 =caseMng.getMachine9();
+            Machine machine10 =caseMng.getMachine10();
+
+            if(machine1!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine1.getCode() == null ? "":machine1.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine1.getName() == null ? "":machine1.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine1.getSerialNumber() == null ? "":machine1.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine2!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine2.getCode() == null ? "":machine2.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine2.getName() == null ? "":machine2.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine2.getSerialNumber() == null ? "":machine2.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine3!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine3.getCode() == null ? "":machine3.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine3.getName() == null ? "":machine3.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine3.getSerialNumber() == null ? "":machine3.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine4!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine4.getCode() == null ? "":machine4.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine4.getName() == null ? "":machine4.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine4.getSerialNumber() == null ? "":machine4.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine5!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine5.getCode() == null ? "":machine5.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine5.getName() == null ? "":machine5.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine5.getSerialNumber() == null ? "":machine5.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine6!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine6.getCode() == null ? "":machine6.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine6.getName() == null ? "":machine6.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine6.getSerialNumber() == null ? "":machine6.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine7!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine7.getCode() == null ? "":machine7.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine7.getName() == null ? "":machine7.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine7.getSerialNumber() == null ? "":machine7.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine8!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine8.getCode() == null ? "":machine8.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine8.getName() == null ? "":machine8.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine8.getSerialNumber() == null ? "":machine8.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine9!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine9.getCode() == null ? "":machine9.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine9.getName() == null ? "":machine9.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine9.getSerialNumber() == null ? "":machine9.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+            if(machine10!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine10.getCode() == null ? "":machine10.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine10.getName() == null ? "":machine10.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine10.getSerialNumber() == null ? "":machine10.getSerialNumber() );
+                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                useRow++;
+            }
+
+        }
+
+        return workbook;
+    }catch(Exception e){
+        LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+
+
+   @Override
+   public   XSSFWorkbook downloadFormPrescription(Long id){
+    LOGGER.info("downloadFormPrescription : {}",id);
+    try{
+        InputStream inp = new FileInputStream(PRESCRIPTION_FILE); 
+        XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        int useRow = 11;
+        if(workbook!=null){
+            CaseManagement caseMng = caseManagementRepository.findOne(id);
+            LOGGER.debug("readFile");
+            Prescription prescription = caseMng.getPrescription();
+            NurseMenu nurseMenu = prescription.getNurseMenu();
+            MakeAdjustment makeAdjustment = prescription.getMakeAdjustment();
+            ChangePrograme changePrograme = prescription.getChangePrograme();
+            Opd opd = changePrograme.getOpd();
+            Tidal tidal = changePrograme.getTidal();
+
+            sheet.getRow(5).getCell(2).setCellValue(prescription.getPatientName());
+            sheet.getRow(6).getCell(2).setCellValue(prescription.getHospitalName() == null ?"": prescription.getHospitalName());
+            sheet.getRow(5).getCell(5).setCellValue(caseMng.getCaseNumber());
+            sheet.getRow(6).getCell(5).setCellValue(prescription.getSerialNumber());
+            sheet.getRow(12).getCell(2).setCellValue(nurseMenu.getModes() == null ?"":nurseMenu.getModes());
+            sheet.getRow(13).getCell(2).setCellValue(nurseMenu.getMinDrawTime() == null ?"":nurseMenu.getMinDrawTime());
+            sheet.getRow(14).getCell(2).setCellValue(nurseMenu.getMinDrawVol() == null ?"":nurseMenu.getMinDrawVol());
+            sheet.getRow(15).getCell(2).setCellValue(nurseMenu.getNegOfTime() == null ?"":nurseMenu.getNegOfTime());
+            sheet.getRow(16).getCell(2).setCellValue(nurseMenu.getPostOfLimit() == null ?"":nurseMenu.getPostOfLimit());
+            sheet.getRow(17).getCell(2).setCellValue(nurseMenu.getSmartDwells() == null ?"":nurseMenu.getSmartDwells());
+            sheet.getRow(18).getCell(2).setCellValue(nurseMenu.getHeaterBagEmpty() == null ?"":nurseMenu.getHeaterBagEmpty());
+            sheet.getRow(19).getCell(2).setCellValue(nurseMenu.getTidalFullDrns() == null ?"":nurseMenu.getTidalFullDrns());
+            sheet.getRow(20).getCell(2).setCellValue(nurseMenu.getLanguage() == null ?"":nurseMenu.getLanguage());
+            sheet.getRow(21).getCell(2).setCellValue(nurseMenu.getFlush() == null ?"":nurseMenu.getFlush());
+            sheet.getRow(22).getCell(2).setCellValue(nurseMenu.getProgramLocked() == null ?"":nurseMenu.getProgramLocked());
+            sheet.getRow(23).getCell(2).setCellValue(nurseMenu.getWeightReset() == null ?"":nurseMenu.getWeightReset());
+            sheet.getRow(12).getCell(4).setCellValue(makeAdjustment.getAdjustBrightness()==null?"":makeAdjustment.getAdjustBrightness());
+            sheet.getRow(13).getCell(4).setCellValue(makeAdjustment.getAdjustLoundNess()==null?"":makeAdjustment.getAdjustLoundNess());
+            sheet.getRow(14).getCell(4).setCellValue(makeAdjustment.getAutoDim()==null?"":makeAdjustment.getAutoDim());
+            sheet.getRow(15).getCell(4).setCellValue(makeAdjustment.getSetClock()==null?"":makeAdjustment.getSetClock());
+            sheet.getRow(16).getCell(4).setCellValue(makeAdjustment.getSetDail()==null?"":makeAdjustment.getSetDail());
+            sheet.getRow(17).getCell(4).setCellValue(makeAdjustment.getDrainTimeMin()==null?"":makeAdjustment.getDrainTimeMin());
+            sheet.getRow(18).getCell(4).setCellValue(makeAdjustment.getDrainAlram()==null?"":makeAdjustment.getDrainAlram());
+            sheet.getRow(19).getCell(4).setCellValue(makeAdjustment.getComfortControll()==null?"":makeAdjustment.getComfortControll());
+            sheet.getRow(20).getCell(4).setCellValue(makeAdjustment.getLastManualDrain()==null?"":makeAdjustment.getLastManualDrain());
+            sheet.getRow(22).getCell(4).setCellValue(makeAdjustment.getAlram()==null?"":makeAdjustment.getAlram());
+            sheet.getRow(23).getCell(4).setCellValue(makeAdjustment.getUrTarget()==null?"":makeAdjustment.getUrTarget());
+            sheet.getRow(12).getCell(6).setCellValue(opd.getTherapy()==null?"":opd.getTherapy());
+            sheet.getRow(13).getCell(6).setCellValue(opd.getTotalVol()==null?"":opd.getTotalVol());
+            sheet.getRow(14).getCell(6).setCellValue(opd.getTherapyTime()==null?"":opd.getTherapyTime());
+            sheet.getRow(15).getCell(6).setCellValue(opd.getFillVol()==null?"":opd.getFillVol());
+            sheet.getRow(16).getCell(6).setCellValue(opd.getLastFillVol()==null?"":opd.getLastFillVol());
+            sheet.getRow(17).getCell(6).setCellValue(opd.getDextRose()==null?"":opd.getDextRose());
+            sheet.getRow(18).getCell(6).setCellValue(opd.getWeightUnit()==null?"":opd.getWeightUnit());
+            sheet.getRow(19).getCell(6).setCellValue(opd.getPatientWeight()==null?"":opd.getPatientWeight());
+            sheet.getRow(12).getCell(8).setCellValue(tidal.getTherapy() ==null?"":tidal.getTherapy());
+            sheet.getRow(13).getCell(8).setCellValue(tidal.getTotalVol() ==null?"":tidal.getTotalVol());
+            sheet.getRow(14).getCell(8).setCellValue(tidal.getTherapyTime() ==null?"":tidal.getTherapyTime());
+            sheet.getRow(15).getCell(8).setCellValue(tidal.getFillVol() ==null?"":tidal.getFillVol());
+            sheet.getRow(16).getCell(8).setCellValue(tidal.getTidalVol() ==null?"":tidal.getTidalVol());
+            sheet.getRow(17).getCell(8).setCellValue(tidal.getTotalOf() ==null?"":tidal.getTotalOf());
+            sheet.getRow(18).getCell(8).setCellValue(tidal.getLastFillVol() ==null?"":tidal.getLastFillVol());
+            sheet.getRow(19).getCell(8).setCellValue(tidal.getDextRose() ==null?"":tidal.getDextRose());
+            sheet.getRow(20).getCell(8).setCellValue(tidal.getWeightUnit()==null?"":tidal.getWeightUnit());
+            sheet.getRow(21).getCell(8).setCellValue(tidal.getFullDrainEvery() ==null?"":tidal.getFullDrainEvery());
+            sheet.getRow(22).getCell(8).setCellValue(tidal.getPatientWeight() ==null?"":tidal.getPatientWeight());
+       
+            sheet.getRow(28).getCell(3).setCellValue(caseMng.getCreatedBy() ==null?"":caseMng.getCreatedBy());
+            sheet.getRow(28).getCell(5).setCellValue(format.format(new Date()));
+
+        }
+
+        return workbook;
+    }catch(Exception e){
+        LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
    }
 
 }
