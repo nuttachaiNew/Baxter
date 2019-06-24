@@ -120,7 +120,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static final String PATH_FILE = "/home/me/devNew/img/";
 
    private static final String  INSTALLATION_FILE= "/home/me/devNew/doc/installation.xlsx";
-   private static final String  PRESCRIPTION_FILE= "/home/docker/Baxter_dev/Prescription.xlsx";
+   private static final String  PRESCRIPTION_FILE= "/home/me/devNew/doc/Prescription.xlsx";
    private static final String  RECEIPT_FILE= "/home/me/devNew/doc/receipt.xlsx";
   
     JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
