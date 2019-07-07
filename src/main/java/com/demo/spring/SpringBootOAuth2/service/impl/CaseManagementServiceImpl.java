@@ -2020,70 +2020,70 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 sheet.getRow(useRow).getCell(0).setCellValue(machine1.getCode() == null ? "":machine1.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine1.getName() == null ? "":machine1.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine1.getSerialNumber() == null ? "":machine1.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine2!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine2.getCode() == null ? "":machine2.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine2.getName() == null ? "":machine2.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine2.getSerialNumber() == null ? "":machine2.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine3!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine3.getCode() == null ? "":machine3.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine3.getName() == null ? "":machine3.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine3.getSerialNumber() == null ? "":machine3.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine4!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine4.getCode() == null ? "":machine4.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine4.getName() == null ? "":machine4.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine4.getSerialNumber() == null ? "":machine4.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine5!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine5.getCode() == null ? "":machine5.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine5.getName() == null ? "":machine5.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine5.getSerialNumber() == null ? "":machine5.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine6!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine6.getCode() == null ? "":machine6.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine6.getName() == null ? "":machine6.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine6.getSerialNumber() == null ? "":machine6.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine7!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine7.getCode() == null ? "":machine7.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine7.getName() == null ? "":machine7.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine7.getSerialNumber() == null ? "":machine7.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine8!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine8.getCode() == null ? "":machine8.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine8.getName() == null ? "":machine8.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine8.getSerialNumber() == null ? "":machine8.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine9!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine9.getCode() == null ? "":machine9.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine9.getName() == null ? "":machine9.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine9.getSerialNumber() == null ? "":machine9.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
             if(machine10!=null){
                 sheet.getRow(useRow).getCell(0).setCellValue(machine10.getCode() == null ? "":machine10.getCode() );
                 sheet.getRow(useRow).getCell(1).setCellValue(machine10.getName() == null ? "":machine10.getName() );
                 sheet.getRow(useRow).getCell(2).setCellValue(machine10.getSerialNumber() == null ? "":machine10.getSerialNumber() );
-                sheet.getRow(useRow).getCell(4).setCellValue("1" );
+                sheet.getRow(useRow).getCell(6).setCellValue("1" );
                 useRow++;
             }
 
