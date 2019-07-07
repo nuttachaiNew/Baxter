@@ -67,7 +67,11 @@ public interface CaseManagementService {
 
     XSSFWorkbook downloadFormInstallation(Long id);
     XSSFWorkbook downloadFormPrescription(Long id);
-    // XSSFWorkbook downloadFormReceipt(Long id);
+
+    void sendDeposit(String json,MultipartFile file);
+    List<Map<String,Object>> listDepositFn(String createdBy);
+    List<Map<String,Object>> listDepositTS(String createdBy);
+
 
 }   
 

@@ -811,4 +811,68 @@ public class CaseManagementController {
         }
     }
 
+    @PostMapping("/sendDeposit")
+    public ResponseEntity<String> sendDeposit(
+            @RequestParam(value = "file",required = false)MultipartFile file,
+            @RequestParam("json")String json
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("=================== sendDeposit =======================");
+            caseManagementService.sendDeposit(json,file);
+            Map<String,Object> result = new HashMap<>();
+            result.put("status","success");
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",ex.getMessage());
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        }
+    }
+
+
+      @RequestMapping(value ="/listDepositFn", method = RequestMethod.GET)
+      ResponseEntity<String> listDepositFn(        @RequestParam(value = "username",required = false)String username
+                                                                        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.listDepositFn(username);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+     @RequestMapping(value ="/listDepositTS", method = RequestMethod.GET)
+      ResponseEntity<String> listDepositTS(        @RequestParam(value = "username",required = false)String username
+                                                                        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.listDepositTS(username);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
 }

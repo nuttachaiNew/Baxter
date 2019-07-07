@@ -169,5 +169,14 @@ public class CaseManagement extends BaseModel {
     private String receiptAddress5;
     private String receiptAddress6;
 
+    private String depositName;
+    private String depositPaymentType;
+    private String depositBankName;
+    private BigDecimal depositAmount;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Timestamp depositDate;
+
+
 
 }

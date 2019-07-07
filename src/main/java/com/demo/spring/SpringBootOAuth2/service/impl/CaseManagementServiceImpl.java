@@ -67,7 +67,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
-
+import java.math.BigDecimal;
 @Service
 public class CaseManagementServiceImpl implements CaseManagementService {
 
@@ -1067,10 +1067,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagementRepository.save(refCase);
         // close old case
         changeCase.setRefCase(refCase);
+        changeCase.setAmount(refCase.getAmount());
         changeCase.setCreatedDate( StandardUtil.getCurrentDate() );
         changeCase.setCaseNumber(newCaseNumber);
         changeCase.setCaseStatus("I");
         changeCase.setCaseType("CH");
+
         changeCase.setCustomer(refCase.getCustomer());
         Integer machineRunning = 1;
             for(Map<String,Object> machineInfo: machineData){   
@@ -1629,6 +1631,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagementRepository.save(refCase);
         // close old case
         changeCase.setRefCase(refCase);
+        changeCase.setAmount(refCase.getAmount());
         changeCase.setCreatedDate( StandardUtil.getCurrentDate() );
         changeCase.setCaseNumber(newCaseNumber);
         changeCase.setCaseStatus("I");
@@ -2098,6 +2101,30 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
 
    @Override
+   public void sendDeposit(String json,MultipartFile file){
+    try{
+        LOGGER.info("sendDeposit :{}",json);
+        JSONObject jsonObject = new JSONObject(json);
+        CaseManagement caseManagement= caseManagementRepository.findOne(  Long.valueOf( jsonObject.get("id").toString()));
+        caseManagement.setUpdatedDate(StandardUtil.getCurrentDate() );
+        caseManagement.setUpdatedBy(  jsonObject.get("updatedBy").toString()  );
+        caseManagement.setDepositName(jsonObject.get("depositName").toString());
+        caseManagement.setDepositPaymentType(jsonObject.get("depositPaymentType").toString());
+        caseManagement.setDepositBankName(jsonObject.get("depositBankName").toString());
+        caseManagement.setDepositAmount(new BigDecimal ( jsonObject.get("depositAmount").toString()));
+        Date depositDate =new SimpleDateFormat("dd-MM-yyyy").parse(jsonObject.get("depositDate").toString());
+        caseManagement.setDepositDate(  new java.sql.Timestamp(depositDate.getTime()));
+      
+        caseManagementRepository.save(caseManagement);
+    }catch(Exception e){
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+
+
+
+   @Override
    public   XSSFWorkbook downloadFormPrescription(Long id){
     LOGGER.info("downloadFormPrescription : {}",id);
     try{
@@ -2170,6 +2197,24 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         return workbook;
     }catch(Exception e){
         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+
+
+   public  List<Map<String,Object>> listDepositFn(String createdBy){
+    try{
+        return caseManagementRepositoryCustom.listDepositFn(createdBy);
+    }catch(Exception e){
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+   public List<Map<String,Object>> listDepositTS(String createdBy){
+     try{
+        return caseManagementRepositoryCustom.listDepositTS(createdBy);
+    }catch(Exception e){
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
         throw new RuntimeException(e);
     }
    }
