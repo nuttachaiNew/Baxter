@@ -40,7 +40,8 @@ public class User extends BaseModel {
     private Boolean accountNonExpired;
     private Boolean credentialsNonExpired;
     private Boolean accountNonLocked;
-
+    private String digitalSignature;
+    
 
     public Boolean getAccountNonExpired() {
         return accountNonExpired;
@@ -162,6 +163,14 @@ public class User extends BaseModel {
         return status;
     }
 
+    public String getDigitalSignature() {
+        return digitalSignature;
+    }
+
+    public void setDigitalSignature(String digitalSignature) {
+        this.digitalSignature = digitalSignature;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
@@ -181,6 +190,8 @@ public class User extends BaseModel {
     public void setRole(Role role) {
         this.role = role;
     }
+
+
 
     @Override
     public String toString() {

@@ -154,9 +154,9 @@ public class FormController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         LOGGER.info("downloadFormPrescription[Controller]");
         try {
-             String mimeType = new MimetypesFileTypeMap().getContentType("installation.xlsx");
+             String mimeType = new MimetypesFileTypeMap().getContentType("prescription.xlsx");
             response.setContentType(mimeType);
-            response.addHeader("Content-Disposition","attachment; filename*=UTF-8''"+"installation.xlsx");
+            response.addHeader("Content-Disposition","attachment; filename*=UTF-8''"+"prescription.xlsx");
             XSSFWorkbook workbook = caseManagementService.downloadFormPrescription(caseId);
             if(workbook != null){
                 workbook.write(response.getOutputStream());
@@ -181,11 +181,14 @@ public class FormController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         LOGGER.info("downloadFormReceipt[Controller]");
         try {
-            // XSSFWorkbook workbook = reportService.downloadFormReceipt(json,request.getHeader("USER"));
-            // if(workbook != null){
-            //     workbook.write(response.getOutputStream());
-            //     response.getOutputStream().flush();
-            // }
+            String mimeType = new MimetypesFileTypeMap().getContentType("recepit.xlsx");
+            response.setContentType(mimeType);
+            response.addHeader("Content-Disposition","attachment; filename*=UTF-8''"+"recepit.xlsx");
+            XSSFWorkbook workbook = caseManagementService.downloadFormReceipt(caseId);
+            if(workbook != null){
+                workbook.write(response.getOutputStream());
+                response.getOutputStream().flush();
+            }
             LOGGER.info("downloadFormReceipt[Controller]=================================");
             headers.add("statusValidate","0");
             return new ResponseEntity<String>(headers, HttpStatus.OK);

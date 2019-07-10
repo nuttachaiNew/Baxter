@@ -68,6 +68,13 @@ import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
 import java.math.BigDecimal;
+
+import java.io.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+
 @Service
 public class CaseManagementServiceImpl implements CaseManagementService {
 
@@ -120,8 +127,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static final String PATH_FILE = "/home/me/devNew/img/";
 
    private static final String  INSTALLATION_FILE= "/home/me/devNew/doc/installation.xlsx";
+   // private static final String  INSTALLATION_FILE= "/home/docker/Baxter_dev/INSTALLATION_RETURN.xlsx";
+   private static final String  INSTALLATION_FILE_SWAP= "/home/me/devNew/doc/INSTALLATION_SWAP.xlsx";
+   private static final String  INSTALLATION_FILE_RETURN= "/home/me/devNew/doc/INSTALLATION_RETURN.xlsx";
    private static final String  PRESCRIPTION_FILE= "/home/me/devNew/doc/Prescription.xlsx";
-   private static final String  RECEIPT_FILE= "/home/me/devNew/doc/receipt.xlsx";
+   private static final String  RECEIPT_FILE= "/home/me/devNew/doc/RECEIPT.xlsx";
+   // private static final String  RECEIPT_FILE= "/home/docker/Baxter_dev/RECEIPT.xlsx";
+   
+   private static final String signaturePath ="/home/me/devNew/doc/";
   
     JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
         public Date deserialize(JsonElement json, Type typeOfT,
@@ -1968,22 +1981,16 @@ public class CaseManagementServiceImpl implements CaseManagementService {
    public void uploadDigitalSignature(String json,MultipartFile file){
         try{
             LOGGER.debug("uploadDigitalSignature :{}",json);
-            ObjectMapper mapper = new ObjectMapper();
             JSONObject jsonObject = new JSONObject(json);
-            Long id = Long.valueOf( jsonObject.get("id").toString() );
-            CaseManagement caseMng = caseManagementRepository.findOne(id);
+            String username = jsonObject.get("username").toString();
+            User user = userRepository.findByUsername(username);
             
              if(file!=null){
+                user.setDigitalSignature(file.getOriginalFilename());
                 byte[] bytes = file.getBytes();
-                String FileName = id+"_DS";
-                FileCopyUtils.copy(bytes, new FileOutputStream(PATH_FILE+FileName));
-                FileUpload fileUpload = new FileUpload();
-                fileUpload.setFileName(file.getOriginalFilename());
-                fileUpload.setFileType( "DS");
-                fileUpload.setUpdatdDate(StandardUtil.getCurrentDate());
-                fileUpload.setCaseManagement(caseMng);
-                fileUpload.setFileUrl(IPSERVER+"?caseId="+caseMng.getId()+"&fileType="+fileUpload.getFileType());
-                fileUploadRepository.save(fileUpload);
+                String FileName = username;
+                FileCopyUtils.copy(bytes, new FileOutputStream(signaturePath+FileName));
+                userRepository.save(user);
             }
 
         }catch(Exception e){
@@ -1993,19 +2000,18 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         }
    }
 
-   @Override
-   public   XSSFWorkbook downloadFormInstallation(Long id){
-    LOGGER.info("downloadFormInstallation : {}",id);
+
+   public XSSFWorkbook getInstallations(CaseManagement caseMng){
     try{
         InputStream inp = new FileInputStream(INSTALLATION_FILE); 
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
+        inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
+          
         int useRow = 11;
-        if(workbook!=null){
-            CaseManagement caseMng = caseManagementRepository.findOne(id);
+        // if(workbook!=null){
             LOGGER.debug("readFile");
             sheet.getRow(7).getCell(1).setCellValue(format.format(new Date()));
-            // sheet.getRow(7).getCell(3).setCellValue("HOME");
             
             sheet.getRow(7).getCell(4).setCellValue(caseMng.getInstallation().getInstallationPlace() == null ? "" :caseMng.getInstallation().getInstallationPlace() );
             Machine machine1 =caseMng.getMachine1();
@@ -2090,8 +2096,344 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 useRow++;
             }
 
-        }
+        String assignBU = caseMng.getAssignBu();
+        User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+        byte[] bytes = IOUtils.toByteArray(signnature);
+        int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+        signnature.close(); 
+        XSSFDrawing drawing = sheet.createDrawingPatriarch();
+        XSSFClientAnchor my_anchor = new XSSFClientAnchor();
+        my_anchor.setCol1(5);
+        my_anchor.setRow1(25);   //   installation 
+         // my_anchor.setRow1(36);      //swap 
+         // my_anchor.setRow1(25);      //return 
 
+        XSSFPicture  my_picture = drawing.createPicture(my_anchor, digitalSignatureByte);
+        my_picture.resize(); 
+
+           return workbook; 
+    }catch(Exception e){
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+
+   }
+
+   public XSSFWorkbook getInstallationChangeMachine(CaseManagement caseMng){
+     try{
+         InputStream inp = new FileInputStream(INSTALLATION_FILE_SWAP); 
+        XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
+        inp.close();
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        int useRow = 11;
+        int returnRow = 22;
+        // if(workbook!=null){
+            LOGGER.debug("readFile");
+            sheet.getRow(7).getCell(2).setCellValue(format.format(new Date()));
+            sheet.getRow(7).getCell(4).setCellValue(caseMng.getInstallation().getInstallationPlace() == null ? "" :caseMng.getInstallation().getInstallationPlace() );
+            Machine machine1 =caseMng.getMachine1();
+            Machine machine2 =caseMng.getMachine2();
+            Machine machine3 =caseMng.getMachine3();
+            Machine machine4 =caseMng.getMachine4();
+            Machine machine5 =caseMng.getMachine5();
+            Machine machine6 =caseMng.getMachine6();
+            Machine machine7 =caseMng.getMachine7();
+            Machine machine8 =caseMng.getMachine8();
+            Machine machine9 =caseMng.getMachine9();
+            Machine machine10 =caseMng.getMachine10();
+             if(machine1!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine1.getCode() == null ? "":machine1.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine1.getName() == null ? "":machine1.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine1.getSerialNumber() == null ? "":machine1.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine1.getCode() == null ? "":machine1.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine1.getName() == null ? "":machine1.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine1.getSerialNumber() == null ? "":machine1.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1" );
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine2!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine2.getCode() == null ? "":machine2.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine2.getName() == null ? "":machine2.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine2.getSerialNumber() == null ? "":machine2.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine2.getCode() == null ? "":machine2.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine2.getName() == null ? "":machine2.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine2.getSerialNumber() == null ? "":machine2.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1" );
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine3!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine3.getCode() == null ? "":machine3.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine3.getName() == null ? "":machine3.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine3.getSerialNumber() == null ? "":machine3.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine3.getCode() == null ? "":machine3.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine3.getName() == null ? "":machine3.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine3.getSerialNumber() == null ? "":machine3.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1" );
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine4!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine4.getCode() == null ? "":machine4.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine4.getName() == null ? "":machine4.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine4.getSerialNumber() == null ? "":machine4.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1");
+
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine4.getCode() == null ? "":machine4.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine4.getName() == null ? "":machine4.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine4.getSerialNumber() == null ? "":machine4.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1" );
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine5!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine5.getCode() == null ? "":machine5.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine5.getName() == null ? "":machine5.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine5.getSerialNumber() == null ? "":machine5.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1");
+                
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine5.getCode() == null ? "":machine5.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine5.getName() == null ? "":machine5.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine5.getSerialNumber() == null ? "":machine5.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1" );
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine6!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine6.getCode() == null ? "":machine6.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine6.getName() == null ? "":machine6.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine6.getSerialNumber() == null ? "":machine6.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1");
+                
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine6.getCode() == null ? "":machine6.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine6.getName() == null ? "":machine6.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine6.getSerialNumber() == null ? "":machine6.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1" );
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine7!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine7.getCode() == null ? "":machine7.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine7.getName() == null ? "":machine7.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine7.getSerialNumber() == null ? "":machine7.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1");
+                
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine7.getCode() == null ? "":machine7.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine7.getName() == null ? "":machine7.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine7.getSerialNumber() == null ? "":machine7.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1");
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine8!=null){
+                sheet.getRow(useRow).getCell(1).setCellValue(machine8.getCode() == null ? "":machine8.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine8.getName() == null ? "":machine8.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine8.getSerialNumber() == null ? "":machine8.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1");
+                
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine8.getCode() == null ? "":machine8.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine8.getName() == null ? "":machine8.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine8.getSerialNumber() == null ? "":machine8.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1");
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine9!=null){
+                 sheet.getRow(useRow).getCell(1).setCellValue(machine9.getCode() == null ? "":machine9.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine9.getName() == null ? "":machine9.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine9.getSerialNumber() == null ? "":machine9.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1");
+                
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine9.getCode() == null ? "":machine9.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine9.getName() == null ? "":machine9.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine9.getSerialNumber() == null ? "":machine9.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1");
+
+                useRow++;
+                returnRow++;
+            }
+            if(machine10!=null){
+                 sheet.getRow(useRow).getCell(1).setCellValue(machine10.getCode() == null ? "":machine10.getCode() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine10.getName() == null ? "":machine10.getName() );
+                sheet.getRow(useRow).getCell(3).setCellValue(machine10.getSerialNumber() == null ? "":machine10.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1");
+                
+                sheet.getRow(returnRow).getCell(1).setCellValue(machine10.getCode() == null ? "":machine10.getCode() );
+                sheet.getRow(returnRow).getCell(2).setCellValue(machine10.getName() == null ? "":machine10.getName() );
+                sheet.getRow(returnRow).getCell(3).setCellValue(machine10.getSerialNumber() == null ? "":machine10.getSerialNumber() );
+                sheet.getRow(returnRow).getCell(7).setCellValue("1");
+
+                useRow++;
+            }
+
+        String assignBU = caseMng.getAssignBu();
+        User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+
+        byte[] bytes = IOUtils.toByteArray(signnature);
+        int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+        signnature.close(); 
+        XSSFDrawing drawing = sheet.createDrawingPatriarch();
+        XSSFClientAnchor my_anchor = new XSSFClientAnchor();
+        my_anchor.setCol1(5);
+         my_anchor.setRow1(36);      //swap 
+        XSSFPicture  my_picture = drawing.createPicture(my_anchor, digitalSignatureByte);
+        my_picture.resize(); 
+
+            return workbook;
+     }catch(Exception e){
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+
+
+    public XSSFWorkbook getInstallationReturn(CaseManagement caseMng){
+     try{
+         InputStream inp = new FileInputStream(INSTALLATION_FILE_RETURN); 
+        XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
+        inp.close();
+
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        int useRow = 11;
+        int returnRow = 22;
+        // if(workbook!=null){
+            LOGGER.debug("readFile");
+            sheet.getRow(7).getCell(2).setCellValue(format.format(new Date()));
+            sheet.getRow(7).getCell(4).setCellValue(caseMng.getInstallation().getInstallationPlace() == null ? "" :caseMng.getInstallation().getInstallationPlace() );
+            Machine machine1 =caseMng.getMachine1();
+            Machine machine2 =caseMng.getMachine2();
+            Machine machine3 =caseMng.getMachine3();
+            Machine machine4 =caseMng.getMachine4();
+            Machine machine5 =caseMng.getMachine5();
+            Machine machine6 =caseMng.getMachine6();
+            Machine machine7 =caseMng.getMachine7();
+            Machine machine8 =caseMng.getMachine8();
+            Machine machine9 =caseMng.getMachine9();
+            Machine machine10 =caseMng.getMachine10();
+            
+            if(machine1!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine1.getCode() == null ? "":machine1.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine1.getName() == null ? "":machine1.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine1.getSerialNumber() == null ? "":machine1.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine2!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine2.getCode() == null ? "":machine2.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine2.getName() == null ? "":machine2.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine2.getSerialNumber() == null ? "":machine2.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine3!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine3.getCode() == null ? "":machine3.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine3.getName() == null ? "":machine3.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine3.getSerialNumber() == null ? "":machine3.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine4!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine4.getCode() == null ? "":machine4.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine4.getName() == null ? "":machine4.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine4.getSerialNumber() == null ? "":machine4.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine5!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine5.getCode() == null ? "":machine5.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine5.getName() == null ? "":machine5.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine5.getSerialNumber() == null ? "":machine5.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine6!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine6.getCode() == null ? "":machine6.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine6.getName() == null ? "":machine6.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine6.getSerialNumber() == null ? "":machine6.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine7!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine7.getCode() == null ? "":machine7.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine7.getName() == null ? "":machine7.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine7.getSerialNumber() == null ? "":machine7.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine8!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine8.getCode() == null ? "":machine8.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine8.getName() == null ? "":machine8.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine8.getSerialNumber() == null ? "":machine8.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine9!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine9.getCode() == null ? "":machine9.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine9.getName() == null ? "":machine9.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine9.getSerialNumber() == null ? "":machine9.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+            if(machine10!=null){
+                sheet.getRow(useRow).getCell(0).setCellValue(machine10.getCode() == null ? "":machine10.getCode() );
+                sheet.getRow(useRow).getCell(1).setCellValue(machine10.getName() == null ? "":machine10.getName() );
+                sheet.getRow(useRow).getCell(2).setCellValue(machine10.getSerialNumber() == null ? "":machine10.getSerialNumber() );
+                sheet.getRow(useRow).getCell(7).setCellValue("1" );
+                useRow++;
+            }
+
+        String assignBU = caseMng.getAssignBu();
+        User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+        byte[] bytes = IOUtils.toByteArray(signnature);
+        int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+        signnature.close(); 
+        XSSFDrawing drawing = sheet.createDrawingPatriarch();
+        XSSFClientAnchor my_anchor = new XSSFClientAnchor();
+        my_anchor.setCol1(5);
+         my_anchor.setRow1(25);     
+        XSSFPicture  my_picture = drawing.createPicture(my_anchor, digitalSignatureByte);
+        my_picture.resize(); 
+
+            return workbook;
+     }catch(Exception e){
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+
+
+   @Override
+   public   XSSFWorkbook downloadFormInstallation(Long id){
+    LOGGER.info("downloadFormInstallation : {}",id);
+    try{
+        XSSFWorkbook  workbook  = null;
+        CaseManagement caseMng = caseManagementRepository.findOne(id);
+        String caseType =    caseMng.getCaseType();
+        if("AR".equalsIgnoreCase(caseType) || "CR".equalsIgnoreCase(caseType) ){
+            workbook = getInstallations(caseMng);
+        }else if("CH".equalsIgnoreCase(caseType) ){
+            workbook = getInstallationChangeMachine(caseMng);
+        }else if("RT".equalsIgnoreCase(caseType) ){
+            workbook = getInstallationReturn(caseMng);
+        }
         return workbook;
     }catch(Exception e){
         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -2130,6 +2472,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     try{
         InputStream inp = new FileInputStream(PRESCRIPTION_FILE); 
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
+        inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
         int useRow = 11;
         if(workbook!=null){
@@ -2218,5 +2561,39 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         throw new RuntimeException(e);
     }
    }
+
+   @Override
+   public XSSFWorkbook downloadFormReceipt(Long id){
+     try{
+         InputStream inp = new FileInputStream(RECEIPT_FILE); 
+        XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
+        inp.close();
+        XSSFSheet sheet = workbook.getSheetAt(0);
+         if(workbook!=null){
+            CaseManagement caseMng = caseManagementRepository.findOne(id);
+            sheet.getRow(6).getCell(23).setCellValue(caseMng.getReceiptNo());
+            sheet.getRow(11).getCell(21).setCellValue(caseMng.getReceiptDate());
+
+            sheet.getRow(9).getCell(4).setCellValue(caseMng.getReceipientName());
+            sheet.getRow(10).getCell(4).setCellValue(caseMng.getReceiptAddress1());
+            sheet.getRow(11).getCell(4).setCellValue(caseMng.getReceiptAddress2());
+            
+            Double amount  =  caseMng.getAmount() == null ?  new BigDecimal("0").doubleValue() : caseMng.getAmount().doubleValue()  ;  
+            Double vat = new BigDecimal("0.07").doubleValue();
+            sheet.getRow(21).getCell(18).setCellValue(amount);
+            sheet.getRow(21).getCell(25).setCellValue(amount);
+            sheet.getRow(31).getCell(25).setCellValue(amount);
+            sheet.getRow(32).getCell(25).setCellValue(amount * vat  );
+            sheet.getRow(33).getCell(25).setCellValue(amount+ (amount * vat ) );
+
+
+        }
+        return workbook;
+     }catch(Exception e){
+         LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+        throw new RuntimeException(e);
+    }
+   }
+
 
 }
