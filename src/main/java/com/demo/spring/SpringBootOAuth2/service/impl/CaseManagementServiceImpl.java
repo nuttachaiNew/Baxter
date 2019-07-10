@@ -2097,8 +2097,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
 
         String assignBU = caseMng.getAssignBu();
-        User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+     //   User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+assignBU);
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
         signnature.close(); 
@@ -2283,8 +2283,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
 
         String assignBU = caseMng.getAssignBu();
-        User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+     //   User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+assignBU );
 
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
@@ -2400,8 +2400,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
 
         String assignBU = caseMng.getAssignBu();
-        User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+      //  User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+assignBU);
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
         signnature.close(); 
@@ -2570,10 +2570,11 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
          if(workbook!=null){
+ CaseManagement caseMng = caseManagementRepository.findOne(id);
 
             String createDate =  caseMng.getReceiptDate() == null? "": FULL_DATE_FORMAT.format(caseMng.getReceiptDate()); 
 
-            CaseManagement caseMng = caseManagementRepository.findOne(id);
+ //           CaseManagement caseMng = caseManagementRepository.findOne(id);
             sheet.getRow(6).getCell(23).setCellValue(caseMng.getReceiptNo());
             sheet.getRow(11).getCell(21).setCellValue(createDate);
 
