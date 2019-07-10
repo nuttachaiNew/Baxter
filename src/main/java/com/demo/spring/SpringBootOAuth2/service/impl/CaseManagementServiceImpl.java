@@ -2570,9 +2570,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
          if(workbook!=null){
+
+            String createDate =  caseMng.getReceiptDate() == null? "": FULL_DATE_FORMAT.format(caseMng.getReceiptDate()); 
+
             CaseManagement caseMng = caseManagementRepository.findOne(id);
             sheet.getRow(6).getCell(23).setCellValue(caseMng.getReceiptNo());
-            sheet.getRow(11).getCell(21).setCellValue(caseMng.getReceiptDate());
+            sheet.getRow(11).getCell(21).setCellValue(createDate);
 
             sheet.getRow(9).getCell(4).setCellValue(caseMng.getReceipientName());
             sheet.getRow(10).getCell(4).setCellValue(caseMng.getReceiptAddress1());
