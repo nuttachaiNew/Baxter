@@ -63,31 +63,53 @@ public class FormController {
             Map<String,Object> map = new HashMap<String,Object>();
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
             CaseManagement caseManagement =  caseRepository.findOne(caseId);
+            if("CR".equalsIgnoreCase(caseManagement.getCaseType())){
+                 map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                map.put("national_id",caseManagement.getCustomer().getNationId());
+                map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+                map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+                map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                map.put("province",caseManagement.getCustomer().getCurrentProvince());
+                map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+                map.put("tel_no",caseManagement.getCustomer().getTelNo());
+                map.put("active_date",format.format(new Date()));
+                map.put("age","");
 
-            map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
-            map.put("national_id",caseManagement.getCustomer().getNationId());
-            map.put("no",caseManagement.getCustomer().getCurrentAddress1());
-            map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
-            map.put("district",caseManagement.getCustomer().getCurrentProvince());
-            map.put("province",caseManagement.getCustomer().getCurrentProvince());
-            map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
-            map.put("tel_no",caseManagement.getCustomer().getTelNo());
-            map.put("active_date",format.format(new Date()));
-            map.put("age","");
+                User user = userService.findUserByUsername("temp");
 
-            User user = userService.findUserByUsername("temp");
+                String jasperFileName1 = "HC1.jasper";
+                String jasperFileName2 = "HC2.jasper";
+                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                jasperPrintList.add(jasperPrint1);
+                jasperPrintList.add(jasperPrint2);
 
-            String jasperFileName1 = "HC1.jasper";
-            String jasperFileName2 = "HC2.jasper";
-            JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
-            JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
-            jasperPrintList.add(jasperPrint1);
-            jasperPrintList.add(jasperPrint2);
+                byte[] b = generateReportForm(jasperPrintList);
+                in = new ByteArrayInputStream(b);
+                outputStream = response.getOutputStream();
+                IOUtils.copy(in, outputStream);
+            }else{
+                 String date = format.format(new Date());
+                String dateSplit[] = date.split("-");
+                map.put("day",dateSplit[0]);
+                map.put("month",dateSplit[1]);
+                map.put("year",dateSplit[2]);
+                map.put("customer",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                map.put("serial",caseManagement.getMachine1().getSerialNumber());
 
-            byte[] b = generateReportForm(jasperPrintList);
-            in = new ByteArrayInputStream(b);
-            outputStream = response.getOutputStream();
-            IOUtils.copy(in, outputStream);
+                User user = userService.findUserByUsername("temp");
+
+                String jasperFileName1 = "EQUIPMENT_PLACEMENT_AGREEMENT.jasper";
+                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                jasperPrintList.add(jasperPrint1);
+
+                byte[] b = generateReportForm(jasperPrintList);
+                in = new ByteArrayInputStream(b);
+                outputStream = response.getOutputStream();
+                IOUtils.copy(in, outputStream);
+            }
+
+           
         }catch (Exception e) {
             LOGGER.error("ERROR : {}",e);
         }finally{
@@ -110,13 +132,14 @@ public class FormController {
             response.addHeader("Content-Disposition", "attachment; filename=Equipment.pdf");
             Map<String,Object> map = new HashMap<String,Object>();
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
-//            CaseManagement caseManagement =  caseRepository.findOne(caseId);
-
-            map.put("day","11");
-            map.put("month","07");
-            map.put("year","2019");
-            map.put("customer","Softsquare");
-            map.put("serial","1111111111");
+            CaseManagement caseManagement =  caseRepository.findOne(caseId);
+            String date = format.format(new Date());
+            String dateSplit[] = date.split("-");
+            map.put("day",dateSplit[0]);
+            map.put("month",dateSplit[1]);
+            map.put("year",dateSplit[2]);
+            map.put("customer",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+            map.put("serial",caseManagement.getMachine1().getSerialNumber());
 
             User user = userService.findUserByUsername("temp");
 
