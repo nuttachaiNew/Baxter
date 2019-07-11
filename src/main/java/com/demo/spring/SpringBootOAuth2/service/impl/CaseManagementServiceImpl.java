@@ -2110,7 +2110,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
          // my_anchor.setRow1(25);      //return 
 
         XSSFPicture  my_picture = drawing.createPicture(my_anchor, digitalSignatureByte);
-        my_picture.resize(); 
+        my_picture.resize(0.3); 
 
            return workbook; 
     }catch(Exception e){
@@ -2294,7 +2294,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         my_anchor.setCol1(5);
          my_anchor.setRow1(36);      //swap 
         XSSFPicture  my_picture = drawing.createPicture(my_anchor, digitalSignatureByte);
-        my_picture.resize(); 
+        my_picture.resize(0.3); 
 
             return workbook;
      }catch(Exception e){
@@ -2410,7 +2410,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         my_anchor.setCol1(5);
          my_anchor.setRow1(25);     
         XSSFPicture  my_picture = drawing.createPicture(my_anchor, digitalSignatureByte);
-        my_picture.resize(); 
+        my_picture.resize(0.3); 
 
             return workbook;
      }catch(Exception e){
