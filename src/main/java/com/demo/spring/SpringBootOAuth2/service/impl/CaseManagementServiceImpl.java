@@ -2097,8 +2097,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
 
         String assignBU = caseMng.getAssignBu();
-     //   User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+assignBU);
+        User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
         signnature.close(); 
@@ -2283,8 +2283,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
 
         String assignBU = caseMng.getAssignBu();
-     //   User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+assignBU );
+        User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
 
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
@@ -2400,8 +2400,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
 
         String assignBU = caseMng.getAssignBu();
-      //  User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+assignBU);
+        User bu = userRepository.findByUsername(assignBU);
+        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
         signnature.close(); 
@@ -2570,14 +2570,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
          if(workbook!=null){
- CaseManagement caseMng = caseManagementRepository.findOne(id);
-
+            CaseManagement caseMng = caseManagementRepository.findOne(id);
             String createDate =  caseMng.getReceiptDate() == null? "": FULL_DATE_FORMAT.format(caseMng.getReceiptDate()); 
-
- //           CaseManagement caseMng = caseManagementRepository.findOne(id);
             sheet.getRow(6).getCell(23).setCellValue(caseMng.getReceiptNo());
             sheet.getRow(11).getCell(21).setCellValue(createDate);
 
+          
             sheet.getRow(9).getCell(4).setCellValue(caseMng.getReceipientName());
             sheet.getRow(10).getCell(4).setCellValue(caseMng.getReceiptAddress1());
             sheet.getRow(11).getCell(4).setCellValue(caseMng.getReceiptAddress2());
@@ -2599,5 +2597,39 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
    }
 
+
+   @Override
+   public void uploadFile(String json,MultipartFile file){
+    try{
+            LOGGER.debug("uploadDigitalSignature :{}",json);
+            JSONObject jsonObject = new JSONObject(json);
+            String id = jsonObject.get("id").toString();
+            String fileType = jsonObject.get("fileType").toString();
+            // User user = userRepository.findByUsername(username);
+            CaseManagement caseManagement = caseManagementRepository.findOne(Long.valueOf(id));
+            // MultipartFile idCardFile = multipartHttpServletRequest.getFile("file");
+            String path=PATH_FILE;
+             
+             // if(file!=null){
+               FileUpload newfile = new FileUpload();
+                byte[] bytes = file.getBytes();
+                String FileName = caseManagement.getId() + "_" + fileType;
+                FileCopyUtils.copy(bytes, new FileOutputStream(path+FileName));
+                newfile.setFileName(file.getOriginalFilename());
+                newfile.setFileType(fileType);
+                newfile.setUpdatdDate(StandardUtil.getCurrentDate());
+                newfile.setCaseManagement(caseManagement);
+                fileUploadRepository.save(newfile);
+                newfile.setFileUrl(IPSERVER+"?caseId="+caseManagement.getId()+"&fileType="+newfile.getFileType());
+                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                fileUploadRepository.save(newfile);
+            // }
+
+        }catch(Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+   }
 
 }

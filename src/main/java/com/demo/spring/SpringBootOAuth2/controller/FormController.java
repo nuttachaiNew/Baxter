@@ -96,6 +96,46 @@ public class FormController {
         }
     }
 
+    @RequestMapping(value = "/downloadFormEquipment",method = RequestMethod.GET,headers = "Accept=application/json")
+    void downloadFormEquipment( @RequestParam(value = "caseId",required = false)Long caseId
+                                                , HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        InputStream in = null;
+        OutputStream outputStream=null;
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        try {
+            response.setContentType("application/x-pdf");
+            response.addHeader("Content-Disposition", "attachment; filename=Equipment.pdf");
+            Map<String,Object> map = new HashMap<String,Object>();
+            List<JasperPrint> jasperPrintList   = new ArrayList<>();
+//            CaseManagement caseManagement =  caseRepository.findOne(caseId);
+
+            map.put("day","11");
+            map.put("month","07");
+            map.put("year","2019");
+            map.put("customer","Softsquare");
+            map.put("serial","1111111111");
+
+            User user = userService.findUserByUsername("temp");
+
+            String jasperFileName1 = "EQUIPMENT_PLACEMENT_AGREEMENT.jasper";
+            JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+            jasperPrintList.add(jasperPrint1);
+
+            byte[] b = generateReportForm(jasperPrintList);
+            in = new ByteArrayInputStream(b);
+            outputStream = response.getOutputStream();
+            IOUtils.copy(in, outputStream);
+        }catch (Exception e) {
+            LOGGER.error("ERROR : {}",e);
+        }finally{
+            IOUtils.closeQuietly(outputStream);
+            IOUtils.closeQuietly(in);
+        }
+    }
+
 
     // @PostMapping("/downloadFormAccept")
     
