@@ -81,7 +81,6 @@ import java.io.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.util.IOUtils;
 
 
 @RestController
@@ -216,7 +215,7 @@ public class CaseManagementController {
        
 	                JSONObject jsonObject = new JSONObject(multipartHttpServletRequest.getParameter("json"));
 
-            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize();
+            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
             
             caseManagementService.submitToASM(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
             
