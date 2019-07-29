@@ -422,6 +422,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             Map returnResult = new HashMap<>();
             returnResult.put("status","success");
             returnResult.put("caseNumber",caseManagement.getCaseNumber());
+            returnResult.put("id",caseManagement.getId());
             return returnResult;
         }catch(Exception e){
             e.printStackTrace();
@@ -581,6 +582,10 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             customer.setCurrentProvince( customerDtl.get("currentProvince")==null?null:customerDtl.get("currentProvince").toString() );
             customer.setCurrentZipCode( customerDtl.get("currentZipCode")==null?null:customerDtl.get("currentZipCode").toString() );
            
+            customer.setContactName( customerDtl.get("contactName")==null?null:customerDtl.get("contactName").toString() );
+            customer.setContactLastName( customerDtl.get("contactLastName")==null?null:customerDtl.get("contactLastName").toString() );
+           
+
             
             customer.setShippingAddress1( customerDtl.get("shippingAddress1")==null?null:customerDtl.get("shippingAddress1").toString() );
             customer.setShippingAddress2( customerDtl.get("shippingAddress2")==null?null:customerDtl.get("shippingAddress2").toString() );
@@ -713,6 +718,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
             returnResult.put("status","success");
             returnResult.put("caseNumber",caseManagement.getCaseNumber());
+            returnResult.put("id",caseManagement.getId());
 
             return returnResult;
 

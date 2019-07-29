@@ -35,7 +35,8 @@ public class Customer extends BaseMasterEntity {
     private String shippingProvince;
     private String shippingZipCode;
     private String shippingSameAddress;
-
+    private String contactName;
+    private String contactLastName;
 
     // public Long getId() {
     //     return id;
