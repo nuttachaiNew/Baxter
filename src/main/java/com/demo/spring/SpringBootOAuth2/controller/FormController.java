@@ -3,6 +3,7 @@ package com.demo.spring.SpringBootOAuth2.controller;
 import com.demo.spring.SpringBootOAuth2.domain.app.User;
 import com.demo.spring.SpringBootOAuth2.service.UserService;
 import com.demo.spring.SpringBootOAuth2.util.AbstractReportJasperPDF;
+import com.demo.spring.SpringBootOAuth2.util.ConstantVariableUtil;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -327,6 +328,54 @@ public class FormController {
             }
 
            
+        }catch (Exception e) {
+            LOGGER.error("ERROR : {}",e);
+        }finally{
+            IOUtils.closeQuietly(outputStream);
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+    @RequestMapping(value = "/downloadFormHCCliria",method = RequestMethod.GET,headers = "Accept=application/json")
+    void downloadFormHCCliria( @RequestParam(value = "caseId",required = false)Long caseId
+            ,  HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        InputStream in = null;
+        OutputStream outputStream=null;
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        try {
+            Map<String,Object> map = new HashMap<String,Object>();
+            List<JasperPrint> jasperPrintList   = new ArrayList<>();
+            CaseManagement caseManagement =  caseRepository.findOne(caseId);
+
+                map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                map.put("national_id",caseManagement.getCustomer().getNationId());
+                map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+                map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+                map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                map.put("province",caseManagement.getCustomer().getCurrentProvince());
+                map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+                map.put("tel_no",caseManagement.getCustomer().getTelNo());
+                map.put("active_date",format.format(new Date()));
+                map.put("age","");
+                map.put("image", ConstantVariableUtil.PATH_IMAGE_FOR_JASPER);
+
+                User user = userService.findUserByUsername("temp");
+
+                String jasperFileName1 = "HC_1_1.jasper";
+                String jasperFileName2 = "HC_1_2.jasper";
+                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                jasperPrintList.add(jasperPrint1);
+                jasperPrintList.add(jasperPrint2);
+
+                byte[] b = generateReportForm(jasperPrintList);
+                in = new ByteArrayInputStream(b);
+                outputStream = response.getOutputStream();
+                IOUtils.copy(in, outputStream);
+
         }catch (Exception e) {
             LOGGER.error("ERROR : {}",e);
         }finally{
