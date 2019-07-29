@@ -213,16 +213,16 @@ public class CaseManagementController {
         try {
             LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
        
-	                JSONObject jsonObject = new JSONObject(multipartHttpServletRequest.getParameter("json"));
+	           //      JSONObject jsonObject = new JSONObject(multipartHttpServletRequest.getParameter("json"));
 
-            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+            // CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
             
-            caseManagementService.submitToASM(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+           Long id=  caseManagementService.submitToASM(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
             
             Map result = new HashMap<>();
             result.put("status","success");
             result.put("caseStatus","W");
-            result.put("id",updateCase.getId());
+            result.put("id",id);
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);

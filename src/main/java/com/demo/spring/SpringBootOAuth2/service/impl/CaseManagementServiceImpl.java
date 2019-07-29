@@ -802,7 +802,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     }
     @Override
     @Transactional
-    public void submitToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest){
+    public Long submitToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest){
         try{
  //  I > W > R|F > W > F
             ObjectMapper mapper = new ObjectMapper();
@@ -842,6 +842,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }else{
                 throw new RuntimeException("Error with flow case status not Init or Reject");
             }
+
+            return Long.valueOf(result.get("id").toString());
         }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);

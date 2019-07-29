@@ -32,7 +32,7 @@ public interface CaseManagementService {
 
     Map<String,Object> rejectFromAsm(MultipartHttpServletRequest multipartHttpServletRequest);
     Map<String,Object> approveFromAsm(MultipartHttpServletRequest multipartHttpServletRequest);
-    void saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest);
+    Long saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest);
 
 
     Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
