@@ -154,7 +154,10 @@ public class CaseManagementController {
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
             LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
-            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+       
+	                JSONObject jsonObject = new JSONObject(multipartHttpServletRequest.getParameter("json"));
+
+            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize();
             
             caseManagementService.submitToASM(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
             
