@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.*;
 import java.util.List;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
@@ -46,6 +48,13 @@ public class CaseManagementController {
     private CaseManagementRepository caseManagementRepository;
 
     private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+  
+        JsonDeserializer<Date> deser = new JsonDeserializer<Date>() {
+		        public Date deserialize(JsonElement json, Type typeOfT,
+					                                JsonDeserializationContext context) throws JsonParseException {
+				            return json == null ? null : new Date(json.getAsLong());
+					            }
+			    };
 
     @RequestMapping(value ="/findCaseManagementById", method = RequestMethod.GET)
     ResponseEntity<String> findCaseManagementById(@RequestParam(value = "id",required = false)String id){
