@@ -22,7 +22,7 @@ public interface CaseManagementService {
     void updateMachineStatus(Long machineId ,Integer status,String caseNumber,String actionBy); 
     Map<String,Object> updateCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     // void submitToASM(Long id,String updBy);
-    void submitToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest);
+    Long submitToASM(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     CaseManagement findByCaseNumber(String caseNumber);
     // void approveCaseByRole();
     List<Map<String,Object>> findHistoryDocByAreaAndDocStatusAndRoleAndCase(String createdBy,Long areaId,String documentStatus,String roleBy,String actionUser , String actionDate);
@@ -32,7 +32,7 @@ public interface CaseManagementService {
 
     Map<String,Object> rejectFromAsm(MultipartHttpServletRequest multipartHttpServletRequest);
     Map<String,Object> approveFromAsm(MultipartHttpServletRequest multipartHttpServletRequest);
-    Long saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest);
+    void saveFromASM(MultipartHttpServletRequest multipartHttpServletRequest);
 
 
     Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest);
