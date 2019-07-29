@@ -2098,7 +2098,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
         String assignBU = caseMng.getAssignBu();
         User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+        InputStream signnature = new FileInputStream(signaturePath+assignBU);
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
         signnature.close(); 
@@ -2284,7 +2284,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
         String assignBU = caseMng.getAssignBu();
         User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+        InputStream signnature = new FileInputStream(signaturePath+assignBU);
 
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
@@ -2401,7 +2401,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
         String assignBU = caseMng.getAssignBu();
         User bu = userRepository.findByUsername(assignBU);
-        InputStream signnature = new FileInputStream(signaturePath+bu.getDigitalSignature());
+        InputStream signnature = new FileInputStream(signaturePath+assignBU);
         byte[] bytes = IOUtils.toByteArray(signnature);
         int digitalSignatureByte = workbook.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
         signnature.close(); 
