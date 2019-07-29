@@ -36,6 +36,54 @@ import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.lang.reflect.Type;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.lang.StringBuilder;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.*;
+import org.springframework.transaction.annotation.Transactional;
+import com.demo.spring.SpringBootOAuth2.util.*;
+import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepositoryCustom;
+
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import com.demo.spring.SpringBootOAuth2.repository.MachineRepository;
+import com.demo.spring.SpringBootOAuth2.repository.MachineHistoryRepository;
+import com.demo.spring.SpringBootOAuth2.repository.CaseActivityRepository;
+import com.demo.spring.SpringBootOAuth2.repository.UserRepository;
+
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
+import org.apache.poi.xssf.usermodel.*;
+
+import java.io.*;
+import java.math.BigDecimal;
+
+import java.io.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/casemanagement")
