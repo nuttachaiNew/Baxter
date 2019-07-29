@@ -1,5 +1,7 @@
 package com.demo.spring.SpringBootOAuth2.controller;
 
+import org.json.JSONObject;
+
 import com.demo.spring.SpringBootOAuth2.domain.app.CaseManagement;
 import com.demo.spring.SpringBootOAuth2.repository.CaseManagementRepository;
 import com.demo.spring.SpringBootOAuth2.service.CaseManagementService;
