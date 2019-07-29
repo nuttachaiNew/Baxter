@@ -28,7 +28,9 @@ import java.util.Map;
 import java.util.HashMap;
 
 import java.util.List;
-
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @CrossOrigin
@@ -152,10 +154,14 @@ public class CaseManagementController {
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
             LOGGER.debug("multipartHttpServletRequest : {}",multipartHttpServletRequest.getParameter("json"));
+            CaseManagement updateCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(jsonObject.toString());
+            
             caseManagementService.submitToASM(multipartHttpServletRequest.getParameter("json"),multipartHttpServletRequest);
+            
             Map result = new HashMap<>();
             result.put("status","success");
             result.put("caseStatus","W");
+            result.put("id",updateCase.getId());
             headers.add("errorStatus", "N");
             headers.add("errorMsg", null);
             return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);

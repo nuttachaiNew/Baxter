@@ -48,6 +48,9 @@ public class FormController {
     @Autowired
     CaseManagementRepository caseRepository;
 
+
+
+
     @RequestMapping(value = "/downloadFormAccept",method = RequestMethod.GET,headers = "Accept=application/json")
     void downloadFormHC( @RequestParam(value = "caseId",required = false)Long caseId
                                      ,  HttpServletResponse response)throws ServletException, IOException {
@@ -261,6 +264,74 @@ public class FormController {
             headers.add("statusValidate","-1");
             headers.add("errorMsg",e.getMessage());
             return new ResponseEntity<String>(e.getMessage(),headers, HttpStatus.OK);
+        }
+    }
+
+    @RequestMapping(value = "/downloadFormAcceptforWebView",method = RequestMethod.GET,headers = "Accept=application/json")
+    void downloadFormAcceptforWebView( @RequestParam(value = "caseId",required = false)Long caseId
+                                     ,  HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        InputStream in = null;
+        OutputStream outputStream=null;
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        try {
+              Map<String,Object> map = new HashMap<String,Object>();
+            List<JasperPrint> jasperPrintList   = new ArrayList<>();
+            CaseManagement caseManagement =  caseRepository.findOne(caseId);
+            if("CR".equalsIgnoreCase(caseManagement.getCaseType())){
+                 map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                map.put("national_id",caseManagement.getCustomer().getNationId());
+                map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+                map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+                map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                map.put("province",caseManagement.getCustomer().getCurrentProvince());
+                map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+                map.put("tel_no",caseManagement.getCustomer().getTelNo());
+                map.put("active_date",format.format(new Date()));
+                map.put("age","");
+
+                User user = userService.findUserByUsername("temp");
+
+                String jasperFileName1 = "HC1.jasper";
+                String jasperFileName2 = "HC2.jasper";
+                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                jasperPrintList.add(jasperPrint1);
+                jasperPrintList.add(jasperPrint2);
+
+                byte[] b = generateReportForm(jasperPrintList);
+                in = new ByteArrayInputStream(b);
+                outputStream = response.getOutputStream();
+                IOUtils.copy(in, outputStream);
+            }else{
+                 String date = format.format(new Date());
+                String dateSplit[] = date.split("-");
+                map.put("day",dateSplit[0]);
+                map.put("month",dateSplit[1]);
+                map.put("year",dateSplit[2]);
+                map.put("customer",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                map.put("serial",caseManagement.getMachine1().getSerialNumber());
+
+                User user = userService.findUserByUsername("temp");
+
+                String jasperFileName1 = "EQUIPMENT_PLACEMENT_AGREEMENT.jasper";
+                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                jasperPrintList.add(jasperPrint1);
+
+                byte[] b = generateReportForm(jasperPrintList);
+                in = new ByteArrayInputStream(b);
+                outputStream = response.getOutputStream();
+                IOUtils.copy(in, outputStream);
+            }
+
+           
+        }catch (Exception e) {
+            LOGGER.error("ERROR : {}",e);
+        }finally{
+            IOUtils.closeQuietly(outputStream);
+            IOUtils.closeQuietly(in);
         }
     }
 
