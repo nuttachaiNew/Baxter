@@ -127,9 +127,13 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static final String PATH_FILE = "/home/me/devNew/img/";
 
    private static final String  INSTALLATION_FILE= "/home/me/devNew/doc/installation.xlsx";
+   private static final String  INSTALLATION_CLIARIA_FILE= "/home/me/devNew/doc/installation_cliria.xlsx";
+
    // private static final String  INSTALLATION_FILE= "/home/docker/Baxter_dev/INSTALLATION_RETURN.xlsx";
    private static final String  INSTALLATION_FILE_SWAP= "/home/me/devNew/doc/INSTALLATION_SWAP.xlsx";
+   private static final String  INSTALLATION_CLIARIA_FILE_SWAP= "/home/me/devNew/doc/INSTALLATION_SWAP_cliria.xlsx";
    private static final String  INSTALLATION_FILE_RETURN= "/home/me/devNew/doc/INSTALLATION_RETURN.xlsx";
+   private static final String  INSTALLATION_CLIARIA_FILE_RETURN= "/home/me/devNew/doc/INSTALLATION_RETURN_cliria.xlsx";
    private static final String  PRESCRIPTION_FILE= "/home/me/devNew/doc/Prescription.xlsx";
    private static final String  RECEIPT_FILE= "/home/me/devNew/doc/RECEIPT.xlsx";
    // private static final String  RECEIPT_FILE= "/home/docker/Baxter_dev/RECEIPT.xlsx";
@@ -2011,7 +2015,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
    public XSSFWorkbook getInstallations(CaseManagement caseMng){
     try{
-        InputStream inp = new FileInputStream(INSTALLATION_FILE); 
+        InputStream inp = null;
+        if("MC1".equalsIgnoreCase(caseMng.getMachine1().machineType())){
+            inp = new FileInputStream(INSTALLATION_FILE); 
+        }else{
+            inp = new FileInputStream(INSTALLATION_CLIARIA_FILE); 
+        }
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
         inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
@@ -2130,7 +2139,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
    public XSSFWorkbook getInstallationChangeMachine(CaseManagement caseMng){
      try{
-         InputStream inp = new FileInputStream(INSTALLATION_FILE_SWAP); 
+         InputStream inp = null;
+        
+        if("MC1".equalsIgnoreCase(caseMng.getMachine1().machineType())){
+            inp = new FileInputStream(INSTALLATION_FILE_SWAP); 
+        }else{
+            inp = new FileInputStream(INSTALLATION_CLIARIA_FILE_SWAP); 
+        }
+
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
         inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
@@ -2314,7 +2330,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     public XSSFWorkbook getInstallationReturn(CaseManagement caseMng){
      try{
-         InputStream inp = new FileInputStream(INSTALLATION_FILE_RETURN); 
+         InputStream inp =  null;
+         if("MC1".equalsIgnoreCase(caseMng.getMachine1().machineType())){
+            inp = new FileInputStream(INSTALLATION_FILE_RETURN); 
+        }else{
+            inp = new FileInputStream(INSTALLATION_CLIARIA_FILE_RETURN); 
+        }
+
+          
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
         inp.close();
 
