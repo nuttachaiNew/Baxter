@@ -68,30 +68,63 @@ public class FormController {
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
             CaseManagement caseManagement =  caseRepository.findOne(caseId);
             if("CR".equalsIgnoreCase(caseManagement.getCaseType())){
-                 map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
-                map.put("national_id",caseManagement.getCustomer().getNationId());
-                map.put("no",caseManagement.getCustomer().getCurrentAddress1());
-                map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
-                map.put("district",caseManagement.getCustomer().getCurrentProvince());
-                map.put("province",caseManagement.getCustomer().getCurrentProvince());
-                map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
-                map.put("tel_no",caseManagement.getCustomer().getTelNo());
-                map.put("active_date",format.format(new Date()));
-                map.put("age","");
+                
+                if("MC1".equalsIgnoreCase(caseManagement.getMachine1().getMachineType())){
+                    map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                    map.put("national_id",caseManagement.getCustomer().getNationId());
+                    map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+                    map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+                    map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                    map.put("province",caseManagement.getCustomer().getCurrentProvince());
+                    map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+                    map.put("tel_no",caseManagement.getCustomer().getTelNo());
+                    map.put("active_date",format.format(new Date()));
+                    map.put("age","");
 
-                User user = userService.findUserByUsername("temp");
+                    User user = userService.findUserByUsername("temp");
 
-                String jasperFileName1 = "HC1.jasper";
-                String jasperFileName2 = "HC2.jasper";
-                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
-                JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
-                jasperPrintList.add(jasperPrint1);
-                jasperPrintList.add(jasperPrint2);
+                    String jasperFileName1 = "HC1.jasper";
+                    String jasperFileName2 = "HC2.jasper";
+                    JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                    JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                    jasperPrintList.add(jasperPrint1);
+                    jasperPrintList.add(jasperPrint2);
 
-                byte[] b = generateReportForm(jasperPrintList);
-                in = new ByteArrayInputStream(b);
-                outputStream = response.getOutputStream();
-                IOUtils.copy(in, outputStream);
+                    byte[] b = generateReportForm(jasperPrintList);
+                    in = new ByteArrayInputStream(b);
+                    outputStream = response.getOutputStream();
+                    IOUtils.copy(in, outputStream);
+               
+
+                }else{
+                        map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                        map.put("national_id",caseManagement.getCustomer().getNationId());
+                        map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+                        map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+                        map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                        map.put("province",caseManagement.getCustomer().getCurrentProvince());
+                        map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+                        map.put("tel_no",caseManagement.getCustomer().getTelNo());
+                        map.put("active_date",format.format(new Date()));
+                        map.put("age","");
+                        map.put("image", ConstantVariableUtil.PATH_IMAGE_FOR_JASPER);
+
+                        User user = userService.findUserByUsername("temp");
+
+                        String jasperFileName1 = "HC_1_1.jasper";
+                        String jasperFileName2 = "HC_1_2.jasper";
+                        JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                        JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                        jasperPrintList.add(jasperPrint1);
+                        jasperPrintList.add(jasperPrint2);
+
+                        byte[] b = generateReportForm(jasperPrintList);
+                        in = new ByteArrayInputStream(b);
+                        outputStream = response.getOutputStream();
+                        IOUtils.copy(in, outputStream);
+
+                }
+
             }else{
                  String date = format.format(new Date());
                 String dateSplit[] = date.split("-");
@@ -282,30 +315,63 @@ public class FormController {
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
             CaseManagement caseManagement =  caseRepository.findOne(caseId);
             if("CR".equalsIgnoreCase(caseManagement.getCaseType())){
-                 map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
-                map.put("national_id",caseManagement.getCustomer().getNationId());
-                map.put("no",caseManagement.getCustomer().getCurrentAddress1());
-                map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
-                map.put("district",caseManagement.getCustomer().getCurrentProvince());
-                map.put("province",caseManagement.getCustomer().getCurrentProvince());
-                map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
-                map.put("tel_no",caseManagement.getCustomer().getTelNo());
-                map.put("active_date",format.format(new Date()));
-                map.put("age","");
+                            if("MC1".equalsIgnoreCase(caseManagement.getMachine1().getMachineType())){
+                    map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                    map.put("national_id",caseManagement.getCustomer().getNationId());
+                    map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+                    map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+                    map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                    map.put("province",caseManagement.getCustomer().getCurrentProvince());
+                    map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+                    map.put("tel_no",caseManagement.getCustomer().getTelNo());
+                    map.put("active_date",format.format(new Date()));
+                    map.put("age","");
 
-                User user = userService.findUserByUsername("temp");
+                    User user = userService.findUserByUsername("temp");
 
-                String jasperFileName1 = "HC1.jasper";
-                String jasperFileName2 = "HC2.jasper";
-                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
-                JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
-                jasperPrintList.add(jasperPrint1);
-                jasperPrintList.add(jasperPrint2);
+                    String jasperFileName1 = "HC1.jasper";
+                    String jasperFileName2 = "HC2.jasper";
+                    JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                    JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                    jasperPrintList.add(jasperPrint1);
+                    jasperPrintList.add(jasperPrint2);
 
-                byte[] b = generateReportForm(jasperPrintList);
-                in = new ByteArrayInputStream(b);
-                outputStream = response.getOutputStream();
-                IOUtils.copy(in, outputStream);
+                    byte[] b = generateReportForm(jasperPrintList);
+                    in = new ByteArrayInputStream(b);
+                    outputStream = response.getOutputStream();
+                    IOUtils.copy(in, outputStream);
+               
+
+                }else{
+                        map.put("name",caseManagement.getCustomer().getPatientName() + " "+ caseManagement.getCustomer().getPatientLastName());
+                        map.put("national_id",caseManagement.getCustomer().getNationId());
+                        map.put("no",caseManagement.getCustomer().getCurrentAddress1());
+                        map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
+                        map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                        map.put("province",caseManagement.getCustomer().getCurrentProvince());
+                        map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
+                        map.put("tel_no",caseManagement.getCustomer().getTelNo());
+                        map.put("active_date",format.format(new Date()));
+                        map.put("age","");
+                        map.put("image", ConstantVariableUtil.PATH_IMAGE_FOR_JASPER);
+
+                        User user = userService.findUserByUsername("temp");
+
+                        String jasperFileName1 = "HC_1_1.jasper";
+                        String jasperFileName2 = "HC_1_2.jasper";
+                        JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                        JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                        jasperPrintList.add(jasperPrint1);
+                        jasperPrintList.add(jasperPrint2);
+
+                        byte[] b = generateReportForm(jasperPrintList);
+                        in = new ByteArrayInputStream(b);
+                        outputStream = response.getOutputStream();
+                        IOUtils.copy(in, outputStream);
+
+                }
+
+
             }else{
                  String date = format.format(new Date());
                 String dateSplit[] = date.split("-");
