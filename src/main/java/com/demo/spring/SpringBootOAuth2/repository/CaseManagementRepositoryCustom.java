@@ -568,4 +568,53 @@ LOGGER.debug("sql : {}",criteriaSqlData);
 
 
 
+ public List<Map<String,Object>> listSwapMachine(String createdBy){
+        try{
+            List<Object[] > listfromQuery = new ArrayList<>();
+            StringBuilder criteriaSqlData = new StringBuilder();
+            List<Map<String,Object>> results = new ArrayList<>();
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME , CUST.current_Address1||' '|| CUST.current_Address2 || ' '||CUST.current_Sub_District||'#'||CUST.current_District||''||current_Province||' '||CUST.current_Zip_Code , CM.AMOUNT");
+            criteriaSqlData.append(" ,M.machine_Type,M.serial_Number,M.code,M.name  ");
+            criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
+            criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
+            criteriaSqlData.append(" JOIN MACHINE M ON M.ID  = CM.MACHINE1   ");
+            criteriaSqlData.append(" WHERE 1 =1 AND CM.CASE_TYPE IN ('CH','RT') and CM.ASSIGN_BU IS NOT NULL ");
+            criteriaSqlData.append(" AND ( CM.ASSIGN_FN IS NOT NULL) AND (CM.ASSIGN_TS IS NULL OR CM.ASSIGN_TS=:createdBy )  ");
+            criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
+            Query query = em.createNativeQuery(criteriaSqlData.toString());
+            query.setParameter("username",createdBy );
+           
+            LOGGER.debug("sql : {}",criteriaSqlData);
+            listfromQuery = query.getResultList();
+             for(Object[] col : listfromQuery){
+                Map<String,Object> activity = new HashMap<>();
+                activity.put("id",col[0]);
+                activity.put("caseNumber",col[1]);
+                activity.put("createdDate",col[2]);
+                activity.put("caseType",col[3]);
+                activity.put("cutsomerName",col[4]);
+                activity.put("cutsomerType",col[5]);
+                activity.put("caseStatus",col[6]);
+                activity.put("assignBu",col[7]);
+                activity.put("assignTs",col[8]);
+                activity.put("assignFn",col[9]);
+                activity.put("assignCs",col[10]);
+                activity.put("hospitalName",col[11]);
+                activity.put("address",col[12]);
+                activity.put("amt",col[13]);
+                activity.put("machineType",col[14]);
+                activity.put("serialNumber",col[15]);
+                activity.put("machineCode",col[16]);
+                activity.put("machineName",col[17]);
+
+                results.add(activity);
+             }
+             return results;
+        }catch(Exception e){
+            e.printStackTrace();   
+             throw new RuntimeException(e.getMessage()); 
+        }
+    }
+
+
 }
