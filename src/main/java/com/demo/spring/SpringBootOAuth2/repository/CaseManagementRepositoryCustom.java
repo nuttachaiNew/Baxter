@@ -577,12 +577,12 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" ,M.machine_Type,M.serial_Number,M.code,M.name  ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
-            criteriaSqlData.append(" JOIN MACHINE M ON M.ID  = CM.MACHINE1   ");
+            criteriaSqlData.append(" JOIN MACHINE M ON M.ID  = CM.MACHINE1_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 AND CM.CASE_TYPE IN ('CH','RT') and CM.ASSIGN_BU IS NOT NULL ");
             criteriaSqlData.append(" AND ( CM.ASSIGN_FN IS NOT NULL) AND (CM.ASSIGN_TS IS NULL OR CM.ASSIGN_TS=:createdBy )  ");
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
-            query.setParameter("username",createdBy );
+            query.setParameter("createdBy",createdBy );
            
             LOGGER.debug("sql : {}",criteriaSqlData);
             listfromQuery = query.getResultList();

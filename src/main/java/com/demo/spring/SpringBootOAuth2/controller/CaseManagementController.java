@@ -990,8 +990,9 @@ public class CaseManagementController {
 
     @PostMapping("/returnMachine")
     public ResponseEntity<String> returnMachine(
-            @RequestParam("json")String json
-        ){
+//            @RequestParam("json")String json
+   @RequestBody String json
+	      	    ){
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
