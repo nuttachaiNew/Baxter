@@ -73,7 +73,8 @@ public interface CaseManagementService {
     List<Map<String,Object>> listDepositFn(String createdBy);
     List<Map<String,Object>> listDepositTS(String createdBy);
     void uploadFile(String json,MultipartFile file);
-
+    List<Map<String,Object>> listSwapMachine(String createdBy);
+    void returnMachine(String json);
 
 }   
 

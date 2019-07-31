@@ -967,5 +967,51 @@ public class CaseManagementController {
         }
     }
 
+
+   @RequestMapping(value ="/listSwapMachine", method = RequestMethod.GET)
+      ResponseEntity<String> listSwapMachine(        @RequestParam(value = "username",required = false)String username
+                                                                        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<Map<String,Object>> caseManagement = caseManagementService.listSwapMachine(username);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
+
+
+    @PostMapping("/returnMachine")
+    public ResponseEntity<String> returnMachine(
+            @RequestParam("json")String json
+        ){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            LOGGER.debug("=================== returnMachine =======================");
+            caseManagementService.returnMachine(json);
+            Map<String,Object> result = new HashMap<>();
+            result.put("status","success");
+            headers.add("errorStatus", "N");
+            headers.add("errorMsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errorMsg", ex.getMessage());
+             Map<String,Object> result = new HashMap<>();
+             result.put("status","error");
+             result.put("errorMsg",ex.getMessage());
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        }
+    }
+
 }
 

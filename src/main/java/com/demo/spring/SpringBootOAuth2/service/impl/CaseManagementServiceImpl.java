@@ -127,9 +127,13 @@ public class CaseManagementServiceImpl implements CaseManagementService {
   private static final String PATH_FILE = "/home/me/devNew/img/";
 
    private static final String  INSTALLATION_FILE= "/home/me/devNew/doc/installation.xlsx";
+   private static final String  INSTALLATION_CLIARIA_FILE= "/home/me/devNew/doc/installation_cliria.xlsx";
+
    // private static final String  INSTALLATION_FILE= "/home/docker/Baxter_dev/INSTALLATION_RETURN.xlsx";
    private static final String  INSTALLATION_FILE_SWAP= "/home/me/devNew/doc/INSTALLATION_SWAP.xlsx";
+   private static final String  INSTALLATION_CLIARIA_FILE_SWAP= "/home/me/devNew/doc/INSTALLATION_SWAP_cliria.xlsx";
    private static final String  INSTALLATION_FILE_RETURN= "/home/me/devNew/doc/INSTALLATION_RETURN.xlsx";
+   private static final String  INSTALLATION_CLIARIA_FILE_RETURN= "/home/me/devNew/doc/INSTALLATION_RETURN_cliria.xlsx";
    private static final String  PRESCRIPTION_FILE= "/home/me/devNew/doc/Prescription.xlsx";
    private static final String  RECEIPT_FILE= "/home/me/devNew/doc/RECEIPT.xlsx";
    // private static final String  RECEIPT_FILE= "/home/docker/Baxter_dev/RECEIPT.xlsx";
@@ -2011,7 +2015,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
    public XSSFWorkbook getInstallations(CaseManagement caseMng){
     try{
-        InputStream inp = new FileInputStream(INSTALLATION_FILE); 
+        InputStream inp = null;
+        if("MC1".equalsIgnoreCase(caseMng.getMachine1().getMachineType())){
+            inp = new FileInputStream(INSTALLATION_FILE); 
+        }else{
+            inp = new FileInputStream(INSTALLATION_CLIARIA_FILE); 
+        }
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
         inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
@@ -2130,7 +2139,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
    public XSSFWorkbook getInstallationChangeMachine(CaseManagement caseMng){
      try{
-         InputStream inp = new FileInputStream(INSTALLATION_FILE_SWAP); 
+         InputStream inp = null;
+        
+        if("MC1".equalsIgnoreCase(caseMng.getMachine1().getMachineType())){
+            inp = new FileInputStream(INSTALLATION_FILE_SWAP); 
+        }else{
+            inp = new FileInputStream(INSTALLATION_CLIARIA_FILE_SWAP); 
+        }
+
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
         inp.close();
         XSSFSheet sheet = workbook.getSheetAt(0);
@@ -2314,7 +2330,14 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
     public XSSFWorkbook getInstallationReturn(CaseManagement caseMng){
      try{
-         InputStream inp = new FileInputStream(INSTALLATION_FILE_RETURN); 
+         InputStream inp =  null;
+         if("MC1".equalsIgnoreCase(caseMng.getMachine1().getMachineType())){
+            inp = new FileInputStream(INSTALLATION_FILE_RETURN); 
+        }else{
+            inp = new FileInputStream(INSTALLATION_CLIARIA_FILE_RETURN); 
+        }
+
+          
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
         inp.close();
 
@@ -2464,7 +2487,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setDepositAmount(new BigDecimal ( jsonObject.get("depositAmount").toString()));
         Date depositDate =new SimpleDateFormat("dd-MM-yyyy").parse(jsonObject.get("depositDate").toString());
         caseManagement.setDepositDate(  new java.sql.Timestamp(depositDate.getTime()));
-      
+        caseManagement.setAssignFn(jsonObject.get("updatedBy").toString());
         caseManagementRepository.save(caseManagement);
     }catch(Exception e){
          LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -2640,4 +2663,109 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         }
    }
 
+   @Override
+     public List<Map<String,Object>> listSwapMachine(String createdBy){
+        try{
+            return caseManagementRepositoryCustom.listSwapMachine(createdBy);
+        }catch(Exception e){
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+     }
+
+
+     @Override
+     @Transactional
+      public void returnMachine(String json){
+        try{
+            LOGGER.info("returnMachine : {}",json);
+            JSONObject jsonObject = new JSONObject(json);
+            String id = jsonObject.get("id").toString();
+            String updatedBy = jsonObject.get("updatedBy").toString();
+            String machineStatus = jsonObject.get("machineStatus").toString();
+            CaseManagement caseManagement = caseManagementRepository.findOne(Long.valueOf(id));
+            CaseManagement refCase = caseManagement.getRefCase();
+            caseManagement.setUpdatedBy(updatedBy);
+            caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
+            caseManagement.setAssignTs(updatedBy);
+            if(refCase!=null){
+                Machine machine1 =refCase.getMachine1();
+                Machine machine2 =refCase.getMachine2();
+                Machine machine3 =refCase.getMachine3();
+                Machine machine4 =refCase.getMachine4();
+                Machine machine5 =refCase.getMachine5();
+                Machine machine6 =refCase.getMachine6();
+                Machine machine7 =refCase.getMachine7();
+                Machine machine8 =refCase.getMachine8();
+                Machine machine9 =refCase.getMachine9();
+                Machine machine10 =refCase.getMachine10();
+                if(machine1!=null){
+                    machine1.setStatus(Integer.valueOf(machineStatus));
+                    machine1.setUpdatedBy(updatedBy);
+                    machine1.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine1);
+                }
+                 if(machine2!=null){
+                    machine2.setStatus(Integer.valueOf(machineStatus));
+                    machine2.setUpdatedBy(updatedBy);
+                    machine1.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine2);
+                }
+                 if(machine3!=null){
+                    machine3.setStatus(Integer.valueOf(machineStatus));
+                    machine3.setUpdatedBy(updatedBy);
+                    machine3.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine3);
+                }
+                 if(machine4!=null){
+                    machine4.setStatus(Integer.valueOf(machineStatus));
+                    machine4.setUpdatedBy(updatedBy);
+                    machine4.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine4);
+                }
+                 if(machine5!=null){
+                    machine5.setStatus(Integer.valueOf(machineStatus));
+                    machine5.setUpdatedBy(updatedBy);
+                    machine5.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine5);
+                }
+                 if(machine6!=null){
+                    machine6.setStatus(Integer.valueOf(machineStatus));
+                    machine6.setUpdatedBy(updatedBy);
+                    machine6.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine6);
+                }
+                 if(machine7!=null){
+                    machine7.setStatus(Integer.valueOf(machineStatus));
+                    machine7.setUpdatedBy(updatedBy);
+                    machine7.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine7);
+                }
+                 if(machine8!=null){
+                    machine8.setStatus(Integer.valueOf(machineStatus));
+                    machine8.setUpdatedBy(updatedBy);
+                    machine8.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine8);
+                }
+                 if(machine9!=null){
+                    machine9.setStatus(Integer.valueOf(machineStatus));
+                    machine9.setUpdatedBy(updatedBy);
+                    machine9.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine9);
+                }
+                 if(machine10!=null){
+                    machine10.setStatus(Integer.valueOf(machineStatus));
+                    machine10.setUpdatedBy(updatedBy);
+                    machine10.setUpdatedDate(StandardUtil.getCurrentDate());
+                    machineRepository.save(machine10);
+                }
+            }
+
+            LOGGER.info("returnMachine complete");
+
+        }catch(Exception e){
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+      }
 }
