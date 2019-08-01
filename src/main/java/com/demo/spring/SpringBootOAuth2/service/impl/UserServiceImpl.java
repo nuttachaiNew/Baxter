@@ -52,8 +52,9 @@ public class UserServiceImpl implements UserService{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private static final String PATH_FILE = "/home/me/devNew/img/user/";
-    private static final String IPSERVER = "http://58.181.168.159:8082/files/downloadFileUser?username=";
+    private static final String signaturePath ="/home/me/devNew/doc/";
 
+    private static final String IPSERVER = "http://58.181.168.159:8082/files/downloadFileUser?username=";
 
     @Autowired
     UserRepository userRepository;
@@ -90,6 +91,19 @@ public class UserServiceImpl implements UserService{
             String fileName = "IMG_"+username;
             String pathFile =PATH_FILE;
             inputStream = new FileInputStream(pathFile+fileName);
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+        return inputStream;
+    }
+
+    @Override
+    public InputStream downloadDigitalSignatureFileUser(String username){
+        InputStream inputStream =null;
+        try {
+            inputStream = new FileInputStream(signaturePath+username);
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);

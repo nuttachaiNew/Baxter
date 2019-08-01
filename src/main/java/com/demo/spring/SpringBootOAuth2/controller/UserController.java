@@ -11,14 +11,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.*;
-
+import java.io.IOException;
+import java.io.InputStream;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 @RestController
 @CrossOrigin
 @RequestMapping("/api/users")
@@ -179,6 +183,23 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/getDigitalSignature",method = RequestMethod.GET,headers = "Accept=application/json")
+    ResponseEntity<String> getDigitalSignature(@RequestParam(value = "username",required = false)String username
+                                                         ,  HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        InputStream in = null;
+        try {
+            in = userService.downloadDigitalSignatureFileUser(username);
+            IOUtils.copy(in, response.getOutputStream());
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        }catch (Exception e) {
+            LOGGER.error("ERROR : {}",e);
+            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
+        }finally{
+            IOUtils.closeQuietly(in);
+        }
+    }
 
 
 }

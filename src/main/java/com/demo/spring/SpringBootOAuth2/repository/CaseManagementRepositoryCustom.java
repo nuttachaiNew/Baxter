@@ -582,7 +582,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" AND ( CM.ASSIGN_FN IS NOT NULL) AND (CM.ASSIGN_TS IS NULL OR CM.ASSIGN_TS=:createdBy )  ");
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
-            query.setParameter("username",createdBy );
+            query.setParameter("createdBy",createdBy );
            
             LOGGER.debug("sql : {}",criteriaSqlData);
             listfromQuery = query.getResultList();

@@ -113,6 +113,24 @@ public class FileController {
         }
     }
 
+    @RequestMapping(value = "/downloadDigitalSignatureFileUser",method = RequestMethod.GET,headers = "Accept=application/json")
+    ResponseEntity<String> downloadDigitalSignatureFileUser(@RequestParam(value = "username",required = false)String username,
+                                                            HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        InputStream in = null;
+        try {
+            in = userService.downloadDigitalSignatureFileUser(username);
+            IOUtils.copy(in, response.getOutputStream());
+            return new ResponseEntity<String>(headers, HttpStatus.OK);
+        }catch (Exception e) {
+            LOGGER.error("ERROR : {}",e);
+            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
+        }finally{
+            IOUtils.closeQuietly(in);
+        }
+    }
+
     @RequestMapping(value = "/getImageUser",method = RequestMethod.GET,headers = "Accept=application/json")
     ResponseEntity<String> getImageUser(@RequestParam(value = "username",required = false)String username,
                                                             HttpServletResponse response)throws ServletException, IOException {
