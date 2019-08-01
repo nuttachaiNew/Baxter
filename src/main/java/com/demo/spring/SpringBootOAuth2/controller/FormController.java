@@ -308,8 +308,10 @@ public class FormController {
         headers.add("Content-Type", "application/json; charset=utf-8");
         InputStream in = null;
         OutputStream outputStream=null;
+	//response.setHeader("Content-Disposition", "attachment;filename=ACCEPT.pdf;");
+        response.setContentType("application/pdf");
 
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+	SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         try {
               Map<String,Object> map = new HashMap<String,Object>();
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
