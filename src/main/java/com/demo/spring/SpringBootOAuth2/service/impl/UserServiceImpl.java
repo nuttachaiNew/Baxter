@@ -100,16 +100,23 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public InputStream downloadDigitalSignatureFileUser(String username){
+    public String downloadDigitalSignatureFileUser(String username){
         InputStream inputStream =null;
+       
         try {
+            String encodeImage = "";
+
             inputStream = new FileInputStream(signaturePath+username);
+
+            byte[] bytes= IOUtils.toByteArray(inputStream);
+            byte[] encoded= Base64.encode(bytes);
+            encodeImage = new String(encoded);
+            return encodeImage;
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
             throw new RuntimeException(e);
         }
-        return inputStream;
     }
 
     @Override

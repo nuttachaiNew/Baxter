@@ -18,7 +18,7 @@ public interface UserService {
     User findUserByUsername(String userName);
     void updateProfile(String json,MultipartHttpServletRequest multipartHttpServletRequest);
     void updateProfileWeb(String json,MultipartFile multipartHttpServletRequest);
-    InputStream downloadDigitalSignatureFileUser(String username);
+    String downloadDigitalSignatureFileUser(String username);
     
     InputStream downloadFileUser(String username);
     String getImageUser(String username);

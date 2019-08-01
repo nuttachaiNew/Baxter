@@ -118,16 +118,14 @@ public class FileController {
                                                             HttpServletResponse response)throws ServletException, IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json; charset=utf-8");
-        InputStream in = null;
         try {
-            in = userService.downloadDigitalSignatureFileUser(username);
-            IOUtils.copy(in, response.getOutputStream());
-            return new ResponseEntity<String>(headers, HttpStatus.OK);
+            String encodedString = userService.downloadDigitalSignatureFileUser(username);
+            // return new ResponseEntity<String>(headers, HttpStatus.OK);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(encodedString),headers,HttpStatus.OK);
+            
         }catch (Exception e) {
             LOGGER.error("ERROR : {}",e);
             return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
-        }finally{
-            IOUtils.closeQuietly(in);
         }
     }
 
