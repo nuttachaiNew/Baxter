@@ -162,7 +162,7 @@ public class CaseManagementController {
     }
 
 
-   /* @RequestMapping(value = "/uploadfileByCaseIdAndFileType", method = RequestMethod.POST, headers = "content-type=multipart/*")
+    @RequestMapping(value = "/uploadfileByCaseIdAndFileType", method = RequestMethod.POST, headers = "content-type=multipart/*")
     public ResponseEntity<String> uploadfileByCaseIdAndFileType(@RequestParam(value = "caseId",required = false)String id,
                                                                 @RequestParam(value = "fileType",required = false)String fileType,
                                                                 MultipartHttpServletRequest multipartHttpServletRequest, HttpServletRequest request) throws IOException {
@@ -184,7 +184,7 @@ public class CaseManagementController {
             return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-*/
+
     @RequestMapping(value = "/downloadFileByCaseIdAndFileType",method = RequestMethod.GET,headers = "Accept=application/json")
     ResponseEntity<String> downloadFileByCaseIdAndFileType(@RequestParam(value = "caseId",required = false)String id,
                                                            @RequestParam(value = "fileType",required = false)String fileType,
