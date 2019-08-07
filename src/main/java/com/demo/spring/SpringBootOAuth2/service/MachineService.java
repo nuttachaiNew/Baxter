@@ -13,6 +13,7 @@ public interface MachineService {
     void inActiveMachine(JSONObject jsonObject,String user);
     Map<String,String> deleteMachine(JSONObject json);
     Map<String,String> saveMachine(String json,String user);
+    Map<String,String> insertList(String json,String user);
     Map<String,String> updateMachine(String json,String user);
     // void deleteMachine(JSONObject jsonObject);
     // Map<String,String> saveMachine(String json);

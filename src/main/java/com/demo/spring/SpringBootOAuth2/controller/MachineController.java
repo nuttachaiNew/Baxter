@@ -48,6 +48,24 @@ public class MachineController {
         }
     }
 
+   @RequestMapping(value ="/insertList", method = RequestMethod.POST)
+    public ResponseEntity<String> insertList(HttpServletRequest request , @RequestBody String json){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            String user = null;
+            Map<String,String> result = machineService.insertList(json,user);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(result), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
     @RequestMapping(value ="/update", method = RequestMethod.POST)
     public ResponseEntity<String> updateMachine(HttpServletRequest request , @RequestBody String json){
         HttpHeaders headers = new HttpHeaders();

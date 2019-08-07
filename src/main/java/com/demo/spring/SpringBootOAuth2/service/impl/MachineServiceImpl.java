@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 
 @Service
 public class MachineServiceImpl implements MachineService {
@@ -54,6 +56,38 @@ public class MachineServiceImpl implements MachineService {
             machine.setCreatedDate(StandardUtil.getCurrentDate());
             machineRepository.saveAndFlush(machine);
             result.put("code",machine.getCode());
+            return result;
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error("Exception : {}",e);
+            throw new RuntimeException(e);
+        }
+    }
+
+
+       @Override
+    @Transactional
+    public Map<String,String> insertList(String json,String user) {
+        Map<String,String> result = new HashMap<>();
+        try{
+            LOGGER.info("===============Save Machine===============");
+            // ObjectMapper mapper = new ObjectMapper(json);
+            JSONObject jsonObject = new JSONObject(json);
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<Map<String,Object>> machineList = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machineL").toString());
+            for(Map<String,Object> machineObject : machineList){
+               Machine machine = mapper.readValue(machineObject.toString(),Machine.class);
+                machine.setCreatedDate(StandardUtil.getCurrentDate());
+                machine.setCreatedBy(user);
+                machineRepository.saveAndFlush(machine);
+            }
+     
+            
+            // 
+            // machine.setCreatedDate(StandardUtil.getCurrentDate());
+            // machineRepository.saveAndFlush(machine);
+            result.put("status","success");
             return result;
         }catch (Exception e){
             e.printStackTrace();
