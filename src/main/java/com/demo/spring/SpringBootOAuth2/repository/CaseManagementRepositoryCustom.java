@@ -245,7 +245,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID  ");
             criteriaSqlData.append(" WHERE CM.CASE_STATUS = 'F' AND CM.CLOSE_FLAG IS NULL  ");
             if(keyword!=null) criteriaSqlData.append(" AND (CUST.patient_Name LIKE :keyword  OR CM.CASE_NUMBER = :case ) ") ; 
-            if(hospitalName!=null)criteriaSqlData.append(" AND  (CUST.Hospital_Name like :hospitalName) ");
+            if(hospitalName!=null)criteriaSqlData.append(" AND  (CUST.Hospital_Name like :hospitalName) AND CM.CASE_TYPE = 'AR' ");
             criteriaSqlData.append(" AND CUST.CUSTOMER_TYPE = :customerType  ");
             // criteriaSqlData.append(" AND CM.CASE_NUMBER = :caseNumber  ");
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC");
@@ -581,9 +581,10 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" JOIN MACHINE M ON M.ID  = CM.MACHINE1_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 AND CM.CASE_TYPE IN ('CH','RT') and CM.ASSIGN_BU IS NOT NULL ");
             criteriaSqlData.append("  AND (CM.ASSIGN_TS IS NULL OR CM.ASSIGN_TS=:createdBy )  ");
+
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
-            query.setParameter("createdBy",createdBy );
+//            query.setParameter("createdBy",createdBy );
            
             LOGGER.debug("sql : {}",criteriaSqlData);
             listfromQuery = query.getResultList();

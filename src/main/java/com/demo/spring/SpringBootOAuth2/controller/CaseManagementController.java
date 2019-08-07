@@ -161,7 +161,7 @@ public class CaseManagementController {
         }
     }
 
-
+/*
     @RequestMapping(value = "/uploadfileByCaseIdAndFileType", method = RequestMethod.POST, headers = "content-type=multipart/*")
     public ResponseEntity<String> uploadfileByCaseIdAndFileType(@RequestParam(value = "caseId",required = false)String id,
                                                                 @RequestParam(value = "fileType",required = false)String fileType,
@@ -172,7 +172,8 @@ public class CaseManagementController {
             String user = null;
             MultipartFile multipartFile = multipartHttpServletRequest.getFile("file");
             String name = multipartHttpServletRequest.getParameter("name");
-            String status = caseManagementService.uploadfileByCaseIdAndFileType(name,multipartFile,Long.valueOf(id),fileType,user);
+            LOGGER.debug("case: {} fileType:{}",id,fileType);
+	    String status = caseManagementService.uploadfileByCaseIdAndFileType(name,multipartFile,Long.valueOf(id),fileType,user);
             if("OK".equals(status)){
                 return new ResponseEntity<String>(headers, HttpStatus.OK);
             }else{
@@ -184,7 +185,7 @@ public class CaseManagementController {
             return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+*/
     @RequestMapping(value = "/downloadFileByCaseIdAndFileType",method = RequestMethod.GET,headers = "Accept=application/json")
     ResponseEntity<String> downloadFileByCaseIdAndFileType(@RequestParam(value = "caseId",required = false)String id,
                                                            @RequestParam(value = "fileType",required = false)String fileType,
@@ -950,7 +951,8 @@ public class CaseManagementController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=utf-8");
         try {
-            caseManagementService.uploadFile(json,file);
+            LOGGER.info("upload json :{}",json);
+		caseManagementService.uploadFile(json,file);
             Map<String,Object> result = new HashMap<>();
             result.put("status","success");
             headers.add("errorStatus", "N");
