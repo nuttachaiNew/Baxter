@@ -245,7 +245,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID  ");
             criteriaSqlData.append(" WHERE CM.CASE_STATUS = 'F' AND CM.CLOSE_FLAG IS NULL  ");
             if(keyword!=null) criteriaSqlData.append(" AND (CUST.patient_Name LIKE :keyword  OR CM.CASE_NUMBER = :case ) ") ; 
-            if(hospitalName!=null)criteriaSqlData.append(" AND  (CUST.Hospital_Name like :hospitalName) ");
+            if(hospitalName!=null)criteriaSqlData.append(" AND  (CUST.Hospital_Name like :hospitalName) AND CM.CASE_TYPE = 'AR' ");
             criteriaSqlData.append(" AND CUST.CUSTOMER_TYPE = :customerType  ");
             // criteriaSqlData.append(" AND CM.CASE_NUMBER = :caseNumber  ");
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC");
