@@ -79,7 +79,7 @@ public class MachineServiceImpl implements MachineService {
             for(Map<String,Object> machineObject : machineList){
                Machine machine = mapper.readValue(machineObject.toString(),Machine.class);
                 machine.setCreatedDate(StandardUtil.getCurrentDate());
-                machine.setCreatedBy(user);
+            //    machine.setCreatedBy(user);
                 machineRepository.saveAndFlush(machine);
             }
      
