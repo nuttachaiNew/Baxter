@@ -129,6 +129,22 @@ public class FileController {
         }
     }
 
+
+    @RequestMapping(value = "/getPayslipById",method = RequestMethod.GET,headers = "Accept=application/json")
+    ResponseEntity<String> getPayslipById(@RequestParam(value = "id",required = false)Long id,
+                                                            HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type","image/*");
+       
+        try {
+            String encodedString = caseManagementService.getPayslipById(id);
+            return new ResponseEntity<String>(new JSONSerializer().deepSerialize(encodedString),headers,HttpStatus.OK);
+        }catch (Exception e) {
+            LOGGER.error("ERROR : {}",e);
+            return new ResponseEntity<String>("{\"ERROR\":" + e.getMessage() + "\"}", headers, HttpStatus.OK);
+        }
+    }
+
     @RequestMapping(value = "/getImageUser",method = RequestMethod.GET,headers = "Accept=application/json")
     ResponseEntity<String> getImageUser(@RequestParam(value = "username",required = false)String username,
                                                             HttpServletResponse response)throws ServletException, IOException {
