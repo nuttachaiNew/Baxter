@@ -87,7 +87,6 @@ public class MachineServiceImpl implements MachineService {
                 machine.setCreatedBy(machineObject.get("createdBy").toString());
                 machine.setStatus(1);
                 machine.setCreatedDate(StandardUtil.getCurrentDate());
-                // machine.setCreatedBy(user);
                 machineRepository.saveAndFlush(machine);
             }
      
