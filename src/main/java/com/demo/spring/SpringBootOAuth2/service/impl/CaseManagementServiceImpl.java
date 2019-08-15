@@ -2768,4 +2768,25 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             throw new RuntimeException(e);
         }
       }
+
+    @Override
+    public String getPayslipById(Long id){
+        try{
+             String fileName = caseId + "_" + "PS";
+            String pathFile ="/home/me/devNew/img/";
+
+             String encodeImage = "";
+
+            inputStream = new FileInputStream(signaturePath+username);
+            byte[] bytes= IOUtils.toByteArray(inputStream);
+            byte[] encoded= Base64.encode(bytes);
+            encodeImage = new String(encoded);
+            return encodeImage;
+
+        }catch(Exception e){
+              LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

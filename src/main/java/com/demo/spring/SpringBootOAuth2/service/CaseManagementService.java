@@ -75,6 +75,6 @@ public interface CaseManagementService {
     void uploadFile(String json,MultipartFile file);
     List<Map<String,Object>> listSwapMachine(String createdBy);
     void returnMachine(String json);
-
+    String getPayslipById(Long id);
 }   
 
