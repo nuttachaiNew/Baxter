@@ -77,9 +77,16 @@ public class MachineServiceImpl implements MachineService {
 
             List<Map<String,Object>> machineList = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machineL").toString());
             for(Map<String,Object> machineObject : machineList){
-               Machine machine = mapper.readValue(machineObject.toString(),Machine.class);
+               // Machine machine = mapper.readValue(machineObject.toString(),Machine.class);
+                Machine machine = new Machine();
+                machine.setCode(machineObject.get("code").toString());
+                machine.setName(machineObject.get("name").toString());
+                machine.setSerialNumber(machineObject.get("serialNumber") ==null?"": machineObject.get("serialNumber").toString());
+                machine.setModelRef(machineObject.get("modelRef").toString());
+                machine.setMachineType(machineObject.get("machineType").toString());
+                machine.setCreatedBy(machineObject.get("createdBy").toString());
+                machine.setStatus(1);
                 machine.setCreatedDate(StandardUtil.getCurrentDate());
-            //    machine.setCreatedBy(user);
                 machineRepository.saveAndFlush(machine);
             }
      
