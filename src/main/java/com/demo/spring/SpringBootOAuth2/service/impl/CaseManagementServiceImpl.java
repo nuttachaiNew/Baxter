@@ -2772,6 +2772,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     @Override
     public String getPayslipById(Long id){
         try{
+            InputStream inputStream =null;
              String fileName = id + "_" + "PS";
             String pathFile ="/home/me/devNew/img/";
 
