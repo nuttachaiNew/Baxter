@@ -74,7 +74,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
-
+import org.springframework.security.crypto.codec.Base64;
 @Service
 public class CaseManagementServiceImpl implements CaseManagementService {
 
@@ -2772,12 +2772,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
     @Override
     public String getPayslipById(Long id){
         try{
-             String fileName = caseId + "_" + "PS";
+             String fileName = id + "_" + "PS";
             String pathFile ="/home/me/devNew/img/";
 
              String encodeImage = "";
 
-            inputStream = new FileInputStream(signaturePath+username);
+            inputStream = new FileInputStream(pathFile+fileName);
             byte[] bytes= IOUtils.toByteArray(inputStream);
             byte[] encoded= Base64.encode(bytes);
             encodeImage = new String(encoded);
