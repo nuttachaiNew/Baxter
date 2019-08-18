@@ -2613,11 +2613,15 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             
             Double amount  =  caseMng.getAmount() == null ?  new BigDecimal("0").doubleValue() : caseMng.getAmount().doubleValue()  ;  
             Double vat = new BigDecimal("0.07").doubleValue();
-            sheet.getRow(21).getCell(18).setCellValue(amount);
-            sheet.getRow(21).getCell(25).setCellValue(amount);
-            sheet.getRow(31).getCell(25).setCellValue(amount);
-            sheet.getRow(32).getCell(25).setCellValue(amount * vat  );
-            sheet.getRow(33).getCell(25).setCellValue(amount+ (amount * vat ) );
+            vat = amount * 7d / 107d ;
+            Double excludeVat  = amount - vat;
+
+            sheet.getRow(21).getCell(18).setCellValue(excludeVat);
+            sheet.getRow(21).getCell(25).setCellValue(excludeVat);
+            sheet.getRow(31).getCell(25).setCellValue(excludeVat);
+            
+            sheet.getRow(32).getCell(25).setCellValue(vat );
+            sheet.getRow(33).getCell(25).setCellValue(amount );
 
 
         }
