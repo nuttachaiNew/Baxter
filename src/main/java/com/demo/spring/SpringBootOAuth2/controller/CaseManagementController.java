@@ -122,6 +122,25 @@ public class CaseManagementController {
         }
     }
 
+     @RequestMapping(value ="/findCaseManagementByDeliveryNote", method = RequestMethod.GET)
+    ResponseEntity<String> findCaseManagementByDeliveryNote(@RequestParam(value = "deliveryNote",required = false)String deliveryNote){
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=utf-8");
+        try {
+            List<CaseManagement> caseManagement = caseManagementRepository.findByDeliveryNote(deliveryNote);
+            headers.add("errorStatus", "N");
+            headers.add("errsg", null);
+            return new ResponseEntity<String>(new JSONSerializer().exclude("*.class").exclude("refCase.*").exclude("caseActivitys.user.branch").exclude("caseActivitys.user.role").exclude("caseActivitys.user.password").exclude("branch.*").exclude("user.*").exclude("role.*").include("caseActivitys.user.id").include("caseActivitys.branch.id").include("refCase.id").deepSerialize(caseManagement), headers, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.error("Exception : {}",ex);
+            headers.add("errorStatus", "E");
+            headers.add("errsg", ex.getMessage());
+            return new ResponseEntity<String>(null, headers, HttpStatus.OK);
+        }
+    }
+
 
     @RequestMapping(value ="/findCaseManagementByCaseNumber", method = RequestMethod.GET)
     ResponseEntity<String> findCaseManagementByCaseNumber(@RequestParam(value = "caseNumber",required = false)String caseNumber){
