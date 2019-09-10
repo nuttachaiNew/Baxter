@@ -2487,7 +2487,11 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setDepositAmount(new BigDecimal ( jsonObject.get("depositAmount").toString()));
         Date depositDate =new SimpleDateFormat("dd-MM-yyyy").parse(jsonObject.get("depositDate").toString());
         caseManagement.setDepositDate(  new java.sql.Timestamp(depositDate.getTime()));
-        caseManagement.setAssignFn(jsonObject.get("updatedBy").toString());
+        // caseManagement.setAssignFn(jsonObject.get("updatedBy").toString());
+        
+        caseManagement.setDepositBy(jsonObject.get("updatedBy").toString());
+        caseManagement.setFlagDeposit("Y");
+
         caseManagementRepository.save(caseManagement);
     }catch(Exception e){
          LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -2691,7 +2695,11 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             CaseManagement refCase = caseManagement.getRefCase();
             caseManagement.setUpdatedBy(updatedBy);
             caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
-            caseManagement.setAssignTs(updatedBy);
+            // caseManagement.setAssignTs(updatedBy);
+            // caseManagement.setAssignTs(updatedBy);
+            // caseManagement.setAssignTs(updatedBy);
+           
+
             if(refCase!=null){
                 Machine machine1 =refCase.getMachine1();
                 Machine machine2 =refCase.getMachine2();

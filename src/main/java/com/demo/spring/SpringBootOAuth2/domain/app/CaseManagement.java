@@ -177,6 +177,10 @@ public class CaseManagement extends BaseModel {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Timestamp depositDate;
 
+   private String flagDeposit;
+   private String depositBy;
+   private String flagReturn;
+   private String returnBy;
 
 
 }
