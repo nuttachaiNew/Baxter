@@ -582,7 +582,6 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" JOIN MACHINE M ON M.ID  = CM.MACHINE1_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 AND CM.CASE_TYPE IN ('CH','RT') and CM.CASE_STATUS = 'F'  ");
             criteriaSqlData.append(" AND (CM.return_By IS NULL AND  CM.flag_Return IS NULL)   ");
-    	    criteriaSqlData.append("  AND (CM.ASSIGN_TS IS NULL  )  ");
                 criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
 //            query.setParameter("createdBy",createdBy );
