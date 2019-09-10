@@ -294,9 +294,9 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND (CM.CASE_STATUS  = :documentStatus OR CM.assign_BU = :username )     ");
 	       if(caseType!=null && !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
             if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND ( CM.CASE_TYPE IN ('CR','AR','RT','CH')  OR CM.assign_BU = :username ) ");
-            if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR','CH')  AND ((CM.assign_TS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_TS =:username ) ");
-            if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR')  AND ((CM.assign_FN  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_FN =:username ) ");
-            if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR','CH')  AND ((CM.assign_CS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_CS =:username ) ");
+            if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR','CH')  AND ((CM.assign_TS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_TS =:username )) ");
+            if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR')  AND ((CM.assign_FN  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_FN =:username )) ");
+            if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR','CH')  AND ((CM.assign_CS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_CS =:username )) ");
 
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
