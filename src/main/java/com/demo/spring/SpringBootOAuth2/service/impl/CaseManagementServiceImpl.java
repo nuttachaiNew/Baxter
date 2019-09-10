@@ -1814,7 +1814,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             }
             Map resultResult = new HashMap<>();
              if(caseMng.getCaseStatus().equalsIgnoreCase("I") || caseMng.getCaseStatus().equalsIgnoreCase("R")  ){
-                caseMng.setCaseStatus("F");
+                caseMng.setCaseStatus("A");
                 caseMng.setUpdatedBy(updateCase.getUpdatedBy());
                 caseMng.setUpdatedDate(StandardUtil.getCurrentDate());
                 Set<CaseActivity> caseActivitys = caseMng.getCaseActivitys();
