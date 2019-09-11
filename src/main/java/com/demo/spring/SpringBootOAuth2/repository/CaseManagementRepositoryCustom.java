@@ -493,7 +493,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME , CUST.current_Address1||' '|| CUST.current_Address2 || ' '||CUST.current_Sub_District||'#'||CUST.current_District||''||current_Province||' '||CUST.current_Zip_Code , CM.AMOUNT");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
-            criteriaSqlData.append(" WHERE 1 =1 AND CM.CASE_TYPE IN ('CH','RT') and CM.ASSIGN_BU IS NOT NULL ");
+            criteriaSqlData.append(" WHERE 1 =1 AND CM.CASE_TYPE IN ('RT') and CM.ASSIGN_BU IS NOT NULL ");
             // criteriaSqlData.append(" AND ( CM.ASSIGN_FN IS NULL OR CM.ASSIGN_FN =:username ) ");
             criteriaSqlData.append(" AND (CM.deposit_By IS NULL AND  CM.flag_Deposit IS NULL) ");
             criteriaSqlData.append(" AND CM.ASSIGN_TS IS NOT NULL ");
