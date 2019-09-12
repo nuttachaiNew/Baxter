@@ -499,7 +499,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" AND CM.ASSIGN_TS IS NOT NULL ");
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
-            query.setParameter("username",createdBy );
+            // query.setParameter("username",createdBy );
             LOGGER.debug("sql : {}",criteriaSqlData);
             listfromQuery = query.getResultList();
              for(Object[] col : listfromQuery){

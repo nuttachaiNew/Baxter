@@ -38,6 +38,11 @@ public class Customer extends BaseMasterEntity {
     private String contactName;
     private String contactLastName;
 
+    private String telephoneNo1;
+    private String telephoneNo2;
+    private String telephoneNo3;
+
+
     // public Long getId() {
     //     return id;
     // }

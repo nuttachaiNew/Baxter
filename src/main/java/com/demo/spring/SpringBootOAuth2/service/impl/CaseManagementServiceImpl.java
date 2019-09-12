@@ -599,6 +599,11 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             customer.setShippingZipCode( customerDtl.get("shippingZipCode")==null?null:customerDtl.get("shippingZipCode").toString() );
             customer.setShippingSameAddress( customerDtl.get("shippingSameAddress")==null?null:customerDtl.get("shippingSameAddress").toString() );
             
+
+            customer.setTelephoneNo1( customerDtl.get("telephoneNo1")==null?null:customerDtl.get("telephoneNo1").toString() );
+            customer.setTelephoneNo2( customerDtl.get("telephoneNo2")==null?null:customerDtl.get("telephoneNo2").toString() );
+            customer.setTelephoneNo3( customerDtl.get("telephoneNo3")==null?null:customerDtl.get("telephoneNo3").toString() );
+
             customerRepository.saveAndFlush(customer);
             caseManagement.setCustomer(customer);
             caseManagement.setCreatedDate(StandardUtil.getCurrentDate());
@@ -2695,6 +2700,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             CaseManagement refCase = caseManagement.getRefCase();
             caseManagement.setUpdatedBy(updatedBy);
             caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
+            caseManagement.setReturnBy(updatedBy);
+            caseManagement.flagReturn("Y");
             // caseManagement.setAssignTs(updatedBy);
             // caseManagement.setAssignTs(updatedBy);
             // caseManagement.setAssignTs(updatedBy);
