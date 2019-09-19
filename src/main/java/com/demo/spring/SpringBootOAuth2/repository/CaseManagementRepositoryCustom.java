@@ -152,7 +152,7 @@ public class CaseManagementRepositoryCustom {
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
-            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS , CUST.HOSPITAL_NAME ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_BU ,CM.ASSIGN_CS   ");
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS , CUST.HOSPITAL_NAME ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_BU ,CM.ASSIGN_CS ,CM.ASSIGN_ASM   ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
@@ -191,6 +191,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
         activity.put("assignFn",col[9]);
         activity.put("assignBu",col[10]);
         activity.put("assignCs",col[11]);
+        activity.put("assignAsm",col[12]);
          
 
                 results.add(activity);

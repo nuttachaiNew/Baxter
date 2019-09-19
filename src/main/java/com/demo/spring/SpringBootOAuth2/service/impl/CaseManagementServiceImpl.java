@@ -304,6 +304,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setContactPersonName(updateCase.getContactPersonName());
             caseManagement.setContactPersonLastName(updateCase.getContactPersonLastName());
             caseManagement.setContactPersonTel(updateCase.getContactPersonTel());
+            caseManagement.setNote(updateCase.getNote());
 
             caseManagement.setCauseReport(updateCase.getCauseReport());
             caseManagement.setDocterReportName(updateCase.getDocterReportName());
