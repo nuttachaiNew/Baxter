@@ -2702,7 +2702,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setUpdatedBy(updatedBy);
             caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
             caseManagement.setReturnBy(updatedBy);
-            caseManagement.setflagReturn("Y");
+            caseManagement.setFlagReturn("Y");
             // caseManagement.setAssignTs(updatedBy);
             // caseManagement.setAssignTs(updatedBy);
             // caseManagement.setAssignTs(updatedBy);
