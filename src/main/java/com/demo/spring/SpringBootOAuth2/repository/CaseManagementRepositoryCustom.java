@@ -186,13 +186,19 @@ LOGGER.debug("sql : {}",criteriaSqlData);
                 activity.put("cutsomerName",col[4]);
                 activity.put("cutsomerType",col[5]);
                 activity.put("caseStatus",col[6]);
-		activity.put("hospitalName",col[7]);
-        activity.put("assignTs",col[8]);
-        activity.put("assignFn",col[9]);
-        activity.put("assignBu",col[10]);
-        activity.put("assignCs",col[11]);
-        activity.put("assignAsm",col[12]);
-         
+	            	activity.put("hospitalName",col[7]);
+                activity.put("assignTs",col[8]);
+                activity.put("assignFn",col[9]);
+                activity.put("assignBu",col[10]);
+                activity.put("assignCs",col[11]);
+                activity.put("assignAsm",col[12]);
+                if(activity.get("caseStatus")!=null && "R".equalsIgnoreCase(activity.get("caseStatus").toString())  ){
+                  activity.put("rejectBy","ASM");
+                }else if(activity.get("caseStatus")!=null && "W".equalsIgnoreCase(activity.get("caseStatus").toString()) && activity.get("assignBu")!=null ){
+                  activity.put("rejectBy","BU");
+                }else {
+                  activity.put("rejectBy",null);
+                }
 
                 results.add(activity);
              }
