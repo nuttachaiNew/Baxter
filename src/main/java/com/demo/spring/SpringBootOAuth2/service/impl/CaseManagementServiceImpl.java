@@ -1968,7 +1968,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         if( "A".equalsIgnoreCase(  updateCase.get("status").toString() ) ){
             caseMng.setCaseStatus("F");
         }else{
-            caseMng.setCaseStatus("W");
+            caseMng.setCaseStatus("R");
         }
         caseManagementRepository.save(caseMng);
 

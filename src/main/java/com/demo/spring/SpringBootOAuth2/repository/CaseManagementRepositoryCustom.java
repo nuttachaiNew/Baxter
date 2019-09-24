@@ -157,7 +157,6 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
             if(date!=null) criteriaSqlData.append(" AND TRUNC(CM.CREATED_DATE) = TO_DATE(:date,'DD-MM-YYYY') ");
-            // if(date!=null) criteriaSqlData.append(" AND TO_CHAR(CM.CREATED_DATE,'MM-YYYY') = :date ");
             criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
             if(areaId!=null)   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null )  criteriaSqlData.append(" AND CM.CASE_STATUS  = :documentStatus  ");
@@ -192,10 +191,10 @@ LOGGER.debug("sql : {}",criteriaSqlData);
                 activity.put("assignBu",col[10]);
                 activity.put("assignCs",col[11]);
                 activity.put("assignAsm",col[12]);
-                if(activity.get("caseStatus")!=null && "R".equalsIgnoreCase(activity.get("caseStatus").toString())  ){
-                  activity.put("rejectBy","ASM");
-                }else if(activity.get("caseStatus")!=null && "W".equalsIgnoreCase(activity.get("caseStatus").toString()) && activity.get("assignBu")!=null ){
+                if(activity.get("caseStatus")!=null && "R".equalsIgnoreCase(activity.get("caseStatus").toString()) && activity.get("assignBu")!=null ){
                   activity.put("rejectBy","BU");
+                }else if(activity.get("caseStatus")!=null && "R".equalsIgnoreCase(activity.get("caseStatus").toString())  ){
+                  activity.put("rejectBy","ASM"); 
                 }else {
                   activity.put("rejectBy",null);
                 }
