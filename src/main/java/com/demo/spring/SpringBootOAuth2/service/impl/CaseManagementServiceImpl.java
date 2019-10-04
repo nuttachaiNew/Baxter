@@ -1338,7 +1338,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setUpdatedDate( StandardUtil.getCurrentDate() );
         caseManagement.setUpdatedBy(updateCase.getUpdatedBy());
 
-        if(closeFlag!=null){
+        if(updateCase.getCloseFlag()!=null){
             caseManagement.setAssignTs(updateCase.getUpdatedBy());
         }
 
@@ -1348,7 +1348,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagementRepository.save(caseManagement);
 
         // LOGGER.debug("caseActivity :{}",caseActivitys.size());
-        if(closeFlag!=null){
+        if(updateCase.getCloseFlag()!=null){
             CaseActivity caseAct = new CaseActivity();
             User user = userRepository.findByUsername( updateCase.getUpdatedBy() );
             caseAct.setUser(user);
