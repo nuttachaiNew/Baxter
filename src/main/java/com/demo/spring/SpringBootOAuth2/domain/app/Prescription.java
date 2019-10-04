@@ -31,7 +31,7 @@ public class Prescription {
     private MakeAdjustment makeAdjustment;
     
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-private ChangePrograme changePrograme;
+    private ChangePrograme changePrograme;
     
 
 }
