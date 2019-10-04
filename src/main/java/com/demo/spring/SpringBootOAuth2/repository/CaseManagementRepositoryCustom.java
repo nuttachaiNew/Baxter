@@ -67,8 +67,32 @@ public class CaseManagementRepositoryCustom {
                 resultList.add(id);
              }
             LOGGER.debug("resultList : {}",resultList);
+
+             if("MC1".equalsIgnoreCase(modelRef)){
+                modelRef = "Machine HomeChoice 10.4";
+             }else if("MC2".equalsIgnoreCase(modelRef)){
+                modelRef = "Machine Cliria";
+             }else{
+                modelRef = "Modem";
+             }
+
+
+             if("MC1".equalsIgnoreCase(machineType)){
+               machineType ="Machine HomeChoice 10.4";
+             }else if("MC2".equalsIgnoreCase(machineType)){
+               machineType ="Machine  Cliria";
+             }else if("PWC".equalsIgnoreCase(machineType)){
+               machineType ="Power Cord";
+             }else if("HC".equalsIgnoreCase(machineType)){
+               machineType ="Hard Case";
+             }else if("GB1".equalsIgnoreCase(machineType)){
+               machineType ="Guide Book1";
+             }else if("GB2".equalsIgnoreCase(machineType)){
+               machineType ="Guide Book1";
+             }
+
              if(resultList.size() == 0){
-                throw new RuntimeException(" Machine type "+ machineType +"  Model Ref "+modelRef+" not Available active ");
+                throw new RuntimeException("Product :  "+ machineType +"  ของ  "+modelRef+"  เครื่องไม่พร้อมสำหรับการใช้งานรบกวนติดต่อ TS เพื่อเช็คอุปกรณ์ ");
              }else{
                 result = resultList.get(0);
              }

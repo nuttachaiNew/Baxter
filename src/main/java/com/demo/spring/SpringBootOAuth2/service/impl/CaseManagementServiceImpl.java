@@ -276,24 +276,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             prescription.setChangePrograme(changePrograme);
             
             caseManagement.setPrescription(prescription);
-
-            // NurseMenu updateNurseMenu = updatePrescription.getNurseMenu();
-            // updateNurseMenu.setId(nurseMenu.getId());
-            // nurseMenu = updateNurseMenu;
-
-            // prescription.setNurseMenu(nurseMenu);
-            // caseManagement.setPrescription(prescription);
-        
-            // MakeAdjustment updateMakeAdjustment = updatePrescription.getMakeAdjustment();
-            // ChangePrograme updateChangePrograme = updatePrescription.getChangePrograme();
-            // updatePrescription.setId( prescription.getId() );
-            // updateNurseMenu.setId(nurseMenu.getId());
-            // updateMakeAdjustment.setId(makeAdjustment.getId());
-            // updateChangePrograme.setId( changePrograme.getId());
-            // updatePrescription.setNurseMenu(updateNurseMenu);
-            // updatePrescription.setMakeAdjustment(updateMakeAdjustment);
-            // updatePrescription.setChangePrograme(updateChangePrograme);
-            
             caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
             caseManagement.setShareSource(updateCase.getShareSource());
             caseManagement.setElectronicConsentFlag(updateCase.getElectronicConsentFlag());
@@ -470,12 +452,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             caseManagement.setMachine8(null);
             caseManagement.setMachine9(null);
             caseManagement.setMachine10(null);
-
-
-            // 
             LOGGER.debug("clear set flag 0 ");
-
-            
             List<Machine> listMachine = new ArrayList<>();
             listMachine.add(machine1);
             listMachine.add(machine2);
@@ -503,14 +480,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
                 String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
                 String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
-                // String flagEdit = machineInfo.get("flagEdit") ==null?"0" :machineInfo.get("flagEdit").toString();
                 serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
-                // if( "1".equalsIgnoreCase(flagEdit) ){
-                    // generate Machine by Condition
                         LOGGER.debug("running : {}   machineInfo :{} :{} :{}",machineRunning,machineType,modelRef,serialNo);
-                        // Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
                         Long machineId =  caseManagementRepositoryCustom.autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);
-                        // update Status Machine 
                         LOGGER.debug("before update Machine");
                         updateMachineStatus(machineId , 0 , caseNumber ,"SYSTEM");
                         LOGGER.debug("afer update Machine");
@@ -1103,10 +1075,69 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         changeCase.setCaseNumber(newCaseNumber);
         changeCase.setCaseStatus("I");
         changeCase.setCaseType("CH");
-
         changeCase.setCustomer(refCase.getCustomer());
+        
+        Machine machine1 = refCase.getMachine1() == null? null: refCase.getMachine1();
+        Machine machine2 = refCase.getMachine2() == null? null: refCase.getMachine2();
+        Machine machine3 = refCase.getMachine3() == null? null: refCase.getMachine3();
+        Machine machine4 = refCase.getMachine4() == null? null: refCase.getMachine4();
+        Machine machine5 = refCase.getMachine5() == null? null: refCase.getMachine5();
+        Machine machine6 = refCase.getMachine6() == null? null: refCase.getMachine6();
+        Machine machine7 = refCase.getMachine7() == null? null: refCase.getMachine7();
+        Machine machine8 = refCase.getMachine8() == null? null: refCase.getMachine8();
+        Machine machine9 = refCase.getMachine9() == null? null: refCase.getMachine9();
+        Machine machine10 = refCase.getMachine10() == null? null: refCase.getMachine10();
+
+        if(machine1 !=null){
+            machine1.setStatus(3);
+            machineRepository.save(machine1);
+        }
+        if(machine2 !=null){
+
+            machine2.setStatus(3);
+            machineRepository.save(machine2);
+        }
+        if(machine3 !=null){
+            machine3.setStatus(3);
+            machineRepository.save(machine3);
+        }
+        if(machine4 !=null){
+            machine4.setStatus(3);
+            machineRepository.save(machine4);
+        }
+        if(machine5 !=null){
+            machine5.setStatus(3);
+            machineRepository.save(machine5);
+        }
+        if(machine6 !=null){
+
+            machine6.setStatus(3);
+            machineRepository.save(machine6);
+        }
+        if(machine7 !=null){
+
+            machine7.setStatus(3);
+            machineRepository.save(machine7);
+        }
+        if(machine8 !=null){
+
+            machine8.setStatus(3);
+            machineRepository.save(machine8);
+        }
+        if(machine9 !=null){
+
+            machine9.setStatus(3);
+            machineRepository.save(machine9);
+        }
+        if(machine10 !=null){
+            machine10.setStatus(3);
+            machineRepository.save(machine10);
+        }
+
+
         Integer machineRunning = 1;
             for(Map<String,Object> machineInfo: machineData){   
+                LOGGER.debug("machine Info :{}",machineInfo);
                 String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
                 String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
                 String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
@@ -1222,96 +1253,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
      }
    }
 
-   // @Override
-   // @Transactional
-   // public  Map<String,Object> saveReturnCase(String json,MultipartHttpServletRequest multipartHttpServletRequest){
-   //   try{
-   //      LOGGER.debug("saveReturnCase :{} ",json);
-   //      JSONObject jsonObject = new JSONObject(json);
-   //      CaseManagement changeCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
-   //      List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
-   //      String refCaseId = jsonObject.get("refCaseId").toString();
-   //      CaseManagement refCase = caseManagementRepository.findOne(Long.valueOf(refCaseId));
-   //      User actionBy = userRepository.findByUsername(changeCase.getCreatedBy()); // fixed action user
-        
-   //      String oldCaseNumber  = refCase.getCaseNumber();
-   //      String[] subCaseNumber = oldCaseNumber.split("/");
-   //      String newCaseNumber = subCaseNumber[0]+"/02/"+subCaseNumber[2];
-   //      if( refCase.getCloseFlag()!= null && "Y".equalsIgnoreCase(refCase.getCloseFlag()) ){
-   //          throw new RuntimeException(" Can't Create change case ( this case already reference case ) ");
-   //      }
-   //      // close Case
-   //      refCase.setCloseFlag("Y"); 
-   //      refCase.setUpdatedDate( StandardUtil.getCurrentDate() );
-   //      refCase.setUpdatedBy(changeCase.getCreatedBy());
-   //      caseManagementRepository.save(refCase);
-   //      // close old case
-   //      changeCase.setRefCase(refCase);
-   //      changeCase.setCreatedDate( StandardUtil.getCurrentDate() );
-   //      changeCase.setCaseNumber(newCaseNumber);
-   //      changeCase.setCaseStatus("I");
-   //      changeCase.setCaseType("CH");
-   //      changeCase.setCustomer(refCase.getCustomer());
-   //      Integer machineRunning = 1;
-   //          for(Map<String,Object> machineInfo: machineData){   
-   //              String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
-   //              String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
-   //              String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
-   //              serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
-   //              // generate Machine by Condition
-   //              Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
-   //              // update Status Machine 
-   //              updateMachineStatus(machineId , 0 , newCaseNumber ,"SYSTEM");
-   //              Machine machineUsed = machineRepository.findOne(machineId);
-   //              if(machineRunning == 1){
-   //                  changeCase.setMachine1(machineUsed);
-   //              }else if(machineRunning == 2 ){
-   //                  changeCase.setMachine2(machineUsed);
-   //              }else if(machineRunning == 3 ){
-   //                  changeCase.setMachine3(machineUsed);
-   //              }else if(machineRunning == 4 ){
-   //                  changeCase.setMachine4(machineUsed);
-   //              }else if(machineRunning == 5 ){
-   //                  changeCase.setMachine5(machineUsed);
-   //              }else if(machineRunning == 6 ){
-   //                  changeCase.setMachine6(machineUsed);
-   //              }else if(machineRunning == 7 ){
-   //                  changeCase.setMachine7(machineUsed);
-   //              }else if(machineRunning == 8 ){
-   //                  changeCase.setMachine8(machineUsed);
-   //              }else if(machineRunning == 9 ){
-   //                  changeCase.setMachine9(machineUsed);
-   //              }else if(machineRunning == 10 ){
-   //                  changeCase.setMachine10(machineUsed);
-   //              }else{
-   //                  throw new RuntimeException("Oversize of machine");
-   //              }
-   //              machineRunning++;
-   //          }
-   //          LOGGER.debug("end with machine");
-   //          LOGGER.debug("user :{}",actionBy.getId());
-   //          changeCase.setAreaId(actionBy.getBranch().getId());
-   //          Map<String,Object> returnResult = new HashMap<>();
-   //          CaseActivity caseActivity = new CaseActivity();
-   //          Set<CaseActivity> activitys = new HashSet<>();
-   //          caseActivity.setUser(actionBy);
-   //          caseActivity.setActionStatus("create Change Machine");
-   //          caseActivity.setActionDate(StandardUtil.getCurrentDate());
-   //          caseActivity.setCaseManagement(changeCase);
-   //          activitys.add(caseActivity);
-   //          changeCase.setCaseActivitys(activitys);
-   //          caseManagementRepository.save(changeCase);
-   //          returnResult.put("caseType",changeCase.getCaseType());
-   //          returnResult.put("status","success");
-   //          returnResult.put("caseNumber",changeCase.getCaseNumber());
-
-   //          return returnResult;
-   //   }catch(Exception e){
-   //        e.printStackTrace();
-   //       LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
-   //       throw new RuntimeException(e);
-   //   }
-   // }
 
    @Override
    @Transactional
@@ -1627,7 +1568,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         LOGGER.debug("saveReturnCase :{} ",json);
         JSONObject jsonObject = new JSONObject(json);
         CaseManagement changeCase = new JSONDeserializer<CaseManagement>().use(null, CaseManagement.class).deserialize(json);
-        // List<Map<String,Object>> machineData = new JSONDeserializer<List<Map<String,Object>>>().deserialize(jsonObject.get("machines").toString());
         String refCaseId = jsonObject.get("refCaseId").toString();
         CaseManagement refCase = caseManagementRepository.findOne(Long.valueOf(refCaseId));
         User actionBy = userRepository.findByUsername(changeCase.getCreatedBy()); // fixed action user
@@ -1654,54 +1594,76 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         changeCase.setCaseType("RT");
         changeCase.setCustomer(refCase.getCustomer());
 
-        changeCase.setMachine1(refCase.getMachine1() == null? null: refCase.getMachine1() );
-        changeCase.setMachine2(refCase.getMachine2() == null? null: refCase.getMachine2() );
-        changeCase.setMachine3(refCase.getMachine3() == null? null: refCase.getMachine3() );
-        changeCase.setMachine4(refCase.getMachine4()== null? null: refCase.getMachine4());
-        changeCase.setMachine5(refCase.getMachine5() == null? null: refCase.getMachine5());
-        changeCase.setMachine6(refCase.getMachine6()== null? null: refCase.getMachine6());
-        changeCase.setMachine7(refCase.getMachine7()== null? null: refCase.getMachine7());
-        changeCase.setMachine8(refCase.getMachine8()== null? null: refCase.getMachine8());
-        changeCase.setMachine9(refCase.getMachine9()== null? null: refCase.getMachine9());
-        changeCase.setMachine10(refCase.getMachine10()== null? null: refCase.getMachine10());
+        Machine machine1 = refCase.getMachine1() == null? null: refCase.getMachine1();
+        Machine machine2 = refCase.getMachine2() == null? null: refCase.getMachine2();
+        Machine machine3 = refCase.getMachine3() == null? null: refCase.getMachine3();
+        Machine machine4 = refCase.getMachine4() == null? null: refCase.getMachine4();
+        Machine machine5 = refCase.getMachine5() == null? null: refCase.getMachine5();
+        Machine machine6 = refCase.getMachine6() == null? null: refCase.getMachine6();
+        Machine machine7 = refCase.getMachine7() == null? null: refCase.getMachine7();
+        Machine machine8 = refCase.getMachine8() == null? null: refCase.getMachine8();
+        Machine machine9 = refCase.getMachine9() == null? null: refCase.getMachine9();
+        Machine machine10 = refCase.getMachine10() == null? null: refCase.getMachine10();
+
+        if(machine1 !=null){
+            machine1.setStatus(2);
+            machineRepository.save(machine1);
+        }
+        if(machine2 !=null){
+
+            machine2.setStatus(2);
+            machineRepository.save(machine2);
+        }
+        if(machine3 !=null){
+            machine3.setStatus(2);
+            machineRepository.save(machine3);
+        }
+        if(machine4 !=null){
+            machine4.setStatus(2);
+            machineRepository.save(machine4);
+        }
+        if(machine5 !=null){
+            machine5.setStatus(2);
+            machineRepository.save(machine5);
+        }
+        if(machine6 !=null){
+
+            machine6.setStatus(2);
+            machineRepository.save(machine6);
+        }
+        if(machine7 !=null){
+
+            machine7.setStatus(2);
+            machineRepository.save(machine7);
+        }
+        if(machine8 !=null){
+
+            machine8.setStatus(2);
+            machineRepository.save(machine8);
+        }
+        if(machine9 !=null){
+
+            machine9.setStatus(2);
+            machineRepository.save(machine9);
+        }
+        if(machine10 !=null){
+            machine10.setStatus(2);
+            machineRepository.save(machine10);
+        }
+
+        changeCase.setMachine1(machine1);
+        changeCase.setMachine2(machine2);
+        changeCase.setMachine3(machine3);
+        changeCase.setMachine4(machine4);
+        changeCase.setMachine5(machine5);
+        changeCase.setMachine6(machine6);
+        changeCase.setMachine7(machine7);
+        changeCase.setMachine8(machine8);
+        changeCase.setMachine9(machine9);
+        changeCase.setMachine10(machine10);
 
 
         Integer machineRunning =1;
-            // for(Map<String,Object> machineInfo: machineData){   
-            //     String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
-            //     String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
-            //     String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
-            //     serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
-            //     // generate Machine by Condition
-            //     Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
-            //     // update Status Machine 
-            //     updateMachineStatus(machineId , 0 , newCaseNumber ,"SYSTEM");
-            //     Machine machineUsed = machineRepository.findOne(machineId);
-            //     if(machineRunning == 1){
-            //         changeCase.setMachine1(machineUsed);
-            //     }else if(machineRunning == 2 ){
-            //         changeCase.setMachine2(machineUsed);
-            //     }else if(machineRunning == 3 ){
-            //         changeCase.setMachine3(machineUsed);
-            //     }else if(machineRunning == 4 ){
-            //         changeCase.setMachine4(machineUsed);
-            //     }else if(machineRunning == 5 ){
-            //         changeCase.setMachine5(machineUsed);
-            //     }else if(machineRunning == 6 ){
-            //         changeCase.setMachine6(machineUsed);
-            //     }else if(machineRunning == 7 ){
-            //         changeCase.setMachine7(machineUsed);
-            //     }else if(machineRunning == 8 ){
-            //         changeCase.setMachine8(machineUsed);
-            //     }else if(machineRunning == 9 ){
-            //         changeCase.setMachine9(machineUsed);
-            //     }else if(machineRunning == 10 ){
-            //         changeCase.setMachine10(machineUsed);
-            //     }else{
-            //         throw new RuntimeException("Oversize of machine");
-            //     }
-            //     machineRunning++;
-            // }
             LOGGER.debug("end with machine");
             LOGGER.debug("user :{}",actionBy.getId());
             changeCase.setAreaId(actionBy.getBranch().getId());
@@ -1732,8 +1694,6 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
                     file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
-
-                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(payslipFile!=null){
@@ -1747,9 +1707,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 file.setUpdatdDate(StandardUtil.getCurrentDate());
                 file.setCaseManagement(changeCase);
                 fileUploadRepository.save(file);
-                    file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
-
-                // file.setFileUrl(IPSERVER+"casemanagement/downloadFileByCaseIdAndFileType?&caseId="+changeCase.getId()+"&fileType="+file.getFileType());
+                file.setFileUrl(IPSERVER+"?caseId="+changeCase.getId()+"&fileType="+file.getFileType());
                 fileUploadRepository.save(file);
             }
             if(contractFile!=null){
