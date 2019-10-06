@@ -30,5 +30,7 @@ public class MakeAdjustment {
     private String lastManualDrain;
     private String urTarget;
     private String alram;
+    private String nurseNetworkMode;
+    
  
 }

@@ -32,4 +32,9 @@ public class NurseMenu {
     private String programLocked;
     private String weightReset;
 
+    private String smartDwellsUp;
+    private String smartDwellsDown;
+    private String nurseNetworkMode;
+
+
 }

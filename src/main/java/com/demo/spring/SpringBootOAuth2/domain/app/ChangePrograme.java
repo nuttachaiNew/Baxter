@@ -25,5 +25,9 @@ public class ChangePrograme {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Tidal tidal;
 
-
+    private String tidalVol;
+    private String tidalTotalUf;
+    private String fullDrainEvery;
+    private String numberOfDayExchange;
+    private String dayFillVol;
 }
