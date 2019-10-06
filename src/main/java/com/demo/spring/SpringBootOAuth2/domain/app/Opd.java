@@ -27,5 +27,10 @@ public class Opd {
     private String dextRose;
     private String weightUnit;
     private String patientWeight;
- 
+    private String tidalVol;
+    private String tidalTotalUf;
+    private String fullEveryDrain;
+    private String numberOfDayExchange;
+    private String dayFillVol;
+
 }
