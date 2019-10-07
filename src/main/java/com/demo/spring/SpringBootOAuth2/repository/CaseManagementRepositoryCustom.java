@@ -51,7 +51,7 @@ public class CaseManagementRepositoryCustom {
              criteriaSqlData.append("\n SELECT M.ID , M.CODE FROM MACHINE M  ");
              criteriaSqlData.append("\n WHERE M.MACHINE_TYPE = :machineType  and M.STATUS = 1  and M.MODEL_REF = :modelRef");
              if( !"".equalsIgnoreCase(serialNumber) ) criteriaSqlData.append("\n AND M.SERIAL_NUMBER  = :serialNumber ");
-             criteriaSqlData.append("\n ORDER BY M.CODE ");
+             criteriaSqlData.append("\n ORDER BY M.CREATED_DATE ");
             LOGGER.debug("criteriaSqlData : {}",criteriaSqlData);
              Query query = em.createNativeQuery(criteriaSqlData.toString());
              query.setParameter("machineType",machineType);
@@ -611,7 +611,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
             criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME , CUST.current_Address1||' '|| CUST.current_Address2 || ' '||CUST.current_Sub_District||'#'||CUST.current_District||''||current_Province||' '||CUST.current_Zip_Code , CM.AMOUNT");
-            criteriaSqlData.append(" ,M.machine_Type,M.serial_Number,M.code,M.name  ");
+            criteriaSqlData.append(" ,M.machine_Type,M.serial_Number,M.code,M.name ,CM.missing_Flag  ");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" JOIN MACHINE M ON M.ID  = CM.MACHINE1_ID   ");
@@ -643,6 +643,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
                 activity.put("serialNumber",col[15]);
                 activity.put("machineCode",col[16]);
                 activity.put("machineName",col[17]);
+                activity.put("missingFlag",col[18]);
 
                 results.add(activity);
              }

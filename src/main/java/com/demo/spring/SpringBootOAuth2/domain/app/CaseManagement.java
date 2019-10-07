@@ -181,6 +181,6 @@ public class CaseManagement extends BaseModel {
    private String depositBy;
    private String flagReturn;
    private String returnBy;
-
+   private String missingFlag;
 
 }

@@ -2645,86 +2645,96 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             CaseManagement refCase = caseManagement.getRefCase();
             caseManagement.setUpdatedBy(updatedBy);
             caseManagement.setUpdatedDate(StandardUtil.getCurrentDate());
-            caseManagement.setReturnBy(updatedBy);
-            caseManagement.setFlagReturn("Y");
-            // caseManagement.setAssignTs(updatedBy);
-            // caseManagement.setAssignTs(updatedBy);
-            // caseManagement.setAssignTs(updatedBy);
-           
-
-            if(refCase!=null){
-                Machine machine1 =refCase.getMachine1();
-                Machine machine2 =refCase.getMachine2();
-                Machine machine3 =refCase.getMachine3();
-                Machine machine4 =refCase.getMachine4();
-                Machine machine5 =refCase.getMachine5();
-                Machine machine6 =refCase.getMachine6();
-                Machine machine7 =refCase.getMachine7();
-                Machine machine8 =refCase.getMachine8();
-                Machine machine9 =refCase.getMachine9();
-                Machine machine10 =refCase.getMachine10();
-                if(machine1!=null){
-                    machine1.setStatus(Integer.valueOf(machineStatus));
-                    machine1.setUpdatedBy(updatedBy);
-                    machine1.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine1);
-                }
-                 if(machine2!=null){
-                    machine2.setStatus(Integer.valueOf(machineStatus));
-                    machine2.setUpdatedBy(updatedBy);
-                    machine1.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine2);
-                }
-                 if(machine3!=null){
-                    machine3.setStatus(Integer.valueOf(machineStatus));
-                    machine3.setUpdatedBy(updatedBy);
-                    machine3.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine3);
-                }
-                 if(machine4!=null){
-                    machine4.setStatus(Integer.valueOf(machineStatus));
-                    machine4.setUpdatedBy(updatedBy);
-                    machine4.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine4);
-                }
-                 if(machine5!=null){
-                    machine5.setStatus(Integer.valueOf(machineStatus));
-                    machine5.setUpdatedBy(updatedBy);
-                    machine5.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine5);
-                }
-                 if(machine6!=null){
-                    machine6.setStatus(Integer.valueOf(machineStatus));
-                    machine6.setUpdatedBy(updatedBy);
-                    machine6.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine6);
-                }
-                 if(machine7!=null){
-                    machine7.setStatus(Integer.valueOf(machineStatus));
-                    machine7.setUpdatedBy(updatedBy);
-                    machine7.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine7);
-                }
-                 if(machine8!=null){
-                    machine8.setStatus(Integer.valueOf(machineStatus));
-                    machine8.setUpdatedBy(updatedBy);
-                    machine8.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine8);
-                }
-                 if(machine9!=null){
-                    machine9.setStatus(Integer.valueOf(machineStatus));
-                    machine9.setUpdatedBy(updatedBy);
-                    machine9.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine9);
-                }
-                 if(machine10!=null){
-                    machine10.setStatus(Integer.valueOf(machineStatus));
-                    machine10.setUpdatedBy(updatedBy);
-                    machine10.setUpdatedDate(StandardUtil.getCurrentDate());
-                    machineRepository.save(machine10);
+            caseManagement.setNote(jsonObject.get("note").toString());
+            if("5".equalsIgnoreCase(machineStatus)){
+                caseManagement.setFlagCheckMachine1(jsonObject.get("flagMachine1").toString());
+                caseManagement.setFlagCheckMachine2(jsonObject.get("flagMachine2").toString());
+                caseManagement.setFlagCheckMachine3(jsonObject.get("flagMachine3").toString());
+                caseManagement.setFlagCheckMachine4(jsonObject.get("flagMachine4").toString());
+                caseManagement.setFlagCheckMachine5(jsonObject.get("flagMachine5").toString());
+                caseManagement.setFlagCheckMachine6(jsonObject.get("flagMachine6").toString());
+                caseManagement.setFlagCheckMachine7(jsonObject.get("flagMachine7").toString());
+                caseManagement.setFlagCheckMachine8(jsonObject.get("flagMachine8").toString());
+                caseManagement.setFlagCheckMachine9(jsonObject.get("flagMachine9").toString());
+                caseManagement.setFlagCheckMachine10(jsonObject.get("flagMachine10").toString());
+            }else{
+                if(refCase!=null){
+                    caseManagement.setReturnBy(updatedBy);
+                   caseManagement.setFlagReturn("Y");
+                    Machine machine1 =refCase.getMachine1();
+                    Machine machine2 =refCase.getMachine2();
+                    Machine machine3 =refCase.getMachine3();
+                    Machine machine4 =refCase.getMachine4();
+                    Machine machine5 =refCase.getMachine5();
+                    Machine machine6 =refCase.getMachine6();
+                    Machine machine7 =refCase.getMachine7();
+                    Machine machine8 =refCase.getMachine8();
+                    Machine machine9 =refCase.getMachine9();
+                    Machine machine10 =refCase.getMachine10();
+                    if(machine1!=null){
+                        machine1.setStatus(Integer.valueOf(machineStatus));
+                        machine1.setUpdatedBy(updatedBy);
+                        machine1.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine1);
+                    }
+                     if(machine2!=null){
+                        machine2.setStatus(Integer.valueOf(machineStatus));
+                        machine2.setUpdatedBy(updatedBy);
+                        machine1.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine2);
+                    }
+                     if(machine3!=null){
+                        machine3.setStatus(Integer.valueOf(machineStatus));
+                        machine3.setUpdatedBy(updatedBy);
+                        machine3.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine3);
+                    }
+                     if(machine4!=null){
+                        machine4.setStatus(Integer.valueOf(machineStatus));
+                        machine4.setUpdatedBy(updatedBy);
+                        machine4.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine4);
+                    }
+                     if(machine5!=null){
+                        machine5.setStatus(Integer.valueOf(machineStatus));
+                        machine5.setUpdatedBy(updatedBy);
+                        machine5.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine5);
+                    }
+                     if(machine6!=null){
+                        machine6.setStatus(Integer.valueOf(machineStatus));
+                        machine6.setUpdatedBy(updatedBy);
+                        machine6.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine6);
+                    }
+                     if(machine7!=null){
+                        machine7.setStatus(Integer.valueOf(machineStatus));
+                        machine7.setUpdatedBy(updatedBy);
+                        machine7.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine7);
+                    }
+                     if(machine8!=null){
+                        machine8.setStatus(Integer.valueOf(machineStatus));
+                        machine8.setUpdatedBy(updatedBy);
+                        machine8.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine8);
+                    }
+                     if(machine9!=null){
+                        machine9.setStatus(Integer.valueOf(machineStatus));
+                        machine9.setUpdatedBy(updatedBy);
+                        machine9.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine9);
+                    }
+                     if(machine10!=null){
+                        machine10.setStatus(Integer.valueOf(machineStatus));
+                        machine10.setUpdatedBy(updatedBy);
+                        machine10.setUpdatedDate(StandardUtil.getCurrentDate());
+                        machineRepository.save(machine10);
+                    }
                 }
             }
-
+            
+            caseManagementRepository.save(caseManagement);
             LOGGER.info("returnMachine complete");
 
         }catch(Exception e){
