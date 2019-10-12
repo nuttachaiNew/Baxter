@@ -532,7 +532,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" WHERE 1 =1 AND CM.CASE_TYPE IN ('RT') and CM.ASSIGN_BU IS NOT NULL ");
             // criteriaSqlData.append(" AND ( CM.ASSIGN_FN IS NULL OR CM.ASSIGN_FN =:username ) ");
             criteriaSqlData.append(" AND (CM.deposit_By IS NULL AND  CM.flag_Deposit IS NULL) ");
-            criteriaSqlData.append(" AND CM.ASSIGN_TS IS NOT NULL ");
+            criteriaSqlData.append(" AND CM.FLAG_RETURN IS NOT NULL ");
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             LOGGER.debug("sql : {}",criteriaSqlData);
