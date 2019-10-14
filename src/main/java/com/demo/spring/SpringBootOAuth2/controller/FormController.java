@@ -52,6 +52,124 @@ public class FormController {
 
 
 
+    @RequestMapping(value = "/generateAgreement",method = RequestMethod.GET,headers = "Accept=application/json")
+    void generateAgreement( 
+
+        @RequestParam(value = "caseType",required = false)String caseType
+       ,@RequestParam(value = "customerName",required = false)String customerName
+       ,@RequestParam(value = "customerLastName",required = false)String customerLastName
+       ,@RequestParam(value = "nationalId",required = false)String nationalId
+       ,@RequestParam(value = "address1",required = false)String address1
+       ,@RequestParam(value = "subDistrict",required = false)String subDistrict
+       ,@RequestParam(value = "district",required = false)String district
+       ,@RequestParam(value = "province",required = false)String province
+       ,@RequestParam(value = "zipCode",required = false)String zipCode
+       ,@RequestParam(value = "telNo",required = false)String telNo
+       ,@RequestParam(value = "serialNo",required = false)String serialNo
+       ,@RequestParam(value = "machineType",required = false)String machineType
+        
+                                     ,  HttpServletResponse response)throws ServletException, IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json; charset=utf-8");
+        InputStream in = null;
+        OutputStream outputStream=null;
+
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        try {
+            response.setContentType("application/x-pdf");
+            response.addHeader("Content-Disposition", "attachment; filename=Acceptance_DOC.pdf");
+            Map<String,Object> map = new HashMap<String,Object>();
+            List<JasperPrint> jasperPrintList   = new ArrayList<>();
+            if("CR".equalsIgnoreCase(caseType)){
+                
+                if("MC1".equalsIgnoreCase(machineType)){
+                    map.put("name",customerName +" "+customerLastName);
+                    map.put("national_id",nationId);
+                    map.put("no",address1);
+                    map.put("sub_district",subDistrict);
+                    map.put("district",district);
+                    map.put("province",province);
+                    map.put("zipcode",zipCode);
+                    map.put("tel_no",telNo);
+                    map.put("active_date",format.format(new Date()));
+                    map.put("age","");
+
+                    User user = userService.findUserByUsername("temp");
+
+                    String jasperFileName1 = "HC1.jasper";
+                    String jasperFileName2 = "HC2.jasper";
+                    JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                    JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                    jasperPrintList.add(jasperPrint1);
+                    jasperPrintList.add(jasperPrint2);
+
+                    byte[] b = generateReportForm(jasperPrintList);
+                    in = new ByteArrayInputStream(b);
+                    outputStream = response.getOutputStream();
+                    IOUtils.copy(in, outputStream);
+               
+
+                }else{
+                         map.put("name",customerName +" "+customerLastName);
+                        map.put("national_id",nationId);
+                        map.put("no",address1);
+                        map.put("sub_district",subDistrict);
+                        map.put("district",district);
+                        map.put("province",province);
+                        map.put("zipcode",zipCode);
+                        map.put("tel_no",telNo);
+                        map.put("active_date",format.format(new Date()));
+                        map.put("age","");
+                        map.put("image", ConstantVariableUtil.PATH_IMAGE_FOR_JASPER);
+
+                        User user = userService.findUserByUsername("temp");
+
+                        String jasperFileName1 = "HC_1_1.jasper";
+                        String jasperFileName2 = "HC_1_2.jasper";
+                        JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                        JasperPrint jasperPrint2 = AbstractReportJasperPDF.exportReport(jasperFileName2,Arrays.asList(user),map);
+                        jasperPrintList.add(jasperPrint1);
+                        jasperPrintList.add(jasperPrint2);
+
+                        byte[] b = generateReportForm(jasperPrintList);
+                        in = new ByteArrayInputStream(b);
+                        outputStream = response.getOutputStream();
+                        IOUtils.copy(in, outputStream);
+
+                }
+
+            }else{
+                 String date = format.format(new Date());
+                String dateSplit[] = date.split("-");
+                map.put("day",dateSplit[0]);
+                map.put("month",dateSplit[1]);
+                map.put("year",dateSplit[2]);
+                map.put("customer",customerName +" "+customerLastName);
+                map.put("serial",serialNo);
+
+                User user = userService.findUserByUsername("temp");
+
+                String jasperFileName1 = "EQUIPMENT_PLACEMENT_AGREEMENT.jasper";
+                JasperPrint jasperPrint1 = AbstractReportJasperPDF.exportReport(jasperFileName1,Arrays.asList(user),map);
+                jasperPrintList.add(jasperPrint1);
+
+                byte[] b = generateReportForm(jasperPrintList);
+                in = new ByteArrayInputStream(b);
+                outputStream = response.getOutputStream();
+                IOUtils.copy(in, outputStream);
+            }
+
+           
+        }catch (Exception e) {
+            LOGGER.error("ERROR : {}",e);
+        }finally{
+            IOUtils.closeQuietly(outputStream);
+            IOUtils.closeQuietly(in);
+        }
+    }
+
+
+
     @RequestMapping(value = "/downloadFormAccept",method = RequestMethod.GET,headers = "Accept=application/json")
     void downloadFormHC( @RequestParam(value = "caseId",required = false)Long caseId
                                      ,  HttpServletResponse response)throws ServletException, IOException {
@@ -74,7 +192,7 @@ public class FormController {
                     map.put("national_id",caseManagement.getCustomer().getNationId());
                     map.put("no",caseManagement.getCustomer().getCurrentAddress1());
                     map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
-                    map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                    map.put("district",caseManagement.getCustomer().getCurrentDistrict());
                     map.put("province",caseManagement.getCustomer().getCurrentProvince());
                     map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
                     map.put("tel_no",caseManagement.getCustomer().getTelNo());
@@ -101,7 +219,7 @@ public class FormController {
                         map.put("national_id",caseManagement.getCustomer().getNationId());
                         map.put("no",caseManagement.getCustomer().getCurrentAddress1());
                         map.put("sub_district",caseManagement.getCustomer().getCurrentSubDistrict());
-                        map.put("district",caseManagement.getCustomer().getCurrentProvince());
+                        map.put("district",caseManagement.getCustomer().getCurrentDistrict());
                         map.put("province",caseManagement.getCustomer().getCurrentProvince());
                         map.put("zipcode",caseManagement.getCustomer().getCurrentZipCode());
                         map.put("tel_no",caseManagement.getCustomer().getTelNo());
