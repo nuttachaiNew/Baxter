@@ -2571,7 +2571,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 String createDate =  caseMng.getReceiptDate() == null? "": FULL_DATE_FORMAT.format(caseMng.getReceiptDate()); 
                 sheet.getRow(6).getCell(23).setCellValue(caseMng.getReceiptNo());
                 String[] sub = createDate.split("-");
-                Integer years = parseInt(sub[2])+543;
+                Integer years = Integer.parseInt(sub[2])+543;
                 createDate = sub[0]+"-"+sub[1]+"-"+years.toString();
                 sheet.getRow(11).getCell(21).setCellValue(createDate);
                 sheet.getRow(9).getCell(4).setCellValue(caseMng.getReceipientName());
