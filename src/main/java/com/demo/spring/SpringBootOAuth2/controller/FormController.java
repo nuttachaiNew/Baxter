@@ -84,7 +84,7 @@ public class FormController {
                 
                 if("MC1".equalsIgnoreCase(machineType)){
                     map.put("name",customerName +" "+customerLastName);
-                    map.put("national_id",nationId);
+                    map.put("national_id",nationalId);
                     map.put("no",address1);
                     map.put("sub_district",subDistrict);
                     map.put("district",district);
@@ -111,7 +111,7 @@ public class FormController {
 
                 }else{
                          map.put("name",customerName +" "+customerLastName);
-                        map.put("national_id",nationId);
+                        map.put("national_id",nationalId);
                         map.put("no",address1);
                         map.put("sub_district",subDistrict);
                         map.put("district",district);
