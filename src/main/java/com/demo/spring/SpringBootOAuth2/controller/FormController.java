@@ -434,8 +434,8 @@ public class FormController {
 
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         try {
-            response.setContentType("application/x-pdf");
-            response.addHeader("Content-Disposition", "attachment; filename=Acceptance_DOC.pdf");
+            // response.setContentType("application/x-pdf");
+            // response.addHeader("Content-Disposition", "attachment; filename=Acceptance_DOC.pdf");
             Map<String,Object> map = new HashMap<String,Object>();
             List<JasperPrint> jasperPrintList   = new ArrayList<>();
             if("CR".equalsIgnoreCase(caseType)){
