@@ -51,10 +51,10 @@ public interface CaseManagementService {
 
 
     
-    List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username);
-    List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username);
-    List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username);
-    List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username);
+    List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo);
+    List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo);
+    List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo);
+    List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo);
    
 
     Map<String,Object>  countCaseShowInDashboard(String startDate, String endDate,String createdBy,String areaId);

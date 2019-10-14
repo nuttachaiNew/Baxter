@@ -313,7 +313,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
 
 
 
-    public List<Map<String,Object>> findCaseforOtherRole(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String role,String username){
+    public List<Map<String,Object>> findCaseforOtherRole(String date, String caseNumber , String areaId , String documentStatus ,Integer firstResult ,Integer maxResult,String caseType,String role,String username,String dateFrom,String dateTo){
         try{
             caseNumber = caseNumber == null?"":caseNumber;
             LOGGER.debug("findCaseByCriteria :{} :{} :{} :{} :{} :{}",date,caseNumber,documentStatus,firstResult,maxResult,username);
@@ -328,18 +328,21 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             criteriaSqlData.append(" AND CM.CASE_NUMBER  LIKE :caseNumber  ");
             if(areaId!=null && !"".equalsIgnoreCase(areaId))   criteriaSqlData.append(" AND CM.AREA_ID  = :areaId  ");
             if(documentStatus!=null && !"".equalsIgnoreCase(documentStatus) )  criteriaSqlData.append(" AND (CM.CASE_STATUS  = :documentStatus OR CM.assign_BU = :username )     ");
-	       if(caseType!=null && !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
+	        if(caseType!=null && !"".equalsIgnoreCase(caseType)) criteriaSqlData.append(" AND CM.CASE_TYPE  = :caseType  ");
             if("BU".equalsIgnoreCase(role) )   criteriaSqlData.append(" AND ( CM.CASE_TYPE IN ('CR','AR','RT','CH')  OR CM.assign_BU = :username ) ");
             if("TS".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR','CH')  AND ((CM.assign_TS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_TS =:username )) ");
             if("FN".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR')  AND ((CM.assign_FN  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_FN =:username )) ");
             if("CS".equalsIgnoreCase(role) )  criteriaSqlData.append("  AND ( CM.CASE_TYPE IN ('CR','AR','CH','RT')  AND ((CM.assign_CS  IS NULL AND CM.ASSIGN_BU IS NOT NULL ) OR CM.assign_CS =:username )) ");
-
+            if(dateFrom!=null) criteriaSqlData.append(" AND TRUNC(CM.created_Date) >= TO_DATE(:dateFrom,'yyyy-mm-dd')  ");
+            if(dateTo!=null) criteriaSqlData.append(" AND TRUNC(CM.created_Date) <= TO_DATE(:dateTo,'yyyy-mm-dd')  ");
             criteriaSqlData.append(" ORDER BY CM.CREATED_DATE DESC,  CM.CASE_NUMBER  ASC  ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             if(date!=null && !"".equalsIgnoreCase(date))query.setParameter("date",date );
             query.setParameter("caseNumber","%"+caseNumber+"%" );
             query.setParameter("username",username );
-
+            if(dateFrom!=null)  query.setParameter("dateFrom",dateFrom );
+            if(dateTo!=null)    query.setParameter("dateTo",dateTo );
+           
             LOGGER.debug("sql : {}",criteriaSqlData);
             // SALE send I  , R 
             // ASM send W 

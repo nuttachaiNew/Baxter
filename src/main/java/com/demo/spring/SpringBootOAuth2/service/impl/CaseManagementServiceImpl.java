@@ -1797,10 +1797,13 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
 
     @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
+   public  List<Map<String,Object>> findCaseByCriteriaforTS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"TS",username);
+        dateFrom = "".equalsIgnoreCase(dateFrom)?null : dateFrom;
+        dateTo = "".equalsIgnoreCase(dateTo)?null : dateTo;
+
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"TS",username,dateFrom,dateTo);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1808,10 +1811,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         }
    } 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
+   public  List<Map<String,Object>> findCaseByCriteriaforFN(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"FN",username);
+        dateFrom = "".equalsIgnoreCase(dateFrom)?null : dateFrom;
+        dateTo = "".equalsIgnoreCase(dateTo)?null : dateTo;
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"FN",username,dateFrom,dateTo);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1819,10 +1824,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         }
    } 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
+   public  List<Map<String,Object>> findCaseByCriteriaforCS(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"CS",username);
+        dateFrom = "".equalsIgnoreCase(dateFrom)?null : dateFrom;
+        dateTo = "".equalsIgnoreCase(dateTo)?null : dateTo;
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"F",firstResult,maxResult,null,"CS",username,dateFrom,dateTo);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -1832,10 +1839,12 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
 
    @Override
-   public  List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username){
+   public  List<Map<String,Object>> findCaseByCriteriaforBU(String date, String caseNumber , String areaId ,String documentStatus ,Integer firstResult ,Integer maxResult,String username,String dateFrom,String dateTo){
      try{
         LOGGER.info("findCaseforOtherRole : {}",date);
-        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"A",firstResult,maxResult,null,"BU",username);
+        dateFrom = "".equalsIgnoreCase(dateFrom)?null : dateFrom;
+        dateTo = "".equalsIgnoreCase(dateTo)?null : dateTo;
+        return caseManagementRepositoryCustom.findCaseforOtherRole(date,caseNumber,areaId,"A",firstResult,maxResult,null,"BU",username,dateFrom,dateTo);
      }catch(Exception e){
             e.printStackTrace();
             LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
@@ -2553,32 +2562,36 @@ public class CaseManagementServiceImpl implements CaseManagementService {
          InputStream inp = new FileInputStream(RECEIPT_FILE); 
         XSSFWorkbook  workbook  = new XSSFWorkbook(inp);
         inp.close();
-        XSSFSheet sheet = workbook.getSheetAt(0);
-         if(workbook!=null){
-            CaseManagement caseMng = caseManagementRepository.findOne(id);
-            String createDate =  caseMng.getReceiptDate() == null? "": FULL_DATE_FORMAT.format(caseMng.getReceiptDate()); 
-            sheet.getRow(6).getCell(23).setCellValue(caseMng.getReceiptNo());
-            sheet.getRow(11).getCell(21).setCellValue(createDate);
+        XSSFSheet sheet ; 
+        Integer running = 0;
+        for(running=0 ; running<=1;running++){
+            sheet =  workbook.getSheetAt(running);
+            if(workbook!=null){
+                CaseManagement caseMng = caseManagementRepository.findOne(id);
+                String createDate =  caseMng.getReceiptDate() == null? "": FULL_DATE_FORMAT.format(caseMng.getReceiptDate()); 
+                sheet.getRow(6).getCell(23).setCellValue(caseMng.getReceiptNo());
+                String[] sub = createDate.split("-");
+                Integer years = paseInt(sub[2])+543;
+                createDate = sub[0]+"-"+sub[1]+"-"+years;
+                sheet.getRow(11).getCell(21).setCellValue(createDate);
+                sheet.getRow(9).getCell(4).setCellValue(caseMng.getReceipientName());
+                sheet.getRow(10).getCell(4).setCellValue(caseMng.getReceiptAddress1());
+                sheet.getRow(11).getCell(4).setCellValue(caseMng.getReceiptAddress2());
+                Double amount  =  caseMng.getAmount() == null ?  new BigDecimal("0").doubleValue() : caseMng.getAmount().doubleValue()  ;  
+                Double vat = new BigDecimal("0.07").doubleValue();
+                vat = amount * 7d / 107d ;
+                Double excludeVat  = amount - vat;
 
-          
-            sheet.getRow(9).getCell(4).setCellValue(caseMng.getReceipientName());
-            sheet.getRow(10).getCell(4).setCellValue(caseMng.getReceiptAddress1());
-            sheet.getRow(11).getCell(4).setCellValue(caseMng.getReceiptAddress2());
-            
-            Double amount  =  caseMng.getAmount() == null ?  new BigDecimal("0").doubleValue() : caseMng.getAmount().doubleValue()  ;  
-            Double vat = new BigDecimal("0.07").doubleValue();
-            vat = amount * 7d / 107d ;
-            Double excludeVat  = amount - vat;
-
-            sheet.getRow(21).getCell(18).setCellValue(excludeVat);
-            sheet.getRow(21).getCell(25).setCellValue(excludeVat);
-            sheet.getRow(31).getCell(25).setCellValue(excludeVat);
-            
-            sheet.getRow(32).getCell(25).setCellValue(vat );
-            sheet.getRow(33).getCell(25).setCellValue(amount );
-
-
+                sheet.getRow(21).getCell(18).setCellValue(excludeVat);
+                sheet.getRow(21).getCell(25).setCellValue(excludeVat);
+                sheet.getRow(31).getCell(25).setCellValue(excludeVat);
+                
+                sheet.getRow(32).getCell(25).setCellValue(vat );
+                sheet.getRow(33).getCell(25).setCellValue(amount );
+            }
         }
+
+         
         return workbook;
      }catch(Exception e){
          LOGGER.error("ERROR -> : {}-{}",e.getMessage(),e);
