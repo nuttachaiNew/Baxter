@@ -955,6 +955,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         saveFromASM(multipartHttpServletRequest);
         CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("id").toString() ) );
         caseManagement.setCaseStatus("R");
+        caseManagement.setNote( caseManagerData.get("note") == null ? "" : caseManagerData.get("note").toString()  );
         caseManagementRepository.save(caseManagement);
         Set<CaseActivity> caseActivitys = caseManagement.getCaseActivitys();
         LOGGER.debug("caseActivity :{}",caseActivitys.size());
@@ -993,6 +994,7 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         CaseManagement caseManagement = caseManagementRepository.findOne( Long.valueOf(caseManagerData.get("id").toString() ) );
         caseManagement.setCaseStatus("A");
         caseManagement.setAssignAsm("asm");
+        caseManagement.setNote( caseManagerData.get("note") == null ? "" : caseManagerData.get("note").toString()  );
         caseManagementRepository.save(caseManagement);
         Set<CaseActivity> caseActivitys = caseManagement.getCaseActivitys();
         LOGGER.debug("caseActivity :{}",caseActivitys.size());
@@ -1037,6 +1039,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         caseManagement.setFlagCheckPrescription( caseManagerData.get("flagCheckPrescription") ==null?"N": caseManagerData.get("flagCheckPrescription").toString()  );
         caseManagement.setFlagCheckInstallation( caseManagerData.get("flagCheckInstallation") ==null?"N": caseManagerData.get("flagCheckInstallation").toString()  );
         caseManagement.setElectronicConsent( caseManagerData.get("electronicConsent") ==null?null: caseManagerData.get("electronicConsent").toString()  );
+        caseManagement.setNote( caseManagerData.get("note") == null ? "" : caseManagerData.get("note").toString()  );
+        
+      
         caseManagementRepository.save(caseManagement);
     }catch(Exception e){
          e.printStackTrace();

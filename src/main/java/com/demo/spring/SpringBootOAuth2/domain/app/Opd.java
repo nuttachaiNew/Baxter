@@ -32,5 +32,10 @@ public class Opd {
     private String fullEveryDrain;
     private String numberOfDayExchange;
     private String dayFillVol;
-
+    private String OfDayFills;
+    private String niteTherTime;
+    private String niteFillVol ;
+    private String niteTidalVol;
+    private String niteUF;
+    
 }
