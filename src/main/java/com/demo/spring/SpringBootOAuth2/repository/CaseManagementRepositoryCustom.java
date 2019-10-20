@@ -320,7 +320,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             List<Object[] > listfromQuery = new ArrayList<>();
             StringBuilder criteriaSqlData = new StringBuilder();
             List<Map<String,Object>> results = new ArrayList<>();
-            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME , CUST.current_Address1||' '|| CUST.current_Address2 || ' '||CUST.current_Sub_District||'#'||CUST.current_District||''||current_Province||' '||CUST.current_Zip_Code");
+            criteriaSqlData.append(" SELECT CM.ID , CM.CASE_NUMBER , CM.CREATED_DATE , CM.CASE_TYPE , NVL(CUST.PATIENT_NAME||' '||CUST.PATIENT_LAST_NAME  ,CUST.HOSPITAL_NAME) CUST_NAME , CUST.CUSTOMER_TYPE ,CM.CASE_STATUS ,CM.ASSIGN_BU ,CM.ASSIGN_TS , CM.ASSIGN_FN , CM.ASSIGN_CS ,CUST.HOSPITAL_NAME , CUST.current_Address1||' '|| CUST.current_Address2 || ' '||CUST.current_Sub_District||'#'||CUST.current_District||''||current_Province||' '||CUST.current_Zip_Code");
             criteriaSqlData.append(" FROM CASE_MANAGEMENT CM   ");
             criteriaSqlData.append(" JOIN CUSTOMER CUST ON CUST.ID  = CM.CUSTOMER_ID   ");
             criteriaSqlData.append(" WHERE 1 =1 ");
