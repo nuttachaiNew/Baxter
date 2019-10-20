@@ -1788,8 +1788,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 resultResult.put("caseNumber",caseMng.getCaseNumber());
                 resultResult.put("caseStatus",caseMng.getCaseStatus());
 
-                 returnResult.put("doctorName",caseMng.getDoctorName());
-                returnResult.put("doctorLastName",caseMng.getDoctorLastName());
+                resultResult.put("doctorName",caseMng.getDoctorName());
+                resultResult.put("doctorLastName",caseMng.getDoctorLastName());
                 resultResult.put("actionRole","SALE");
                 resultResult.put("status","success");
               
