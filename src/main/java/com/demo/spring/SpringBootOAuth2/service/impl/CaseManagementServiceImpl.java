@@ -409,6 +409,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             Map returnResult = new HashMap<>();
             returnResult.put("status","success");
             returnResult.put("caseNumber",caseManagement.getCaseNumber());
+            returnResult.put("doctorName",caseManagement.getDoctorName());
+            returnResult.put("doctorLastName",caseManagement.getDoctorLastName());
             returnResult.put("id",caseManagement.getId());
             return returnResult;
         }catch(Exception e){
@@ -1736,6 +1738,8 @@ public class CaseManagementServiceImpl implements CaseManagementService {
             returnResult.put("caseType",changeCase.getCaseType());
             returnResult.put("status","success");
             returnResult.put("caseNumber",changeCase.getCaseNumber());
+            returnResult.put("doctorName",changeCase.getDoctorName());
+            returnResult.put("doctorLastName",changeCase.getDoctorLastName());
 
             return returnResult;
      }catch(Exception e){
@@ -1783,6 +1787,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
 
                 resultResult.put("caseNumber",caseMng.getCaseNumber());
                 resultResult.put("caseStatus",caseMng.getCaseStatus());
+
+                 returnResult.put("doctorName",caseMng.getDoctorName());
+                returnResult.put("doctorLastName",caseMng.getDoctorLastName());
                 resultResult.put("actionRole","SALE");
                 resultResult.put("status","success");
               
