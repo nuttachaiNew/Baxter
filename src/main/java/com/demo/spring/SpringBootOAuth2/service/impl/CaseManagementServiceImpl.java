@@ -1408,6 +1408,21 @@ public class CaseManagementServiceImpl implements CaseManagementService {
         
     	caseActivityRepository.save(caseAct);
 
+        Customer customer = caseMng.getCustomer();
+        
+
+        customer.setCurrentAddress1(caseManagement.get("shippingAddress1").toString());
+        customer.setCurrentAddress2(caseManagement.get("shippingAddress2").toString());
+        customer.setCurrentDistrict(caseManagement.get("shippingDistrict").toString());
+        customer.setCurrentProvince(caseManagement.get("shippingProvince").toString());
+        customer.setCurrentZipCode(caseManagement.get("shippingZipCode").toString());
+        customer.setShippingAddress1(caseManagement.get("shippingAddress1").toString());
+        customer.setShippingAddress2(caseManagement.get("shippingAddress2").toString());
+        customer.setShippingDistrict(caseManagement.get("shippingDistrict").toString());
+        customer.setShippingProvince(caseManagement.get("shippingProvince").toString());
+        customer.setShippingZipCode(caseManagement.get("shippingZipCode").toString());
+
+        customerRepository.save(customer);
         Map<String,Object> returnResult = new HashMap();
         returnResult.put("caseType",caseMng.getCaseType());
         returnResult.put("status","success");

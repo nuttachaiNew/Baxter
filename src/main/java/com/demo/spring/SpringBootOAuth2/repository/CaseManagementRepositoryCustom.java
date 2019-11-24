@@ -143,7 +143,7 @@ public class CaseManagementRepositoryCustom {
             criteriaSqlData.append("\n  ORDER BY CA.ACTION_DATE DESC,CM.CASE_NUMBER ASC ");
             Query query = em.createNativeQuery(criteriaSqlData.toString());
             query.setParameter("documentStatus",Arrays.asList(documentStatus.split(",")) );
-    	    query.setMaxResults(30);
+    	    // query.setMaxResults(30);
     	    if(areaId!=null) query.setParameter("areaId",areaId);
             if(createdBy!=null) query.setParameter("createdBy",createdBy);
             if(actionUser!=null) query.setParameter("actionUser","%"+actionUser+"%");
