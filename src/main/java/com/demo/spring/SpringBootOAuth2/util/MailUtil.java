@@ -1,7 +1,7 @@
 package com.demo.spring.SpringBootOAuth2.service.util;
 
 
-import org.slf4j.Logger;
+/*import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -29,11 +29,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import com.spt.engine.util.ConstantVariableUtil;
-
-@Service
+*/
+//@Service
 public class MailUtil {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MailUtil.class);
+  /*  private static final Logger LOGGER = LoggerFactory.getLogger(MailUtil.class);
    
     JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
     SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -81,5 +81,5 @@ public class MailUtil {
 
 
 
-
+*/
 }
