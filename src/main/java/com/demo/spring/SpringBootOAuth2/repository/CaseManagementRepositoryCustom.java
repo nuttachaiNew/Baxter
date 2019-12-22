@@ -290,7 +290,7 @@ LOGGER.debug("sql : {}",criteriaSqlData);
             LOGGER.debug("statement :{} ",criteriaSqlData);
             Query query = em.createNativeQuery(criteriaSqlData.toString());
            if(keyword!=null)  query.setParameter("keyword","%"+keyword+"%" );
-           if(keyword!=null)  query.setParameter("case",keyword );
+           if(keyword!=null)  query.setParameter("case","%"+keyword+"%" );
             query.setParameter("customerType",customerType );
            if(hospitalName!=null) query.setParameter("hospitalName","%"+hospitalName+"%" );
             listfromQuery = query.getResultList();
