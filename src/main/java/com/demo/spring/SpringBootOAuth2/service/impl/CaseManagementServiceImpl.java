@@ -1148,7 +1148,9 @@ public class CaseManagementServiceImpl implements CaseManagementService {
                 String machineType =  machineInfo.get("machineType") ==null?"" :machineInfo.get("machineType").toString();
                 String modelRef = machineInfo.get("modelRef") ==null?"" :machineInfo.get("modelRef").toString();
                 String serialNo = machineInfo.get("serialNo") ==null?"" :machineInfo.get("serialNo").toString();
-                serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
+                // serialNo =  !"AUTO".equalsIgnoreCase(serialNo) ? serialNo  : "";
+                serialNo =   "";
+                
                 // generate Machine by Condition
                 Long machineId = autoGenerateMachineByTypeAndStatusEqActive(machineType,modelRef,serialNo);  
                 // update Status Machine 
